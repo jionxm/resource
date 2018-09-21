@@ -1,0 +1,80 @@
+body{
+    width:100%;
+    height:680px;
+    background:white;
+}
+/* 闁烩偓鍔嶉崺娑㈠触閿燂拷 */
+#user-name{
+    width:500px;
+    height:72px;
+    border-bottom:2px solid silver;
+    margin-left:100px;
+    padding:10px;
+    margin-top:200px;
+}
+#user-name>img{
+   width:50px;
+   height:50px;
+}
+#user-name>input{
+      border:0;
+      background:white;
+      font-size:26px;
+      padding-left:20px;
+      width:400px;
+      outline: none;
+    }
+/* 閻庨潧妫涢悥锟� */
+#pwd{
+    width:500px;
+    height:72px;
+    border-bottom:2px solid silver;
+    margin-left:100px;
+    padding:10px;
+    margin-top:20px;
+}
+#pwd>img{
+   width:50px;
+   height:50px;
+}
+#pwd>input{
+      border:0;
+      background:white;
+      font-size:26px;
+      padding-left:20px;
+      width:400px;
+      outline: none;
+    }
+.over{
+	display:none;
+}
+.show{
+	display:block;
+}
+#people{
+	font-size:18px;
+	color:red;
+	width:40%;
+	float:left;
+	margin-left:100px;
+	margin-top:25px;
+}
+#forget>a{
+     font-size:20px;
+     float:right;
+     margin-right:150px;
+     margin-top:25px;
+}
+button{
+    margin:0 auto;
+    width:220px;
+    height:60px;
+    border-radius: 10px;
+    background:#0a9eeb;
+    color:white;
+    font-size:24px;
+    margin-top:140px;
+    margin-left:265px;
+    outline: none;
+    border:none;
+}

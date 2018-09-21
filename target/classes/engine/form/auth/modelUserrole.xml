@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+	<object name="role" table="t_role" primary="id" unique="name" order="updateTime desc">
+	<property name="id" type="Long" length="20" initial="" field="id"/>
+	<property name="name" type="String" length="50" initial="" field="name"/>
+	<property name="description" type="String" length="200" field="description"/>
+	<property name="createTime" type="Date" length="" validate=""  field="create_time" />		
+	<property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+	<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+	<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+	<property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+	<property name="updateByName" type="String" length="50" validate=""  field="" />
+	<property name="createByName" type="String" length="50" validate=""  field="" />
+  </object>       
+  <object name="userrole" table="t_user_role" primary="id" unique="role" order="">
+	<property name="id" type="Long" length="20" initial="" field="id"/>
+	<property name="roleId" type="Long" length="50" initial="" field="role_id"/>
+	<property name="userId" type="Long" length="20" initial="" field="user_id"/>
+	<!-- 查询相关，关联表字段等 begin-->
+	<property name="name" type="String" length="50" field=""/>
+	<property name="description" type="String" length="200" field=""/>
+	<property name="roleName" type="String" length="50" field=""/>
+	<property name="userName" type="String" length="50" validate=""  field="" />	
+	<property name="empName" type="String" length="20" initial="" field=""/>	
+	<property name="authTypeName" type="String" length="50" field=""/>	
+	<property name="statusName" type="String" length="50" validate=""  field="" />
+	
+	<!-- end -->	
+	<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+	<property name="updateByName" type="String" length="50" validate=""  field="" />
+	<property name="createBy" type="Long" length="10" validate=""  field="create_by" />	
+	<property name="createByName" type="String" length="50" validate=""  field="" />
+	<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+	<property name="createTime" type="Date" length="" validate=""  field="create_time" />
+  </object>    
+	<object name="user" table="t_user" primary="id" unique="name" order="updateTime desc">
+	<property name="id" type="Long" length="20" initial="" field="id"/>
+	<property name="name" type="String" length="50" initial="" field="name"/>
+	<property name="empId" type="Long" length="20" initial="" field="emp_id"/>
+	<property name="authType" type="String" length="50" field="auth_type"/>
+	<property name="status" type="String" length="50" validate=""  field="status" />
+		<property name="salt" type="String" length="64" validate=""  field="" />
+	<property name="password" type="String" length="100" validate=""  field="password" />
+	<property name="oldPassword" type="String" length="50" validate=""   field="" />
+	<property name="updatePassword" type="String" length="50"   field="" />
+
+		<!-- 查询相关，关联表字段等 begin-->
+	<property name="roleId" type="Long" length="20" validate=""  field="" />
+	<property name="funcName" type="String" length="50" validate=""  field="" />
+	<property name="funcDescription" type="String" length="50" validate=""  field="" />
+	<property name="orgName" type="String" length="50" validate=""  field="" />
+	<property name="orgId" type="String" length="50" validate=""  field="" />
+	<property name="empCode" type="String" length="20" initial="" field=""/>
+	<property name="empExtCode" type="String" length="20" initial="" field=""/>
+	<property name="empStatusName" type="String" length="20" initial="" field=""/>	
+	<property name="empStatus" type="String" length="20" initial="" field=""/>	
+	<property name="gender" type="String" length="20" initial="" field=""/>
+	<property name="genderName" type="String" length="20" initial="" field=""/>	
+	<property name="empName" type="String" length="20" initial="" field=""/>
+	<property name="empType" type="String" length="20" initial="" field=""/>
+	<property name="empTypeName" type="String" length="20" initial="" field=""/>
+	<property name="authTypeName" type="String" length="50" field=""/>	
+	<property name="statusName" type="String" length="50" validate=""  field="" />
+	<property name="email" type="String" length="50" validate=""  field="" />
+	<property name="mobile" type="String" length="50" validate=""  field="" />
+	<property name="wechat" type="String" length="50" validate=""  field="" />
+	<!-- end -->	
+	<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+	<property name="updateByName" type="String" length="50" validate=""  field="" />
+	<property name="createBy" type="Long" length="10" validate=""  field="create_by" />	
+	<property name="createByName" type="String" length="50" validate=""  field="" />
+	<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+	<property name="createTime" type="Date" length="" validate=""  field="create_time" />
+  </object>     
+</model_layer>
+</tsoftware>

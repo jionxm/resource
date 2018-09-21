@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+ <object name="redisConfig" table="t_redis_config" primary="id" unique="" order="id desc" autoinc="Y">
+  <property name="id" type="Long" length="4" initial="" field="id"/>
+  <property name="version" type="String" length="20" field="redis_version"/>
+  <property name="os" type="String" length="50" field="os"/>
+  <property name="runId" type="String" length="50" field="run_id"/>
+  <property name="archBits" type="Long" length="4" field="arch_bits"/>
+  <property name="processId" type="Long" length="20" field="process_id"/>
+  <property name="port" type="Long" length="4" field="tcp_port"/>
+  <property name="clients" type="Long" length="10" field="connected_clients"/>
+</object>       
+</model_layer>
+</tsoftware>

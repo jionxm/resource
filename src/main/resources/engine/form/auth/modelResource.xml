@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+	<object name="resource" table="t_resource" primary="id" unique="url" order="" autoinc="Y">
+	<property name="id" type="Long" length="20" initial="" field="id"/>
+	<property name="name" type="String" length="50" initial="" field="name"/>
+	<property name="parent" type="Long" length="20" initial="" field="parent"/>
+	<property name="url" type="String" length="50" field="url"/>
+	<property name="isAuth" type="String" length="50" field="is_auth"/>
+	<!-- 查询相关，关联表字段等 begin-->
+	<property name="parentName" type="String" length="50" field=""/>
+	<property name="funcId" type="String" length="50" field=""/>
+	<property name="funcName" type="String" length="50" field=""/>
+	<property name="roleName" type="String" length="50" field=""/>
+	<property name="typeName" type="String" length="50" field=""/>
+	<property name="resType" type="String" length="50" field=""/><!-- 是否和权限关联 resourceFunctionId -->
+	<!-- end -->	
+	<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+	<property name="updateByName" type="String" length="50" validate=""  field="" />
+	<property name="createBy" type="Long" length="10" validate=""  field="create_by" />	
+	<property name="createByName" type="String" length="50" validate=""  field="" />
+	<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+	<property name="createTime" type="Date" length="" validate=""  field="create_time" />
+  </object>       
+  
+  <object name="resfunc" table="t_res_func" primary="id" unique="url" order="">
+	<property name="rfId" type="Long" length="20" initial="" field="id"/>
+	<property name="resId" type="Long" length="50" initial="" field="res_id"/>
+	<property name="funcId" type="Long" length="20" initial="" field="func_id"/>
+	<property name="name" type="String" length="50" initial="" field=""/>
+	<property name="url" type="String" length="50" field=""/>
+	<property name="isAuth" type="String" length="50" field=""/>
+	<!-- 查询相关，关联表字段等 begin-->
+	<property name="parentName" type="String" length="50" field=""/>
+	<property name="funcName" type="String" length="50" field=""/>
+	
+	<!-- end -->	
+	<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+	<property name="updateByName" type="String" length="50" validate=""  field="" />
+	<property name="createBy" type="Long" length="10" validate=""  field="create_by" />	
+	<property name="createByName" type="String" length="50" validate=""  field="" />
+	<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+	<property name="createTime" type="Date" length="" validate=""  field="create_time" />
+  </object>  
+  <object name="roleFunc" table="t_role_func" primary="id" unique="role_id,func_id" order="">
+	<property name="id" type="Long" length="20" initial="" field="id"/>
+	<property name="roleId" type="Long" length="20" initial="" field="role_id"/>
+	<property name="funcId" type="Long" length="20" initial="" field="func_id"/>
+	<property name="dataAuth" type="String" length="50" field="data_auth"/>	
+	<!-- 查询相关，关联表字段等 begin-->
+	<property name="roleName" type="String" length="50" initial="" field=""/>
+	<property name="userCount" type="String" length="50" field=""/>
+	<property name="dataAuthName" type="String" length="50" field=""/>
+	<property name="name" type="String" length="50" initial="" field=""/>
+	<property name="description" type="String" length="50" initial="" field=""/>
+	<!-- end -->	
+	<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+	<property name="updateByName" type="String" length="50" validate=""  field="" />
+	<property name="createBy" type="Long" length="10" validate=""  field="create_by" />	
+	<property name="createByName" type="String" length="50" validate=""  field="" />
+	<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+	<property name="createTime" type="Date" length="" validate=""  field="create_time" />
+  </object>   
+  <object name="function" table="t_function" primary="id" unique="name" order="">
+	<property name="id" type="Long" length="20" initial="" field="id"/>
+	<property name="name" type="String" length="50" initial="" field="name"/>
+	<property name="description" type="String" length="200" initial="" field="description"/>
+	<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+	<property name="updateByName" type="String" length="50" validate=""  field="" />
+	<property name="createBy" type="Long" length="10" validate=""  field="create_by" />	
+	<property name="createByName" type="String" length="50" validate=""  field="" />
+	<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+	<property name="createTime" type="Date" length="" validate=""  field="create_time" />
+	
+	<property name="url" type="String" length="50" field=""/>
+  </object>
+	<object name="resAuthStat" table="t_change_log" primary="id" unique="" order="">
+	<property name="id" type="Long" length="50" initial="" field="id"/>
+	<property name="changeId" type="String" length="50" initial="" field="change_id"/>
+	<property name="type" type="String" length="50" field="type"/>
+	<property name="oldContent" type="String" length="50" field="old_content"/>
+	<property name="newContent" type="String" length="50" field="new_content"/>
+	<property name="createTime" type="String" length="50" field="create_time"/>
+	<property name="changeEntity" type="Date" length="" field="change_entity"/>
+	<property name="flowId" type="String" length="50" initial="" field="flow_id"/>
+  </object>              
+</model_layer>
+</tsoftware>

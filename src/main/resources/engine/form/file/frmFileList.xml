@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+			
+<model_layer>
+  <object name="fileIndex" table="t_file_index" primary="id" unique="ID" order="createTime desc" father="">
+	<property name="id" type="Long" length="" validate=""  field="id"/>
+	<property name="uuid" type="String" length="32" validate="" field="uuid"/>
+	<property name="filename" type="String" length="200" validate="" field="filename"/>
+	<property name="fileType" type="String" length="50" validate="" field="file_type"/>
+	<property name="fileLength" type="String" length="" validate="" field="length"/>
+	<property name="storageType" type="String" length="20" validate="" field="storage_type"/>
+	<property name="storageTypeName" type="String" length="20" validate="" field=""/>
+	<property name="accessType" type="String" length="20" validate=""  field="access_type"/>
+	<property name="accessTypeName" type="String" length="20" validate=""  field=""/>
+	<property name="source" type="String" length="20" validate=""  field="source"/>
+	<property name="sourceName" type="String" length="20" validate=""  field=""/>
+	<property name="docCata" type="String" length="20" validate=""  field=""/>
+	<property name="description" type="String" length="200" validate=""  field="description"/>
+	<property name="createTime" type="String" length="" validate=""  field="create_time" />	
+	<property name="createBy" type="String" length="10" validate=""  field="create_by" />
+	<property name="createByName" type="String" length="20" validate=""  field="" />
+  </object>
+</model_layer>
+<ui_layer>
+  <ui name="fileList" title="查询文件列表">
+	<panel name="pnlUp" title="工具条" object="" type="Toolbar">
+		<control name="ctlQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<!-- 查询条件用op_做前缀 -->
+	<panel name="pnlGroup" title="pnlGroup" object="fileIndex" type="Group">
+		<control name="lk_uuid" title="文件编号" property="uuid" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="lk_filename" title="文件标题" property="filename" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="lk_fileType" title="文件类型" property="fileType" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="lk_storageType" title="存储类型" property="storageType" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+		<control name="lk_accessType" title="访问类型" property="accessType" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="lk_createTime" title="上传日期" property="createTime" type="DateBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="lk_source" title="文件来源" property="source" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+		<!-- <control name="lk" title="测试password" property="source" type="PasswordBox" edit="Y" required="N" format="" width="1" height="1" column="Y"/> -->
+	</panel>
+	<panel name="pnlDg" title="pnlDg" object="fileIndex" type="Grid"  multiple="">
+		<control name="id" title="id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+		<control name="uuid" title="文件编号" property="uuid" type="TextBox" edit="" required="" format="" width="200" height="" column=""/>
+		<control name="filename" title="文件标题" property="filename" type="TextBox" edit="" required="" format="" width="200" height="" column=""/>
+		<control name="fileType" title="文件类型" property="fileType" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="fileLength" title="文件大小" property="fileLength" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="storageTypeName" title="存储类型" property="storageTypeName" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="accessTypeName" title="访问类型" property="accessTypeName" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="sourceName" title="文件来源" property="sourceName" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="docCata" title="目录" property="docCata" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="createTime" title="创建日期" property="createTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="createByName" title="创建人" property="createByName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+	</panel>
+	
+    <flow trigger="" event="OnLoad" filter="">
+       <procedure name="initForm"  logic="Clear" ifyes="jsdict1" ifno="" >
+           <param name="Out" value="pnlGroup"></param>
+      </procedure>  
+      <procedure name="jsdict1"  logic="List" ifyes="jsdict2" ifno="">
+        <param name="Out" value="pnlGroup.lk_storageType"></param>
+        <param name="Sql" value="fileStorage"></param>
+      </procedure>      
+      <procedure name="jsdict2"  logic="List" ifyes="jsdict3" ifno="">
+        <param name="Out" value="pnlGroup.lk_accessType"></param>
+        <param name="Sql" value="fileAccess"></param>
+      </procedure> 
+      <procedure name="jsdict3"  logic="List" ifyes="j4" ifno="">
+        <param name="Out" value="pnlGroup.lk_source"></param>
+        <param name="Sql" value="fileSource"></param>
+      </procedure>      
+      <procedure name="j4"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="QryFileList"></param>
+      </procedure>
+    </flow>
+    <flow trigger="pnlUp.ctlQuery" event="OnClick" filter="">
+      <procedure name="testJs"  logic="Validate" ifyes="" ifno="queryTable">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Options" value="CheckEmail(param.lk_filename)"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="QryFileList"></param>
+      </procedure>
+    </flow>
+    <flow trigger="pnlUp.ctlClear" event="OnClick" filter="">
+      <procedure name="btnClear"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+      </procedure>
+    </flow>
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pnlUp" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="North" scale=""/>
+		<subregion panel="pnlDg" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>
+  </ui_layer>
+</tsoftware>

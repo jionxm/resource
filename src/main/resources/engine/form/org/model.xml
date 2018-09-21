@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+  <object name="tree" table="t_tree" primary="id" unique="id" order="" father="pid">
+	<property name="id" type="Long" length="" validate=""  field="id"/>
+	<property name="pid" type="Long" length="50" validate=""  field="pid"/>
+	<property name="name" type="String" length="50" validate=""  field="name"/>
+  </object>
+</model_layer>
+</tsoftware>

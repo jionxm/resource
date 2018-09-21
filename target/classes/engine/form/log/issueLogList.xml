@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+      xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+<!-- 迭代model -->
+  <object name="issueLog" table="t_issue_log" primary="id" unique="" order="createTime desc">
+    <property name="id" type="Long" length="20" initial="" field="id"/>
+    <property name="issueId" type="Long" length="20" initial="" field="issue_id"/>
+    <property name="type" type="String" length="20" field="type"/>
+    <property name="typeName" type="String" length="20" field=""/>
+    <property name="logContent" type="String" length="200" field="log_content"/>
+    <property name="updateStatus" type="String" length="20" field="update_status"/>
+    
+    <property name="upStatusName" type="String" length="20" field=""/>
+    <property name="createTime" type="Date" length="" validate=""  field="create_time" />   
+    <property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+    <property name="createByName" type="String" length="50" validate=""  field="" />
+    <property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+    <property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+    <property name="updateByName" type="Long" length="10" validate=""  field="" />
+    <property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+  </object>  
+</model_layer>
+
+<ui_layer>
+  <ui name="issueLogList" title="工作项日志列表">
+  <panel name="pnlUp" title="工具条" object="" type="Toolbar">
+    <control name="ctlQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlEmpStatus" title="活跃状态" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlExport" title="导出清单" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+  </panel>
+  <panel name="pnlGroup" title="查询条件" object="issueLog" type="Group">
+    <control name="lk_issueId" title="工作项编号" property="issueId" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+    <control name="eq_type" title="类型" property="type" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+    <control name="lk_logContent" title="日志内容" property="logContent" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+    <control name="eq_updateStatus" title="最后状态" property="logContent" type="ComboBox" multiple="Y" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+  </panel>
+  <panel name="pnlDg" title="pnlDg" object="issueLog" type="Grid"  multiple="">
+    <control name="id" title="日志编号" property="id" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="ctlIssueId" title="工作项编号" property="issueId" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="createByName" title="操作人" property="createByName" type="TextBox" edit="" required="" format="" width="140" height="" column=""/>
+    <control name="ctlTypeName" title="类型" property="typeName" type="TextBox" edit="" required="" format="" width="140" height="" column=""/>
+    <control name="ctlLogContent" title="日志内容" property="logContent" type="TextBox" edit="" required="" format="" width="300" height="" column=""/>
+    <control name="createTime" title="操作日期" property="createTime" type="TextBox" edit="" required="" format="" width="140" height="" column=""/>
+  	<control name="upStatus" title="最终状态" property="upStatusName" type="TextBox" edit="" required="" format="" width="140" height="" column=""/>
+  </panel>
+  <!-- 加载 -->
+    <flow trigger="" event="OnLoad" filter="">
+      <procedure name="getType"  logic="List" ifyes="jsUpstatus" ifno="">
+        <param name="Out" value="pnlGroup.eq_type"></param>
+        <param name="Sql" value="issue/issuelogType"></param>
+        <param name="Options" value=",[全部]"/>
+      </procedure> 
+      <procedure name="jsUpstatus"  logic="List" ifyes="jsQuery" ifno="">
+        <param name="Out" value="pnlGroup.eq_updateStatus"></param>
+        <param name="Sql" value="issue/ListIssueStatus"></param>
+        <param name="Options" value="YorN,[全选/取消]"/>
+      </procedure>      
+       <procedure name="jsQuery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="issue/QryIssLogList"></param>
+      </procedure>
+    </flow>
+  <!-- 查询 -->
+    <flow trigger="pnlUp.ctlQuery" event="OnClick" filter="">
+       <procedure name="jsQuery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="issue/QryIssLogList"></param>
+      </procedure>
+    </flow>
+    <!-- 清空条件 -->
+    <flow trigger="pnlUp.ctlClear" event="OnClick" filter="">
+      <procedure name="btnClear"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+      </procedure>
+    </flow>
+    <!-- 导出清单 -->
+    <flow trigger="pnlUp.ctlExport" event="OnClick" filter="">
+      <procedure name="ctlExport" server="" logic="Export" ifyes="" ifno="">
+        <param name="Format" value="pnlDg"></param>
+        <param name="In" value="pnlGroup"></param>
+        <param name="Sql" value="issue/QryIssLogList"></param>
+      </procedure>
+    </flow>
+    <!-- 活跃状态 -->
+    <flow trigger="pnlUp.ctlEmpStatus" event="OnClick" filter="">
+      <procedure name="jsgoto"  logic="Transition" ifyes="" ifno="">
+        <param name="To" value="empActiveTime"></param>
+        <param name="Mode" value="Edit"></param>
+      </procedure>
+    </flow>   
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pnlUp" location ="North" scale=""/>
+      </region>
+    <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="North" scale=""/>
+    <subregion panel="pnlDg" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>
+  </ui_layer>
+</tsoftware>

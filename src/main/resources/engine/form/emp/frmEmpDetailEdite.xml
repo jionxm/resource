@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+
+	<!-- 教育经历 -->
+  <ui name="frmEducation" title="教育经历编辑">
+	<panel name="pnlGroup" title="pnlGroup" object="education" type="Group">
+		<control name="ctlId" title="id" property="id" type="Hidden" edit="Y" required="" format="" width="" height="" column=""/>
+		<control name="ctlEmpId" title="人员编号" property="empId" type="Hidden" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlStartDate" title="开始日期" property="startDate" type="DateBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlEndDate" title="结束日期" property="endDate" type="DateBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlSchool" title="学校名称" property="school" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlSpeciality" title="专业" property="speciality" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlDegree" title="学历" property="degree" type="ComboBox" initial="'bachelor'"  edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlLearningStyle" title="学习方式" property="learningStyle" initial="'fulltime'" type="ComboBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column=""  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column=""  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil" format="" width="1" height="1" column=""  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column=""  />
+	</panel>
+	<panel name="pnlDown" title="pnlDown" object="" type="Toolbar">
+		<control name="ctlSave" title="确认" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlCancel" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<!-- 加载 -->
+   	<flow trigger="" event="OnLoad" filter="" >
+      <procedure name="clear"  logic="Clear" ifyes="getDegree" ifno="">
+       <param name="Out" value="pnlGroup"></param>
+      </procedure>
+ 	  <procedure name="getDegree" server="" logic="List" ifyes="getLearningStyle" ifno="">
+        <param name="Out" value="pnlGroup.ctlDegree"></param>
+        <param name="Sql" value="educationDegree"></param>
+      </procedure>
+      <procedure name="getLearningStyle"  logic="List" ifyes="branch" ifno="">
+        <param name="Out" value="pnlGroup.ctlLearningStyle"></param>
+        <param name="Sql" value="educationLearnStyle"></param>	
+      </procedure> 
+   	  <procedure name="branch" server="" logic="Branch" ifyes="getEmpId" ifno="getId">
+        <param name="In" value="getStorage('frmEducation_EditMode')=='Add'"></param>
+      </procedure> 
+      <procedure name="getId" server="" logic="DecodeId" ifyes="qid" ifno="jclear">
+        <param name="Out" value="pnlGroup.ctlId"></param>
+      </procedure>
+      <procedure name="getEmpId" server="" logic="DecodeId" ifyes="qid" ifno="jclear">
+        <param name="Out" value="pnlGroup.ctlEmpId"></param>
+      </procedure>
+      <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryEducationList"></param>
+      </procedure> 
+    </flow>
+    
+   	<!-- 保存 -->
+    <flow trigger="pnlDown.ctlSave" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Msg" value="教育经历已保存,详情请查看操作日志"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+    
+	<!-- 关闭 -->
+    <flow trigger="pnlDown.ctlCancel" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="pnlDown" location="South" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="Center" scale="" />
+      </region>
+    </layout>
+  </ui>
+  
+   <!-- 工作经历 -->
+  <ui name="frmExperience" title="工作经历编辑">
+	<panel name="pnlGroup" title="pnlGroup" object="experience" type="Group">
+		<control name="ctlId" title="id" property="id" type="Hidden" edit="Y" required="" format="" width="1" height="" column=""/>
+		<control name="ctlEmpId" title="人员编号" property="empId" type="Hidden" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlStartDate" title="开始日期" property="startDate" type="DateBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlEndDate" title="结束日期" property="endDate" type="DateBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlCompany" title="单位名称" property="company" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlDepartment" title="部门" property="department" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlPosition" title="职位" property="position" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil" format="" width="1" height="1" column="1"  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column="1"  />
+	</panel>
+	<panel name="pnlDown" title="pnlDown" object="" type="Toolbar">
+		<control name="ctlSave" title="确认" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlCancel" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+ 	<!-- 加载 -->
+   	<flow trigger="" event="OnLoad" filter="" >
+ 	  <procedure name="branch" server="" logic="Branch" ifyes="getEmpId" ifno="getId">
+        <param name="In" value="Judge(getStorage('frmExperience_EditMode'),'IsEq','Add')"></param>
+      </procedure> 
+      <procedure name="getId" server="" logic="DecodeId" ifyes="qid" ifno="jclear">
+        <param name="Out" value="pnlGroup.ctlId"></param>
+      </procedure>
+      <procedure name="getEmpId" server="" logic="DecodeId" ifyes="" ifno="jclear">
+        <param name="Out" value="pnlGroup.ctlEmpId"></param>
+      </procedure>
+      <procedure name="qid"  logic="QueryById" ifyes="getDegree" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryExperienceList"></param>
+      </procedure> 
+    </flow>
+
+    
+   	<!-- 保存 -->
+    <flow trigger="pnlDown.ctlSave" event="OnClick" filter="editMode!='' &amp;&amp; editMode!='Readonly'" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Msg" value="工作记录已保存,详情请查看操作日志"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+    
+	<!-- 关闭 -->
+    <flow trigger="pnlDown.ctlCancel" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>
+
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="pnlDown" location="South" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="Center" scale="" />
+      </region>
+    </layout>
+  </ui>
+  
+  <!-- 培训记录 -->
+  <ui name="frmTraining" title="培训记录编辑">
+	<panel name="pnlGroup" title="pnlGroup" object="training" type="Group">
+		<control name="ctlId" title="id" property="id" type="Hidden" edit="Y" required="" format="" width="" height="" column="1"/>
+		<control name="ctlEmpId" title="人员编号" property="empId" type="Hidden" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlStartDate" title="开始日期" property="startDate" type="DateBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlEndDate" title="结束日期" property="endDate" type="DateBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlAgency" title="培训机构名称" property="agency" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlContent" title="培训内容" property="content" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlCertificate" title="培训证书" property="certificate" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil" format="" width="1" height="1" column="1"  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column="1"  />
+	</panel>
+	<panel name="pnlDown" title="pnlDown" object="" type="Toolbar">
+		<control name="ctlSave" title="确认" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlCancel" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<!-- 加载 -->
+   	<flow trigger="" event="OnLoad" filter="" >
+   	  <procedure name="branch" server="" logic="Branch" ifyes="getEmpId" ifno="getId">
+        <param name="In" value="Judge(getStorage('frmTraining_EditMode'),'IsEq','Add')"></param>
+      </procedure>
+      <procedure name="getId" server="" logic="DecodeId" ifyes="qid" ifno="jclear">
+        <param name="Out" value="pnlGroup.ctlId"></param>
+      </procedure>
+   	  <procedure name="getEmpId" server="" logic="DecodeId" ifyes="" ifno="jclear">
+        <param name="Out" value="pnlGroup.ctlEmpId"></param>
+      </procedure>
+      <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryTrainingList"></param>
+      </procedure> 
+    </flow>
+
+    
+   	<!-- 保存 -->
+    <flow trigger="pnlDown.ctlSave" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Msg" value="培训记录已保存,详情请查看操作日志"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+    
+	<!-- 关闭 -->
+    <flow trigger="pnlDown.ctlCancel" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>
+
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="pnlDown" location="South" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="Center" scale="" />
+      </region>
+    </layout>
+  </ui>
+   
+  <!-- 考核记录 -->
+  <ui name="frmAssessment" title="考核记录编辑">
+	<panel name="pnlGroup" title="pnlGroup" object="assessment" type="Group">
+		<control name="ctlId" title="id" property="id" type="Hidden" edit="Y" required="" format="" width="" height="" column="1"/>
+		<control name="ctlEmpId" title="人员编号" property="empId" type="Hidden" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlStartDate" title="日期" property="startDate" type="DateBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlName" title="考核名称" property="name" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="ctlResult" title="考核结果" property="result" type="TextBox" edit="Y" required="Y" format="" width="1" height="2" column="1"/>
+		<control name="ctlScore" title="考核成绩" property="score" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil" format="" width="1" height="1" column="1"  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column="1"  />
+	</panel>
+	<panel name="pnlDown" title="pnlDown" object="" type="Toolbar">
+		<control name="ctlSave" title="确认" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlCancel" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<!-- 加载 -->
+   	<flow trigger="" event="OnLoad" filter="" >
+   	  <procedure name="branch" server="" logic="Branch" ifyes="getEmpId" ifno="getId">
+        <param name="In" value="getStorage('frmAssessment_EditMode')=='Add'"></param>
+      </procedure>
+      <procedure name="getId" server="" logic="DecodeId" ifyes="qid" ifno="jclear">
+        <param name="Out" value="pnlGroup.ctlId"></param>
+      </procedure>
+   	  <procedure name="getEmpId" server="" logic="DecodeId" ifyes="" ifno="jclear">
+        <param name="Out" value="pnlGroup.ctlEmpId"></param>
+      </procedure>
+      <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryAssessmentList"></param>
+      </procedure>       
+    </flow>
+    
+   	<!-- 保存 -->
+    <flow trigger="pnlDown.ctlSave" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Msg" value="考核记录已保存,详情请查看操作日志"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+    
+	<!-- 关闭 -->
+    <flow trigger="pnlDown.ctlCancel" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>
+
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="pnlDown" location="South" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="Center" scale="" />
+      </region>
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

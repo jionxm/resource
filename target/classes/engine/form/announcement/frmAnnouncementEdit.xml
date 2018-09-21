@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmAnnouncementEdit" title="公告编辑">
+	<panel name="pForm" title="公告编辑" object="announcement" type="Group">
+		<control name="id" title="id" property="id" type="Hidden" edit="Y" required="" format="" width="2" height="" column="2"/>
+		<control name="title" title="标题" property="title" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column=""/>
+		<control name="eq_type" title="类型" property="type" type="ComboBox"  edit="Y" required="Y" format="" width="1" height="1" column="2"/>
+		<control name="context" title="内容" property="context" type="KindEditor" edit="Y" required="N" format="" width="1" height="1" column="2"  />
+		<control name="orgName" title="发布部门" property="orgName" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="2" />
+		<control name="createName" title="发布人" property="createName" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="2"/>
+		<control name="eq_orgId" title="发布部门ID" property="orgId" type="Hidden" edit="Y" required="N" format="" width="2" height="2" column="2"/>
+  		<control name="eq_createBy" title="发布人ID" property="createBy" type="Hidden" edit="Y" required="N" format="" width="2" height="2" column="2"/>
+		<control name="createTime" title="发布时间" property="createTime" type="Hidden" edit="Y"  required="N"   target="editMode=='Add'?CurrentTime():model.createTime" format="" width="200" height="1" column=""  />
+		<control name="updateBy" title="修改人" property="updateBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?model.updateBy:session.userInfo.empId" format="" width="1" height="1" column=""  />
+		<control name="updateTime" title="修改时间" property="updateTime" type="Hidden" edit="Y" required="N" target="editMode=='Add'?model.updateTime:CurrentTime()" format="" width="1" height="1" column=""  />
+	</panel>
+	<panel name="pButton" title="工具按钮" object="" type="Toolbar">
+		<control name="save" title="确认" property="" type="Button" edit="" required="" format="" width="" height="" column="2"/>
+		<control name="cancel" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column="2"/>
+	</panel>
+	
+	<!-- 加载 -->
+    <flow trigger="" event="OnLoad" filter="" >
+    <procedure name="jClear"  logic="Clear" ifyes="List" ifno="" sync="Y">
+         <param name="Out" value="pForm"></param>
+      </procedure>
+      <procedure name="List"  logic="List" ifyes="jBranch" ifno="" sync="Y">
+         <param name="Out" value="pForm.eq_type"></param>
+         <param name="Sql" value="announcement/ListAnnouncementType"></param>
+      </procedure>
+    <procedure name="jBranch" server="" logic="Branch" ifyes="j1" ifno="">
+      <param name="In" value="getEditMode()=='Edit'"></param>
+     </procedure>
+     <procedure name="j1" server="" logic="DecodeId" ifyes="qid" ifno="">
+        <param name="Out" value="pForm.id" />
+      </procedure> 
+      <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+        <param name="In" value="pForm" />
+        <param name="Out" value="pForm" />
+        <param name="Sql" value="announcement/QryAnnouncementList" />
+      </procedure>
+	</flow>
+    
+    <!-- 选择发布人 -->
+    <flow trigger="pForm.createName" event="OnClick" filter="">
+      <procedure name="jSearch" logic="Find" ifyes="" ifno="">
+       <param name="In" value="pForm"/>
+        <param name="Sql" value="emp" />
+        <param name="Out" value="pForm" />
+        <param name="Title" value="发布人选择" />
+        <param name="Options" value="$RESET,重置"/>
+        <param name="Columns" value="id,编码,eq_createBy|name,姓名,createName" />
+         <param name="Window" value="Medium" />
+      </procedure>
+    </flow>
+      <!-- 选择发布部门 -->
+ <flow trigger="pForm.orgName" event="OnClick" filter="">
+      <procedure name="joSearch" logic="Find" ifyes="" ifno="">
+       <param name="In" value="pForm"/>
+        <param name="Sql" value="AnnouncementOrg" />
+        <param name="Out" value="pForm" />
+        <param name="Title" value="发布部门选择" />
+        <param name="Options" value="$RESET,重置"/>
+        <param name="Columns" value="orgId,编码,eq_orgId|orgName,部门名称,orgName" />
+         <param name="Window" value="Medium" />
+      </procedure>
+    </flow> 
+       <!-- 保存 -->
+    <flow trigger="pButton.save" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Msg" value="'公告已保存'"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>	
+    
+    <!-- 取消 -->
+    <flow trigger="pButton.cancel" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>	
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="pButton" location="South" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pForm" location="Center" scale="" />
+      </region>      
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

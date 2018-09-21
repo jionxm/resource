@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+<!-- 人员model -->
+	<object name="employee1" table="t_employee" primary="id" unique="code|id_card" order="">
+		<property name="empId" type="Long" length="20" initial="" field="id"/>
+		<property name="name" type="String" length="50" initial="" field="name"/>
+		<property name="code" type="String" length="20" field="code"/>
+		<property name="extCode" type="String" length="20" field="ext_code"/>
+		<property name="orgId" type="Long" length="20" field="org_id"/>
+		<property name="orgName" type="String" length="20" field=""/>
+		<property name="idCard" type="String" length="18" field="id_card"/>
+		<property name="status" type="String" length="20" field="status"/>
+		<property name="statusName" type="String" length="20" field=""/>
+		<property name="type" type="String" length="20" field="type"/>
+		<property name="typeName" type="String" length="20" field=""/>
+		<property name="gender" type="String" length="20" field="gender"/>
+		<property name="genderName" type="String" length="20" field=""/>
+		<property name="nationality" type="String" length="20" field="nationality"/>
+		<property name="nationalityName" type="String" length="20" field=""/>
+		<property name="birthPlace" type="String" length="20" field="birth_place"/>
+		<property name="birthPlaceName" type="String" length="20" field=""/>
+		<property name="birthDate" type="Date" length="20" field="birth_date"/>
+		<property name="marital" type="String" length="20" field="marital"/>
+		<property name="maritalName" type="String" length="20" field=""/>
+		<property name="mobile" type="String" length="11" validate="CheckMobile(self)" field="mobile"/>
+		<property name="officePhone" type="String" length="13" validate="CheckPhone(self)" field="office_phone"/>
+		<property name="homePhone" type="String" length="20" validate="CheckPhone(self)" field="home_phone"/>
+		<property name="email" type="String" length="50" validate="CheckEmail(self)" field="email"/>
+		<property name="positionId" type="String" length="50" field="position_id"/>
+		<property name="positionName" type="String" length="50" field=""/>
+		<property name="entryDate" type="Date" length="20" field="entry_date"/>
+		<property name="homeAddress" type="String" length="200" field="home_address"/>
+		<property name="homePostcode" type="String" length="6" validate="CheckPostCode(self)" field="home_postcode"/>
+		<property name="remark" type="String" length="200" field="remark"/>
+		<property name="photoId" type="Long" length="20" field="photo_id"/>
+		
+		<property name="lastTime" type="Date" length="" validate=""  field="" />
+		<property name="createTime" type="Date" length="" validate=""  field="create_time" />		
+		<property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+		<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+		<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+		<property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+ 	</object>  
+ 	<!-- 人员教育经历model -->
+ 	<object name="education" table="t_education" primary="id" unique="" order="">
+ 		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="empId" type="String" length="50" initial="" field="emp_id"/>
+		<property name="empName" type="String" length="50" initial="" field=""/>
+		<property name="startDate" type="String" length="50" initial="" field="start_date"/>
+		<property name="endDate" type="String" length="50" initial="" field="end_date"/>
+		<property name="school" type="String" length="50" initial="" field="school"/>
+		<property name="speciality" type="String" length="50" initial="" field="speciality"/>
+		<property name="degree" type="String" length="50" initial="" field="degree"/>
+		<property name="degreeName" type="String" length="50" initial="" field=""/>
+		<property name="learningStyle" type="String" length="20" initial="" field="learning_style"/>
+		<property name="learningStyleName" type="String" length="50" initial="" field=""/>
+				
+		<property name="createTime" type="Date" length="" validate=""  field="create_time" />		
+		<property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+		<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+		<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+		<property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+ 	</object>   
+ 	<!-- 人员工作经历model -->  
+ 	<object name="experience" table="t_experience" primary="id" unique="" order="">
+ 		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="empId" type="String" length="50" initial="" field="emp_id"/>
+		<property name="empName" type="String" length="50" initial="" field=""/>
+		<property name="startDate" type="String" length="50" initial="" field="start_date"/>
+		<property name="endDate" type="String" length="50" initial="" field="end_date"/>
+		<property name="company" type="String" length="50" initial="" field="company"/>
+		<property name="department" type="String" length="50" initial="" field="department"/>
+		<property name="position" type="String" length="50" initial="" field="position"/>
+				
+		<property name="createTime" type="Date" length="" validate=""  field="create_time" />		
+		<property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+		<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+		<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+		<property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+ 	</object>  
+ 	<!-- 人员培训记录model -->
+ 	<object name="training" table="t_training" primary="id" unique="" order="">
+ 		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="empId" type="String" length="50" initial="" field="emp_id"/>
+		<property name="empName" type="String" length="50" initial="" field=""/>
+		<property name="startDate" type="String" length="50" initial="" field="start_date"/>
+		<property name="endDate" type="String" length="50" initial="" field="end_date"/>
+		<property name="agency" type="String" length="50" initial="" field="agency"/>
+		<property name="content" type="String" length="50" initial="" field="content"/>
+		<property name="certificate" type="String" length="50" initial="" field="certificate"/>
+				
+		<property name="createTime" type="Date" length="" validate=""  field="create_time" />		
+		<property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+		<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+		<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+		<property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+ 	</object> 
+ 	<!-- 人员考核记录model -->
+ 	<object name="assessment" table="t_assessment" primary="id" unique="" order="">
+ 		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="empId" type="String" length="50" initial="" field="emp_id"/>
+		<property name="empName" type="String" length="50" initial="" field=""/>
+		<property name="startDate" type="String" length="50" initial="" field="start_date"/>
+		<property name="name" type="String" length="50" initial="" field="name"/>
+		<property name="result" type="String" length="50" initial="" field="result"/>
+		<property name="score" type="String" length="50" initial="" field="score"/>
+				
+		<property name="createTime" type="Date" length="" validate=""  field="create_time" />		
+		<property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+		<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+		<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+		<property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+ 	</object> 
+ 	<!-- 人员变更记录model -->
+ 	<object name="empLog" table="t_emp_log" primary="id" unique="" order="">
+ 		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="empId" type="String" length="50" initial="" field="emp_id"/>
+		<property name="type" type="String" length="50" initial="" field="type"/>
+		<property name="logContent" type="String" length="50" initial="" field="log_content"/>
+		<property name="empName" type="String" length="50" initial="" field=""/>
+				
+		<property name="createTime" type="Date" length="" validate=""  field="create_time" />		
+		<property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+		<property name="createByName" type="Long" length="10" validate=""  field="" />
+		<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+		<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+		<property name="updateByName" type="Long" length="10" validate=""  field="" />
+		<property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+ 	</object>
+ 	<!-- 岗位model -->
+	<object name="position" table="t_position" primary="id" unique="name" order=""> <!-- 唯一性校验字段unique -->
+		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="name" type="String" length="50" initial="" field="name"/>
+		<property name="remark" type="String" length="200" field="remark"/>
+		
+		<property name="createTime" type="Date" length="" validate=""  field="create_time" />		
+		<property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+		<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+		<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+		<property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+		<!-- 岗位下挂岗人员 -->
+		<property name="empCount" type="Long" length="10" validate=""  field="" />  
+ 	</object>  
+</model_layer>
+</tsoftware>

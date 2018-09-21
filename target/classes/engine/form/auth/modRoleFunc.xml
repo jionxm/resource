@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+  <object name="modRoleFunc" table="t_role_func" primary="id" unique="role_id,func_id" order="">
+	<property name="id" type="Long" length="20" initial="" field="id"/>
+	<property name="roleId" type="Long" length="20" initial="" field="role_id"/>
+	<property name="funcId" type="Long" length="20" initial="" field="func_id"/>
+	<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+	<property name="createBy" type="Long" length="10" validate=""  field="create_by" />	
+	<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+	<property name="createTime" type="Date" length="" validate=""  field="create_time" />
+  </object>     
+</model_layer>
+</tsoftware>

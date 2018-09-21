@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+    <model_layer>
+        <!-- markdownDocmodel -->
+        <object name="markdowndoc" table="t_markdown_doc" primary="ID" unique="" order="" father="pid">
+            <property name="id" type="Long" length="20" initial="" field="ID"/>
+            <property name="title" type="String" length="50" initial="" field="title"/>
+            <property name="name" type="String" length="200" field="name"/>
+            <property name="property" type="String" length="20" field="property"/>
+            <property name="type" type="String" length="50" validate="" field="type"/>
+            <property name="path" type="String" length="200" validate="" field="path"/>
+            <property name="fileId" type="Long" length="" validate="" field="file_id"/>
+            <property name="createBy" type="Long" length="10" validate="" field="create_by"/>
+            <property name="createTime" type="Date" length="" validate="" field="create_time"/>
+            <property name="fileSize" type="String" length="" validate="" field=""/>
+            <property name="xmlpath" type="String" length="500" validate="" field="xml_path"/>
+            <!-- 关联跳转页面列表 -->
+            <property name="oldTransition" type="String" length="" validate="" field=""/>  
+            <property name="transition" type="String" length="" validate="" field=""/>         
+        </object>
+    </model_layer>
+
+    <ui_layer>
+        <ui name="frmMdownFormList" title="配置库表单列表">
+            <panel name="pToolbar" title="工具条" object="" type="Toolbar">
+            	<control name="btnTransition" title="跳转页面" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="btnQuery" title="查询" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <!-- <control name="btnClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/> -->
+                <control name="btnRefresh" title="重新装载" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+            </panel>
+            <panel name="pCondition" title="查询条件" object="markdowndoc" type="Group">
+                <control name="lk_name" title="文件名" property="name" type="TextBox" edit="Y" required="N" format=""
+                         width="1" height="1" column="5"/>
+            </panel>
+            <panel name="pTable" title="查询结果" object="markdowndoc" type="Grid" multiple="">
+                <control name="edit" title="预览" property="" type="Link" edit="" required="" format="" width="120"
+                         height="" column=""/>
+                <control name="flowList" title="事件流" property="" type="Link" edit="" required="" format="" width=""
+                         height="" column=""/>
+				<control name="interFace" title="接口" property="" type="Link" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="name" title="文件标识" property="name" type="TextBox" edit="" required="" format=""
+                         width="100" height="" column=""/>
+                <control name="title" title="文件名" property="title" type="TextBox" edit="" required="" format=""
+                         width="130" height="" column=""/>
+                <control name="type" title="类型" property="type" type="TextBox" edit="" required="" format="" width="140"
+                         height="" column=""/>
+                <control name="createTime" title="创建时间" property="createTime" type="TextBox" edit="" required=""
+                         format="" width="150" height="" column=""/>
+                <control name="fileSize" title="文件大小" property="fileSize" type="TextBox" edit="" required="" format=""
+                         width="80" height="" column=""/>
+                         
+                <control name="xmlpath" title="xml文件所在位置" property="xmlpath" type="TextBox" edit="" required="" format=""
+                         width="1000" height="" column=""/>         
+                         
+                <control name="path" title="md文件所在位置" property="path" type="TextBox" edit="" required="" format=""
+                         width="500" height="" column=""/>
+                <control name="fileId" title="文件fileId" property="fileId" type="TextBox" edit="" required="" format=""
+                         width="80" height="" column=""/>
+            </panel>
+
+            <flow trigger="" event="OnLoad" filter="">
+                <procedure name="initForm" logic="Clear" ifyes="j4" ifno="">
+                    <param name="Out" value="pCondition"></param>
+                </procedure>
+                <procedure name="j4" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pCondition"></param>
+                    <param name="Out" value="pTable"></param>
+                    <param name="Sql" value="QryMarkDownDocList"></param>
+                </procedure>
+            </flow>
+            <flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+                <procedure name="jsquery" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pCondition"/>
+                    <param name="Out" value="pTable"/>
+                    <param name="Sql" value="QryMarkDownDocList"/>
+                </procedure>
+            </flow>
+            <!--  <flow trigger="pToolbar.btnClear" event="OnClick" filter="">
+               <procedure name="jsquery"  logic="Clear" ifyes="" ifno="">
+                 <param name="Out" value="pCondition"></param>
+               </procedure>
+             </flow>  -->
+            <flow trigger="pToolbar.btnRefresh" event="OnClick" filter="">
+                <procedure name="j2" logic="Transform" ifyes="jsquery" ifno="">
+                    <param name="Plugin" value="com.tedu.base.file.controller.MarkDownProcessor"/>
+                </procedure>
+                <procedure name="jsquery" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pCondition"/>
+                    <param name="Out" value="pTable"/>
+                    <param name="Sql" value="QryMarkDownDocList"/>
+                </procedure>
+            </flow>
+              <flow trigger="pToolbar.btnTransition" event="OnClick" filter="">
+                	<procedure name="jPopup" logic="Popup" ifyes=""
+                           ifno="">
+                    <param name="To" value="frmTransition"/>
+                    <param name="Mode" value="ReadOnly"/>
+                    <param name="Window" value="Medium"/>
+                    <param name="Title" value="跳转页面列表"/>
+                </procedure>
+            </flow>
+
+            <!-- 预览 -->
+            <flow trigger="pTable.edit" event="OnClick" filter="">
+                <procedure name="jspopup" logic="PreviewFile" ifyes="" ifno="">
+                    <param name="In" value="pTable.fileId"></param>
+                </procedure>
+            </flow>
+
+            <flow trigger="pTable.flowList" event="OnClick" filter="">
+                <procedure name="jEncodeid" server="" logic="EncodeId"
+                           ifyes="jPopup" ifno="">
+                    <param name="In" value="pTable.name"></param>
+                </procedure>
+                <procedure name="jPopup" logic="Popup" ifyes=""
+                           ifno="">
+                    <param name="To" value="frmFlowList"/>
+                    <param name="Mode" value="ReadOnly"/>
+                    <param name="Window" value="Medium"/>
+                    <param name="Title" value="资源列表"/>
+                </procedure>
+            </flow>
+            
+           <flow trigger="pTable.interFace" event="OnClick" filter="">
+                <procedure name="jEncodeid" server="" logic="EncodeId"
+                           ifyes="jPopup" ifno="">
+                    <param name="In" value="pTable.name"></param>
+                </procedure>
+                <procedure name="jPopup" logic="Popup" ifyes=""
+                           ifno="">
+                    <param name="To" value="frmInterFaceList"/>
+                    <param name="Mode" value="ReadOnly"/>
+                    <param name="Window" value="Medium"/>
+                    <param name="Title" value="接口列表"/>
+                </procedure>
+            </flow>
+            <flow trigger="pToolbar.btnReturn" event="OnClick" filter="root!=''">
+                <procedure name="jsclose" server="" logic="Back" ifyes="" ifno="">
+                    <param name="Mode" value="Edit"/>
+                </procedure>
+            </flow>
+
+            <!-- 布局 -->
+            <layout>
+                <region location="North" scale="">
+                    <subregion panel="pToolbar" location="North" scale=""/>
+                </region>
+                <region location="Center" scale="">
+                    <subregion panel="pCondition" location="North" scale=""/>
+                    <subregion panel="pTable" location="Center" scale=""/>
+                </region>
+            </layout>
+        </ui>
+    </ui_layer>
+</tsoftware>

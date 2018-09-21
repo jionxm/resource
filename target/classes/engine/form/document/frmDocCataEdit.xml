@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmDocCataEdit" title="文档表编辑">
+	<panel name="pnlHidden" title="pnlHidden" object="documentmd" type="Hidden">
+		<control name="id" title="id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pForm" title="编辑界面" object="documentmd" type="Group">
+		<control name="id" title="文档表id" property="id" type="Hidden" edit="Y" required="" format="" width="2" height="" column="1"/>
+		<control name="fileId" title="文件表Id" property="fileId" type="Hidden" edit="Y" required="" format="" width="2" height="" column="1"/>
+		<control name="title" title="文档名称" property="title" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="keyword" title="关键词" property="keyword" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="1"/>
+		<control name="status" title="状态" property="status" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="1"/>
+		<control name="eq_cataId" title="所属目录" property="cataId" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column="1"/>
+		<control name="cataName" title="所属目录" property="cataName" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="1"/>
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil" format="" width="1" height="1" column="1"  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column="1"  />
+	</panel>
+	<panel name="pToolbar" title="功能按钮" object="" type="Toolbar">
+		<control name="btnSave" title="确认" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnClose" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	
+   <!-- 所属部门-->
+    <flow trigger="pForm.cataName" event="OnClick" filter="">
+      <procedure name="findOrg"  logic="Find" ifyes="" ifno="">
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="Doccata"></param>
+        <param name="Title" value="目录选择"></param>
+        <param name="Columns" value="name,目录名称,cataName|id,编码,eq_cataId|upDocName,上级目录"></param> 
+        <param name="Window" value="Large"></param> 
+        </procedure>
+     </flow>
+    
+    <!-- 加载 -->
+    <flow trigger="" event="OnLoad" filter="" >
+      <procedure name="j1" server="" logic="DecodeId" ifyes="jdname" ifno="">
+        <param name="Out" value="pForm.id"></param>
+      </procedure>
+      <procedure name="jdname"  logic="QueryById" ifyes="" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="QryCataDocDetail"></param>
+      </procedure>               
+    </flow>
+    
+    <!-- 确认 -->
+    <flow trigger="pToolbar.btnSave" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Msg" value="'文档信息已被保存,详情请查看操作日志'"></param>
+      </procedure>
+      
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+    <!-- 取消 -->
+    <flow trigger="pToolbar.btnClose" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>	
+    <!-- 布局 -->    
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="pToolbar" location="North" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pForm" location="Center" scale="" />
+      </region>
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+			
+<model_layer>
+  <object name="jobLog" table="t_job_log" primary="ID" unique="ID" order="createTime desc" father="">
+	<property name="id" type="Long" length="" validate=""  field="ID"/>
+	<property name="name" type="String" length="50" validate="" field=""/>
+	<property name="cronExpression" type="String" length="50" validate="" field=""/>
+	<property name="description" type="String" length="50" validate="" field=""/>
+	<property name="jobId" type="String" length="50" validate="" field="JOB_ID"/>
+	<property name="cost" type="Long" length="50" validate="" field="COST"/>
+	<property name="type" type="String" length="4" validate=""  field="TYPE"/>
+	<property name="result" type="String" length="10" validate=""  field="result"/>
+	<property name="concurrent" type="String" length="4" validate=""  field=""/>
+	<property name="param" type="String" length="4" validate=""  field=""/>
+	<property name="createTime" type="Date" length="" validate=""  field="CREATE_TIME"/>
+  </object>
+</model_layer>
+<ui_layer>
+  <ui name="jobLogList" title="任务日志列表">
+	<panel name="pnlUp" title="工具条" object="" type="Toolbar">
+		<control name="ctlQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnExport" title="导出清单" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<!-- 查询条件用op_做前缀 -->
+	<panel name="pnlGroup" title="pnlGroup" object="jobLog" type="Group">
+		<control name="lk_Name" title="任务名称" property="name" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="eq_type" title="类型" property="type" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="eq_param" title="参数" property="param" type="TextBox" edit="Y" required="N" format="" width="2" height="1" column="1"/>
+		<control name="dg_createTime" title="触发时间从" property="createTime" type="DateBox" edit="Y" required="N" format="" width="1" height="1" column="" initial="CurrentTime()"/>
+		<control name="dl_createTime" title="至" property="createTime" type="DateBox" edit="Y" required="N" format="" width="1" height="1" column="" initial="CurrentTime()"/>
+		<control name="le_cost" title="执行时长阈值" property="cost" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="eq_concurrent" title="并发控制" property="concurrent" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column="1"/>
+	</panel>
+	<panel name="pnlDg" title="pnlDg" object="jobLog" type="Grid"  multiple="">
+		<control name="id" title="序号" property="id" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="ctlName" title="任务名称" property="name" type="TextBox" edit="" required="" format="" width="200" height="" column=""/>
+		<control name="ctlCronExpression" title="触发时间" property="createTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="ctlCost" title="执行时长" property="cost" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="ctlType" title="类型" property="type" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="ctlDescription" title="并发控制" property="concurrent" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="ctlParam" title="任务参数" property="param" type="TextBox" edit="" required="" format="" width="350" height="" column=""/>
+		<control name="ctlresult" title="结果" property="result" type="TextBox" edit="" required="" format="" width="70" height="" column=""/>
+	</panel>
+    <flow trigger="pnlUp.ctlClear" event="OnClick" filter="">
+      <procedure name="btnClear"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+      </procedure>
+    </flow>
+        <flow trigger="pnlUp.btnExport" event="OnClick" filter="">
+      <procedure name="exportdata" logic="Export" ifyes="" ifno="">
+		<param name="In" value="pnlGroup" />      
+        <param name="Format" value="pnlDg"></param>
+        <param name="Sql" value="QryJobLogList"></param>
+      </procedure>
+    </flow>
+		    <flow trigger="" event="OnLoad" filter="">
+          <procedure name="initForm"  logic="Clear" ifyes="jsdict1" ifno="" >
+           <param name="Out" value="pnlGroup"></param>
+      </procedure>  
+            <procedure name="jsdict1"  logic="List" ifyes="jsdict2" ifno="">
+        <param name="Out" value="pnlGroup.eq_type"></param>
+        <param name="Sql" value="jobType"></param>
+        <param name="Options" value=",[全部]"></param>
+      </procedure>      
+      <procedure name="jsdict2"  logic="List" ifyes="j4" ifno="">
+        <param name="Out" value="pnlGroup.eq_concurrent"></param>
+        <param name="Sql" value="concurrent"></param>
+        <param name="Options" value=",全部"></param>
+      </procedure>      
+      <procedure name="j4"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="QryJobLogList"></param>
+      </procedure>   
+    </flow>
+	        <flow trigger="pnlUp.ctlQuery" event="OnClick" filter="">
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="QryJobLogList"></param>
+      </procedure>
+      </flow>
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pnlUp" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="North" scale=""/>
+		<subregion panel="pnlDg" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>
+  </ui_layer>
+</tsoftware>

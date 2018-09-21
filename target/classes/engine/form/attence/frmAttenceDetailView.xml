@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmAttenceDetailView" title="考勤明细表详情">
+	<panel name="hiddenPanel" title="hidden" object="attencecheckdetail" type="Hidden">
+		<control name="acdId" title="Id" property="Id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pForm" title="考勤明细详情" object="attencecheckdetail"  type="Grid" multiple="">
+		<control name="userId" title="UserId" property="userId" type="Hidden" edit="N" required="N" format="" width="100" height="" column=""/>
+		<control name="userName" title="姓名" property="userName" type="TextBox" edit="N" required="N" format="" width="100" height="" column=""/>
+		<control name="createTime" title="日报提交日期" property="createTime" type="TextBox" edit="N" required="N" format="" width="180" height="" column="" />
+		<control name="commitHours" title="确认的工作小时数" property="commitHours" type="TextBox" edit="N" required="N" format="" width="100" height="" column="" />
+		<control name="projName" title="项目" property="projName" type="TextBox" edit="N" required="N" format="" width="200" height="" column=""/>
+	</panel>
+    <flow trigger="" event="OnLoad" filter="" >
+      <procedure name="j1" server="" logic="DecodeId" ifyes="je" ifno="">
+        <param name="Out" value="hiddenPanel.acdId"></param>
+      </procedure> 
+      <procedure name="je"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="hiddenPanel"></param>
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="attence/QryGetAttDetailList"></param>
+      </procedure> 
+    </flow>
+    <layout>
+      <region location ="Center" scale="">
+        <subregion panel="pForm" location="Center" scale="" />
+      </region>  
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

@@ -1,0 +1,144 @@
+body {
+  background: #ebebeb;
+}
+.none{
+	display:none;
+}
+.title {
+  box-sizing: border-box;
+  height: 90px;
+  line-height: 90px;
+  text-align: center;
+  background: white;
+  font-size: 38px;
+  margin-bottom: 10px;
+  font-weight: normal;
+  position: relative;
+}
+.title a {
+  background: url(../img/show.png) no-repeat center center;
+  position: absolute;
+  left: 0;
+  width: 90px;
+  height: 90px;
+}
+#Defect li {
+  clear: both;
+  width: 750px;
+  height: 80px;
+  padding: 15px 35px;
+  margin-bottom: 10px;
+  background: white;
+}
+#Defect li span {
+  float: left;
+  width: 35%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 32px;
+}
+#Defect li input,
+#Defect li select,
+#Defect li option {
+	background:white;
+  float: right;
+  width: 65%;
+  font-size: 26px;
+  height: 50px;
+  text-align: right;
+  border: none;
+  outline: none;
+  color: #cecece;
+  direction: rtl;
+}
+#Defect .liM {
+  clear: both;
+  width: 750px;
+  height: 240px;
+  padding: 15px 35px;
+  border-bottom: 4px solid #ebebeb;
+  background: white;
+}
+#Defect .liM span {
+  float: left;
+  width: 25%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 32px;
+}
+#Defect .liM textarea {
+  float: right;
+  width: 75%;
+  padding-top:10px;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 28px;
+}
+#Defect .add {
+  position: relative;
+}
+#Defect .add input {
+  visibility: hidden;
+}
+#Defect .add img {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  right: 35px;
+}
+#Defect #submit {
+  width: 100%;
+  height: 97px;
+  position: absolute;
+  bottom: 0;
+  z-index: 99;
+}
+#Defect #submit button {
+  width: 50%;
+  height: 100%;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  float: left;
+  font-size: 36px;
+  color: white;
+}
+#Defect #submit button:first-child {
+  background: #0a9eeb;
+}
+#Defect #submit button:last-child {
+  background: red;
+}
+.weui-actionsheet__cell {
+  font-size: 38px!important;
+}
+
+.modal-full-screen{
+ position: fixed;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ background: rgba(0,0,0,0.5);
+ z-index: 100;
+}
+.modal-full-screen>div{
+ position: absolute;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ width: 450px;
+ height: 200px;
+ margin: auto;
+ background: white;
+ border-radius: 5px;
+}
+.modal-full-screen>div>p{
+ font-size: 35px;
+ height: 200px;
+ line-height: 200px;
+ text-align: center;
+}
+

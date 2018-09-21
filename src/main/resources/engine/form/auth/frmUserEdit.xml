@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+    <ui_layer>
+        <ui name="frmUserEdit" title="用户编辑">
+            <panel name="pForm" title="编辑界面" object="user" type="Group">
+                <control name="id" title="id" property="id" type="Hidden" edit="N" required="" format="" width="2"
+                         height="" column=""/>
+                <control name="name" title="用户名" property="name" type="TextBox" edit="Y" required="Y" format=""
+                         width="1" height="1" column="1"/>
+                <control name="ctlNewPassword" title="登录口令" property="" type="PasswordBox" edit="Y" required="Y"
+                         format="" width="1" height="1" column="1"/>
+                <control name="ctlReNewPassword" title="再次输入口令" property="updatePassword" type="PasswordBox" edit="Y"
+                         required="Y" format="" width="1" height="1" column="1"/>
+                <control name="ctlSalt" title="密码加盐" property="salt" type="Hidden" edit="N" format="" width="1"
+                         initial="Guid()" height="1" column="1"/>
+                <control name="ctlPassWord" title="加密的密码" property="password" type="Hidden" edit="N" format="" width="1"
+                         target="Password(Guid(),model.updatePassword)" height="0" column=""/>
+                <control name="empId" title="人员编码" property="empId" type="Hidden" edit="Y" required="Y" format=""
+                         width="1" height="1" column="1"/>
+                <control name="empName" title="人员姓名" property="empName" type="PopupBox" edit="Y" required="Y" format=""
+                         width="1" height="1" column="1"/>
+
+                <control name="authType" title="认证方式" property="authType" type="ComboBox" edit="Y" required="N"
+                         format="" width="1" height="1" column="1" initial="'local'"/>
+                <control name="status" title="状态" property="status" type="ComboBox" edit="Y" required="N" format=""
+                         width="1" height="1" column="1" initial="'enable'"/>
+
+                <control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N"
+                         target="CurrentTime()" format="" width="1" height="1" column="1"/>
+                <control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N"
+                         target="session.userInfo.empId" format="" width="1" height="1" column="1"/>
+                <control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N"
+                         target="editMode=='Add'?CurrentTime():nil" format="" width="1" height="1" column="1"/>
+                <control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N"
+                         target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column="1"/>
+            </panel>
+            <panel name="pToolbar" title="功能按钮" object="" type="Toolbar">
+                <control name="btnSave" title="确认" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="btnClose" title="取消" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+            </panel>
+            <flow trigger="" event="OnLoad" filter="">
+                <procedure name="jsclear" logic="Clear" ifyes="list1" ifno="">
+                    <param name="Out" value="pForm"></param>
+                </procedure>
+                <procedure name="list1" logic="List" ifyes="list2" ifno="">
+                    <param name="Out" value="pForm.authType"></param>
+                    <param name="Sql" value="authType"></param>
+                </procedure>
+                <procedure name="list2" logic="List" ifyes="decode" ifno="">
+                    <param name="Out" value="pForm.status"></param>
+                    <param name="Sql" value="userStatus"></param>
+                </procedure>
+                <procedure name="decode" server="" logic="DecodeId" ifyes="qid">
+                    <param name="Out" value="pForm.id"></param>
+                </procedure>
+                <procedure name="qid" logic="QueryById" ifyes="" ifno="">
+                    <param name="In" value="pForm"></param>
+                    <param name="Out" value="pForm"></param>
+                    <param name="Sql" value="QryUserList"></param>
+                </procedure>
+
+            </flow>
+            <flow trigger="pForm.empName" event="OnClick" filter="">
+                <procedure name="search" logic="Find" ifyes="" ifno="">
+                    <param name="In" value="pForm.empId"></param>
+                    <param name="Sql" value="UserEmpName"></param>
+                    <param name="Out" value="pForm"></param>
+                    <param name="Title" value="选择人员"></param>
+                    <param name="Columns" value="name,人员姓名,empName|id,人员编码,empId|orgName,所属部门"></param>
+                    <param name="Window" value="Medium"></param>
+                </procedure>
+            </flow>
+            <flow trigger="pToolbar.btnSave" event="OnClick" filter="editMode!='' &amp;&amp; editMode!='Readonly'">
+                <procedure name="proJudgeRepassword" logic="Branch" ifyes="jssave" ifno="proRePasswordWrong">
+                    <param name="In"
+                           value="getPanelControlValue('pForm.ctlNewPassword')==getPanelControlValue('pForm.ctlReNewPassword')"></param>
+                </procedure>
+                <procedure name="proRePasswordWrong" logic="InfoMsg" ifyes="" ifno="">
+                    <param name="Msg" value="两次密码不一致!"></param>
+                </procedure>
+
+
+                <procedure name="jssave" logic="Save" ifyes="jsclose" ifno="">
+                    <param name="In" value="pForm"></param>
+                    <param name="Plugin" value="pwdManagerService"/>
+                    <param name="Msg" value="'保存成功'"></param>
+                </procedure>
+                <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+                    <param name="Refresh" value="true"></param>
+                </procedure>
+            </flow>
+            <flow trigger="pToolbar.btnClose" event="OnClick" filter="">
+                <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+                    <param name="Refresh" value="false"></param>
+                </procedure>
+            </flow>
+            <layout>
+                <region location="South" scale="">
+                    <subregion panel="pToolbar" location="North" scale=""/>
+                </region>
+                <region location="Center" scale="">
+                    <subregion panel="pForm" location="Center" scale=""/>
+                </region>
+            </layout>
+        </ui>
+    </ui_layer>
+</tsoftware>

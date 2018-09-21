@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+      xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmEmpQuery" title="人员查询">
+  <panel name="pnlUp" title="工具条" object="" type="Toolbar">
+	<control name="ctlQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	<control name="ctlClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlAdd" title="新增人员" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlImport" title="导入人员" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlExport" title="导出清单" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlDlg" title="显示列" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+  </panel>
+  <panel name="pnlGroup" title="查询条件" object="employee1" type="Group"  multiple="Y">
+    <control name="lk_name" title="人员姓名" property="name" type="TextBox" edit="Y" required="" format="" width="1" height="1" column=""/>
+    <control name="lk_code" title="人员编码" property="code" type="TextBox" edit="Y" required="" format="" width="1" height="1" column=""/>
+    <control name="lk_extCode" title="外部编码" property="extCode" type="TextBox" edit="Y" required="" format="" width="1" height="1" column=""/>
+    <control name="lk_idCard" title="身份证号" property="idCard" type="TextBox" edit="Y" required="" format="" width="1" height="1" column="4"/>
+    <control name="eq_orgId" title="所属部门" property="orgId" type="Hidden" edit="Y" required="" format="" width="1" height="1" column=""/>
+    <control name="ctlOrgName" title="所属部门" property="orgName" type="PopupBox" edit="Y" required="" format="" width="1" height="1" column=""/>
+    <control name="lk_mobile" title="移动电话" property="mobile" type="TextBox" edit="Y" required="" format="" width="1" height="1" column=""/>
+    <control name="lk_email" title="电子邮件" property="email" type="TextBox" edit="Y" required="" format="" width="1" height="1" column=""/>
+    <control name="eq_gender" title="性别" property="gender" type="ComboBox" edit="Y" required=""  format="" width="1" height="1" column="4"/>
+    <control name="eq_type" title="人员类型" property="type" type="ComboBox" multiple="Y" edit="Y" required="" initial="" format="" width="1" height="1" column=""/>
+   <!--  <control name="eq_status" title="状态" property="status" type="ComboBox" edit="" required="" format="" width="1" height="1" column=""/> -->
+    <control name="lk_status" title="状态" property="status" type="ComboBox" multiple="Y"  edit="Y" initial="" required="" format="" width="1" height="1" column=""/>
+    <control name="dg_entryDate" title="入职日期从" property="entryDate" type="DateBox" edit="Y" required="" format="" width="1" height="1" column=""/>
+    <control name="dl_entryDate" title="至" property="entryDate" type="DateBox" edit="Y" required="" format="" width="1" height="1" column="4"/>
+  </panel>
+  <panel name="pnlDg" title="人员列表" object="employee1" type="Grid"  multiple="">
+    <control name="ctlEdit" title="编辑" property="" type="Link" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="ctlDel" title="删除" property="" type="Link" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlName" title="人员姓名" property="name" type="DataLink" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="ctlCode" title="人员编码" property="code" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="ctlExtCode" title="外部编码" property="extCode" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="ctlIdCard" title="身份证号" property="idCard" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+    <control name="ctlOrgName" title="所属部门" property="orgName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="ctlGenderName" title="性别" property="genderName" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="ctlMobile" title="移动电话" property="mobile" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+    <control name="ctlEmail" title="电子邮件" property="email" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+    <control name="ctlTypeName" title="人员类型" property="typeName" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="ctlStatusName" title="状态" property="statusName" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="empId" title="empId" property="empId" type="Hidden" edit="" required="" format="" width="" height="" column="" />
+  </panel>
+  
+   <!-- 逻辑加载 -->
+   <flow trigger="" event="OnLoad" filter="">
+     <procedure name="clear"  logic="Clear" ifyes="getGender" ifno="">
+       <param name="Out" value="pnlGroup"></param>
+     </procedure>
+     <procedure name="getGender"  logic="List" ifyes="getEmptype" ifno="">
+        <param name="Out" value="pnlGroup.eq_gender"></param>
+        <param name="Sql" value="employeeGender"></param>
+        <param name="Options" value=",[全部]"/>	
+      </procedure>   
+      <procedure name="getEmptype"  logic="List" ifyes="getEmpstatus" ifno="">
+        <param name="Out" value="pnlGroup.eq_type"></param>
+        <param name="Sql" value="employeeType"></param>
+        <param name="Options" value="YorN,[全选/取消]"/>
+      </procedure>
+      <procedure name="getEmpstatus"  logic="List" ifyes="getEmpDg" ifno="">
+        <param name="Out" value="pnlGroup.lk_status"></param>
+        <param name="Sql" value="employeeStatus"></param>
+        <param name="Options" value="YorN,[全选/取消]"/>
+      </procedure>
+     <procedure name="getEmpDg"  logic="Query" ifyes="" ifno="">
+       <param name="In" value="pnlGroup"></param>
+       <param name="Out" value="pnlDg"></param>
+       <param name="Sql" value="QryEmployeeList"></param>
+     </procedure>
+    </flow>
+     <flow trigger="pnlUp.ctlImport" event="OnClick" filter="">
+      <procedure name="importbat"  logic="BatchImport" ifyes="" ifno="">
+        <param name="In" value="frmEmployeeEdit.empGroup"></param>
+        <param name="Title" value="批量导入人员"></param>
+        <param name="Foreign" value="ctlOrgId|t_org.name|ctlOrgName,ctlNationality|t_nationality.name|ctlNationalityName,ctlBirthPlace|t_city.name|ctlBirthPlaceName"></param>
+        <param name="Dict" value="ctlWechat|empPosition,ctlType|employeeType,ctlGender|employeeGender,ctlMarital|employeeMarital,ctlStatus|employeeStatus"></param>
+        <param name="Window" value="Large"></param>
+      </procedure>  
+      </flow>
+    <flow trigger="pnlUp.ctlDlg" event="OnClick" filter="">
+      <procedure name="p1" logic="ShowColumn" ifyes="" ifno="">
+        <param name="In" value="pnlDg" />
+      </procedure>
+    </flow>
+    <!-- 所属部门-->
+    <flow trigger="pnlGroup.ctlOrgName" event="OnClick" filter="">
+      <procedure name="findOrg"  logic="Find" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="EmpQueryOrg"></param>
+        <param name="Title" value="部门选择"></param>
+        <param name="Columns" value="name,部门名称,ctlOrgName|id,编码,eq_orgId|upOrgName,上级部门"></param> 
+        <param name="Window" value="Large"></param> 
+        </procedure>
+     </flow>
+    
+    <!-- 人员详情 -->
+    <flow trigger="pnlDg.ctlName" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jsgoto" ifno="">
+        <param name="In" value="pnlDg.empId"></param>
+      </procedure>
+      <procedure name="jsgoto"  logic="Transition" ifyes="" ifno="">
+        <param name="To" value="frmEmpDetail"></param>
+        <param name="Mode" value="Readonly"></param>
+      </procedure>
+    </flow>
+    
+    <!-- 删除 -->
+    <flow trigger="pnlDg.ctlDel" event="OnClick" filter="">
+      <procedure name="msg" server="" logic="ConfirmMsg" ifyes="deleteData" ifno="">
+       <param name="Title" value="删除"></param>
+       <param name="Msg" value="确认删除当前记录吗?"></param>
+      </procedure>
+      <procedure name="deleteData"  logic="Delete" ifyes="jsquery" ifno="">
+        <param name="In" value="pnlDg" />
+        <param name="Msg" value="model.name+'已删除'" />
+       	<param name="Constraints" value="t_user.emp_id|有用户绑定该人员;t_issue.assignee|有工作项绑定该人员;t_issue.test_by|有工作项绑定该人员;t_issue.test_design_by|有工作项绑定该人员;t_issue.reporter|有工作项绑定该人员;" />
+	   	<param name="Cascade" value="t_assessment.emp_id;t_education.emp_id;t_training.emp_id;t_experience.emp_id" />
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="QryEmployeeList"></param>
+      </procedure>  
+    </flow>  
+    
+    <!-- 查询 --> 
+    <flow trigger="pnlUp.ctlQuery" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="QryEmployeeList"></param>
+      </procedure>  
+    </flow>
+    
+    <!-- 新增 -->
+    <flow trigger="pnlUp.ctlAdd" event="OnClick" filter="">
+      <procedure name="jspopup" server="" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmEmployeeEdit"></param>
+        <param name="Mode" value="Add"></param>
+        <param name="Window" value="Large"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="QryEmployeeList"></param>
+      </procedure>  
+    </flow>
+    
+    <!-- 编辑 -->
+    <flow trigger="pnlDg.ctlEdit" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="pnlDg.empId"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmEmployeeEdit"></param>
+        <param name="Mode" value="Edit"></param>
+         <param name="Window" value="Large"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="QryEmployeeList"></param>
+      </procedure>              
+    </flow>
+    
+    <!-- 清空条件 -->
+    <flow trigger="pnlUp.ctlClear" event="OnClick" filter="">
+      <procedure name="btnClear"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+      </procedure>
+    </flow>
+    
+    <!-- 数据导出 -->
+    <flow trigger="pnlUp.ctlExport" event="OnClick" filter="">
+      <procedure name="exportdata" server="" logic="Export" ifyes="" ifno="">
+        <param name="Format" value="pnlDg"></param>
+        <param name="In" value="pnlGroup"></param>
+        <param name="Sql" value="QryEmployeeList"></param>
+      </procedure>
+    </flow>
+    
+    <!-- 布局 --> 
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pnlUp" location ="North" scale=""/>
+        <subregion panel="pnlGroup" location ="Center" scale=""/>
+      </region>
+      <region location ="Center" scale="">
+    	<subregion panel="pnlDg" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>
+  </ui_layer>
+</tsoftware>

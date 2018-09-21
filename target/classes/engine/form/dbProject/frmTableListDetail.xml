@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmTableListDetail" title="数据表"> 
+	<panel name="pToolbar" title="按钮栏" object="" type="Toolbar">
+		<control name="btnBack" title="返回" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	
+	<panel name="pTable" title="数据表名称" object="tdatasheet" type="Group">
+		<control name="tableName" title="数据表名称" property="tableName" type="TextBox" edit="N" required="N" format="" width="1" height="" column="4"></control>
+	</panel>
+	 
+	<panel name="pTable1" title="数据表详情" object="tdatasheet" type="Grid">
+		<control name="filed" title="字段名称" property="filed" type="TextBox" edit="N" required="N" format="" width="150" height="" column=""></control>
+		<control name="key" title="主键" property="colkey" type="TextBox" edit="N" required="N" format="" width="150" height="" column=""></control>		
+		<control name="dataTypeAndLength" title="字段类型" property="dataTypeAndLength" type="TextBox" edit="N" required="N" format="" width="150" height="" column=""></control>
+		<control name="isNull" title="字段是否允许为空" property="isNull" type="TextBox" edit="N" required="N" format="" width="150" height="" column=""></control>
+		<control name="columnComment" title="字段注释" property="columnComment" type="TextBox" edit="N" required="N" format="" width="150" height="" column=""></control>
+	    <control name="isAuto" title="自增长" property="extra" type="TextBox" edit="N" required="N" format="" width="150" height="" column=""></control>
+	</panel>
+		
+	<!-- 逻辑加载 -->
+	<flow trigger="" event="OnLoad" filter="">  
+      <procedure name="j1" server="" logic="DecodeId" ifyes="qid" ifno="">
+        <param name="Out" value="pTable.tableName" />
+      </procedure>   
+      <procedure name="qid"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pTable"></param>
+        <param name="Out" value="pTable1" />
+        <param name="Sql" value="datasheet/QryTableListDetail" />
+       </procedure>
+    </flow>
+    
+    <!-- 返回事件 -->
+    <flow trigger="pToolbar.btnBack" event="OnClick" filter="">
+        <procedure name="jBack" logic="Back">
+        </procedure>
+    </flow>
+    
+    
+    <layout>
+      <region location="North" scale="">
+          <subregion panel="pToolbar" location="East" scale=""/>
+      </region>
+      <region location="Center" scale="">
+          <subregion panel="pTable" location="North" scale=""/>
+          <subregion panel="pTable1" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>
+</ui_layer> 
+</tsoftware>

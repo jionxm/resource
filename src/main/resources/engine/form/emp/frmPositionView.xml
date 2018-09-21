@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmPositionView" title="岗位详情"> 
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnClose" title="返回" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pForm" title="详细信息" object="position" type="Group">
+		<control name="id" title="岗位" property="id" type="Hidden" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="name" title="岗位名称" property="name" type="TextBox" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="remark" title="岗位描述" property="remark" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="3"/>
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil" format="" width="1" height="1" column="1"  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column="1"  />
+	</panel>
+	<!-- 加载岗位详情信息 -->
+    <flow trigger="" event="OnLoad" filter="" >
+      <procedure name="j1" server="" logic="DecodeId" ifyes="je" ifno="jclear">
+        <param name="Out" value="pForm.id"></param>
+      </procedure>
+      <procedure name="je" logic="EncodeId" ifyes="jdname" ifno="">
+        <param name="In" value="pForm.id"></param>
+      </procedure>
+      <procedure name="jdname"  logic="QueryById" ifyes="" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="QryPositionList"></param>
+      </procedure>  
+    </flow>	
+    <!-- 返回上一页 -->
+    <flow trigger="pToolbar.btnClose" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Back" ifyes="" ifno="">
+      </procedure>
+    </flow>	   
+    <layout>
+    <!-- 布局 -->
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+        <subregion panel="pForm" location ="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>    
+</ui_layer>
+</tsoftware>

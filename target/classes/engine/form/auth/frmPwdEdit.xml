@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+    <ui_layer>
+        <ui name="frmPwdEdit" title="修改密码">
+            <panel name="pnlInfo" title="修改密码" object="user" type="Group">
+                <control name="id" title="id" property="id" type="Hidden" edit="N" initial="session.userInfo.userId"
+                         format="" width="1" height="" column=""/>
+                <control name="ctlName" title="用户名称" property="name" type="TextBox" edit="N" format=""
+                         initial="session.userInfo.userName" width="1" height="1" column="1"/>
+                <control name="ctlEmpName" title="人员名称" property="empName" type="TextBox" edit="N" format="" width="1"
+                         initial="session.userInfo.empName" height="1" column="1"/>
+                <control name="oldPassword" title="输入旧口令" property="oldPassword" type="PasswordBox" edit="Y"
+                         required="Y" format="" width="1" height="1" column="1"/>
+                <control name="ctlNewPassword" title="输入新口令" property="" type="PasswordBox" edit="Y" required="Y"
+                         format="" width="1" height="1" column="1"/>
+                <control name="ctlReNewPassword" title="再次输入新口令" property="updatePassword" type="PasswordBox" edit="Y"
+                         required="Y" format="" width="1" height="1" column="1"/>
+                <control name="ctlSalt" title="密码加盐" property="salt" type="Hidden" edit="N" format="" width="1"
+                         initial="Guid()" height="0" column=""/>
+                <control name="ctlPassWord" title="加密的密码" property="password" type="Hidden" edit="N" format="" width="1"
+                         target="Password(model.salt,model.updatePassword)" height="0" column=""/>
+            </panel>
+
+            <panel name="pnlToolbar" title="工具条" object="" type="Toolbar">
+                <control name="ctlSave" title="确认" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlCancel" title="取消" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+            </panel>
+
+            <flow trigger="" event="OnLoad" filter="">
+                <procedure name="proClear" logic="Clear" ifyes="">
+                    <param name="Out" value="pnlInfo"></param>
+                </procedure>
+            </flow>
+
+            <flow trigger="pnlToolbar.ctlSave" event="OnClick" filter="">
+                <procedure name="proJudgePasswordNull" logic="Branch" ifyes="procJudgeNullMeg" ifno="proJudgeRepassword">
+                    <param name="In"
+                           value="getPanelControlValue('pnlInfo.oldPassword')==''||getPanelControlValue('pnlInfo.ctlNewPassword')==''||getPanelControlValue('pnlInfo.ctlReNewPassword')==''"></param>
+                </procedure>
+                <procedure name="procJudgeNullMeg" logic="InfoMsg" ifyes="" ifno="">
+                    <param name="Msg" value="请输入必填的密码值!"></param>
+                </procedure>
+                <procedure name="proJudgeRepassword" logic="Branch" ifyes="proSave" ifno="proRePasswordWrong">
+                    <param name="In"
+                           value="getPanelControlValue('pnlInfo.ctlNewPassword')==getPanelControlValue('pnlInfo.ctlReNewPassword')"></param>
+                </procedure>
+                <procedure name="proRePasswordWrong" logic="InfoMsg" ifyes="" ifno="">
+                    <param name="Msg" value="两次新密码不一致!"></param>
+                </procedure>
+
+                <procedure name="proSave" logic="Save" ifyes="procClose" ifno="">
+                    <param name="In" value="pnlInfo"></param>
+                    <param name="Mode" value="Edit"></param>
+                    <param name="Msg" value="密码已经更新"></param>
+                    <param name="Plugin" value="pwdService"/>
+                    <param name="Sql" value="UpdatePwd"></param>
+                </procedure>
+                <procedure name="procClose" server="" logic="Close" ifyes="" ifno="">
+                    <param name="Refresh" value="false"></param>
+                </procedure>
+
+            </flow>
+
+            <flow trigger="pnlToolbar.ctlCancel" event="OnClick" filter="">
+                <procedure name="procClose" server="" logic="Close" ifyes="" ifno="">
+                    <param name="Refresh" value="false"></param>
+                </procedure>
+            </flow>
+
+            <layout>
+                <region location="Center" scale="">
+                    <subregion panel="pnlInfo" location="Center" scale=""/>
+                </region>
+                <region location="South" scale="">
+                    <subregion panel="pnlToolbar" location="South" scale=""/>
+                </region>
+            </layout>
+        </ui>
+    </ui_layer>
+</tsoftware>

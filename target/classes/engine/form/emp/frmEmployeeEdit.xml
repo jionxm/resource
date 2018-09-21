@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+      xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmEmployeeEdit" title="人员编辑">
+   	<panel name="pnlHidden" title="查询条件" object="org" type="Hidden">
+		<control name="eq_id" title="id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+        <control name="modelId" title="id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="empGroup" title="tab1" object="employee1" type="Group">
+		<control name="ctlId" title="id" property="empId" type="Hidden" edit="Y" required="" format="" width="" height="" column=""/>
+		<control name="ctlName" title="人员姓名" property="name" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column=""/>
+		<control name="ctlCode" title="人员编码" property="code" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column=""/>
+		<control name="ctlExtCode" title="外部编码" property="extCode" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="3"/>
+		<control name="ctlOrgId" title="部门" property="orgId" type="Hidden" edit="Y" required="" format="" width="3" height="1" column=""/>
+		<control name="ctlOrgName" title="所属部门" property="orgName" type="PopupBox" edit="Y" required="Y" format="" width="1" height="1" column=""/>
+		<control name="ctlIdCode" title="身份证号" property="idCard" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="ctlStatus" title="状态" property="status" type="ComboBox" edit="Y" required="Y" format="" width="1" height="1" column="3" initial="" source=""/>
+		<control name="ctlType" title="人员类型" property="type" type="ComboBox" edit="Y" required="Y" format="" width="1" height="1" column=""/>
+		<control name="ctlGender" title="性别" property="gender" type="ComboBox" edit="Y" required="Y" format="" width="1" height="1" column="" initial=""/>
+		<control name="ctlNationality" title="民族" property="nationality" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="ctlNationalityName" title="民族" property="nationalityName" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="3"/>
+		<control name="ctlBirthPlaceName" title="出生地" property="birthPlaceName" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="ctlBirthPlace" title="出生地" property="birthPlace" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="ctlBirthDate" title="出生日期" property="birthDate" type="DateBox" edit="Y" required="N" format="" width="1" height="1" column="" initial="CurrentTime()"/>
+		<control name="ctlMarital" title="婚姻状况" property="marital" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column="3"/>
+		<control name="ctlMobile" title="移动电话" property="mobile" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="ctlOfficePhone" title="办公电话" property="officePhone" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="ctlHomePhone" title="家庭电话" property="homePhone" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="3"/>
+		<control name="ctlEmail" title="电子邮箱" property="email" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="ctlWechat" title="岗位" property="positionId" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="ctlEntryDate" title="入职日期" property="entryDate" type="DateBox" edit="Y" required="N" format="" width="1" height="1" column="3" initial="CurrentTime()"/>
+		<control name="ctlHomeAddress" title="家庭住址" property="homeAddress" type="TextBox" edit="Y" required="N" format="" width="2" height="1" column=""/>
+		<control name="ctlHomePostcode" title="邮政编码" property="homePostcode" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="3"/>
+		<control name="ctlPhoto" title="上传照片" property="" type="FileBox" edit="Y" required="N" format="" width="3" height="1" column="3"  />
+		<control name="ctlPhotoId" title="图片编号" property="photoId" type="Hidden" edit="Y" required="N" format="" width="3" height="1" column="3"  />
+		<control name="ctlRemark" title="备注" property="remark" type="TextBox" edit="Y" required="N" format="" width="3" height="2" column="3"  />
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column=""  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column=""  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil" format="" width="1" height="1" column=""  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column=""  />
+	</panel>
+	<panel name="empDown" title="pnlDown" object="" type="Toolbar">
+		<control name="ctlSave" title="确认" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlCancel" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>	
+    <flow trigger="" event="OnLoad" filter="" >
+      <procedure name="getGender"  logic="List" ifyes="getMarital" ifno="">
+        <param name="Out" value="empGroup.ctlGender"></param>
+        <param name="Sql" value="employeeGender"></param>	
+        
+      </procedure>         
+      <procedure name="getMarital"  logic="List" ifyes="getEmpstatus" ifno="">
+        <param name="Out" value="empGroup.ctlMarital"></param>
+        <param name="Sql" value="employeeMarital"></param>
+      </procedure>      
+      <procedure name="getEmpstatus"  logic="List" ifyes="getEmptype" ifno="">
+        <param name="Out" value="empGroup.ctlStatus"></param>
+        <param name="Sql" value="employeeStatus"></param>
+      </procedure>
+      <procedure name="getEmptype"  logic="List" ifyes="getPosition" ifno="">
+        <param name="Out" value="empGroup.ctlType"></param>
+        <param name="Sql" value="employeeType"></param>
+      </procedure>  
+      <procedure name="getPosition"  logic="List" ifyes="branch" ifno="">
+        <param name="Out" value="empGroup.ctlWechat"></param>
+        <param name="Sql" value="empPosition"></param>
+      </procedure> 
+   	  <procedure name="branch" server="" logic="Branch" ifyes="getOrgId" ifno="getId">
+        <param name="In" value="getStorage('frmEmployeeEdit_EditMode')=='Add'"></param>
+      </procedure> 
+      <procedure name="getOrgId" server="" logic="DecodeId" ifyes="queryOrg" ifno="">
+        <param name="Out" value="pnlHidden.eq_id"></param>
+      </procedure>   
+      <procedure name="queryOrg" server="" logic="QueryById" ifyes="" ifno="">
+        <param name="In" value="pnlHidden"></param>
+        <param name="Out" value="empGroup"></param>
+        <param name="Sql" value="org/QryOrgList"></param>
+      </procedure>   
+      <procedure name="getId" server="" logic="DecodeId" ifyes="qid" ifno="">
+        <param name="Out" value="empGroup.ctlId"></param>
+      </procedure> 
+      <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+        <param name="In" value="empGroup"></param>
+        <param name="Out" value="empGroup"></param>
+        <param name="Sql" value="QryEmployeeList"></param>
+      </procedure>  
+    </flow>
+    <!-- 确认 -->
+    <flow trigger="empDown.ctlSave" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="empGroup"></param>
+          <param name="Out" value="empGroup.ctlId"></param>
+        <param name="Plugin" value="empLogService" />
+        <param name="Msg" value="'人员信息已被保存,详情请查看操作日志'"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+    <!-- 取消 -->
+    <flow trigger="empDown.ctlCancel" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>
+    <!-- 所属部门 -->
+    <flow trigger="empGroup.ctlOrgName" event="OnClick" filter="">
+      <procedure name="findOrg"  logic="Find" ifyes="" ifno="">
+        <param name="Out" value="empGroup"></param>
+        <param name="Sql" value="EmpOrg"></param>
+        <param name="Title" value="部门选择"></param>
+        <param name="Columns" value="id,编码,ctlOrgId|name,部门名称,ctlOrgName"></param> 
+        <param name="Window" value="Large"></param> 
+        </procedure>
+     </flow>
+    <!-- 选择出生地 -->
+    <flow trigger="empGroup.ctlBirthPlaceName" event="OnClick" filter="">
+      <procedure name="findOrg"  logic="Find" ifyes="" ifno="">
+        <param name="Out" value="empGroup"></param>
+        <param name="Sql" value="city"></param>
+        <param name="Title" value="出生地选择"></param> 
+        <param name="Columns" value="id,编码,ctlBirthPlace|name,出生地,ctlBirthPlaceName"></param> 
+      	<param name="Window" value="Large"></param> 
+      </procedure>
+    </flow>
+    <!-- 选择民族 -->  
+   <flow trigger="empGroup.ctlNationalityName" event="OnClick" filter="">
+      <procedure name="findNationality" logic="Find" ifyes="" ifno="">
+        <param name="Out" value="empGroup"></param>
+        <param name="Sql" value="nationality"></param>
+        <param name="Title" value="民族选择"></param>
+        <param name="Columns" value="id,编码,ctlNationality|name,民族,ctlNationalityName"></param>
+		<param name="Window" value="Large"></param>       
+      </procedure>
+    </flow> 
+    <!-- 图片上传 -->
+     <flow trigger="empGroup.ctlPhoto" event="OnClick" filter="">
+      <procedure name="fileUpload" server="" logic="Upload" ifyes="" ifno="">
+        <param name="Size" value="10000000"></param>
+        <param name="Type" value="jpg,txt,pdf,md,mp4"></param>
+        <param name="Bucket" value="public"></param>
+        <param name="Out" value="empGroup.ctlPhotoId"></param>
+        <!-- <param name="UploadUrl" value="qiniu"></param> -->
+      </procedure>
+    </flow>
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="empDown" location="South" scale="" />
+      </region>
+      <region location ="North" scale="">
+        <subregion panel="empGroup" location="Center" scale="" />
+        <subregion panel="pnlHidden" location="North" scale="" />
+      </region>
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+      xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+<!-- 迭代model -->
+  <object name="commitLog" table="t_commit_log" primary="sha1" unique="" order="date desc">
+    <property name="sha1" type="String" length="100" initial="" field="sha1"/>
+    <property name="message" type="String" length="2000" initial="" field="message"/>
+    <property name="author" type="String" length="20" field="author"/>
+    <property name="authorName" type="String" length="20" field=""/>
+    <property name="date" type="Date" length="" field="date"/>
+    <property name="branch" type="String" length="20" field="branch"/>
+    <property name="issueId" type="String" length="500" field="issue_id"/>
+    <property name="jobId" type="Long" length="20" field="job_id"/>
+    <property name="insertTime" type="Date" length="" field="insert_time"/>
+	<property name="baseline" type="String" length="20" field=""/>
+	<property name="test" type="String" length="20" field=""/>
+  </object>  
+</model_layer>
+</tsoftware>

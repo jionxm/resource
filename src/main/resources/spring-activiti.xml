@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- activiti的各种服务接口 -->
+	<bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService" />
+	<bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService" />
+	<bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" />
+	<bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService" />
+	<bean id="managementService" factory-bean="processEngine" factory-method="getManagementService" />
+	<bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService" />
+
+	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+		<property name="dataSource" ref="dataSource" />
+		<property name="transactionManager" ref="txManager" />
+		<property name="databaseSchemaUpdate" value="true" />
+		<property name="activityFontName" value="宋体" />
+		<property name="labelFontName" value="宋体" />
+		<property name="beans">
+			<map>
+				<!--工作流执行SQL-->
+				<entry key="workflowExecuteSql" value-ref="workflowExecuteSql" />
+				<!--工作流集成系统邮件接口-->
+				<entry key="workflowMailService" value-ref="workflowMailService" />
+				<entry key="workflowUserService" value-ref="workflowUserService"/>
+			</map>
+		</property>
+		<property name="eventListeners">
+			<bean class="com.tedu.base.workflow.util.WorkflowExecTaskListener" />
+		</property>
+
+	</bean>
+
+	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor" />
+
+	<!-- 加载activiti引擎 -->
+	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
+	</bean>
+
+	<!--工作流执行SQL-->
+	<bean id="workflowExecuteSql" class="com.tedu.base.workflow.util.WorkflowExecuteSql"/>
+	<!--工作流集成系统邮件接口-->
+	<bean id="workflowMailService" class="com.tedu.base.workflow.util.WorkflowMailService" />
+
+	<bean id="workflowUserService" class="com.tedu.base.workflow.service.impl.WorkflowUserServiceImpl" />
+
+
+	<!--工作流自定义部署器-->
+	<bean id="workflowDeploy"  class="com.tedu.base.workflow.util.WorkflowDeploy">
+		<property name="category" value="engine.bpmn" />
+		<property name="deploymentResources" value="classpath*:/engine/bpmn/*/*.bpmn" />
+	</bean>
+</beans>

@@ -1,0 +1,2 @@
+insert into t_commit (c_id,push_sha,issue_id,message,url,name,email,timestamp)
+VALUES (#{data.c_id},#{data.push_sha},#{data.issue_id},#{data.message},#{data.url},#{data.name},#{data.email},#{data.timestamp})

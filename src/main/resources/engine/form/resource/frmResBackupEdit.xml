@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+	<ui_layer>
+		<ui name="frmResBackupEdit" title="备份">
+			<panel name="pToolbar" title="工具按钮" object="" type="Toolbar">
+				<control name="btnSave" title="确认" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="2" />
+				<control name="btnCancel" title="取消" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="2" />
+			</panel>
+			<panel name="pBackup" title="备份" object="backupsRecord" type="Group">
+				<control name="id" title="id" property="id" type="Hidden"
+					edit="Y" required="" format="" width="2" height="" column="2" />
+				<control name="targetServer" title="备份服务器" property="targetServer"
+					type="ComboBox" edit="Y" required="Y" format="" width="2" height=""
+					column="2" />
+				<control name="type" title="类型" property="type" type="ComboBox"
+					edit="Y" required="Y" format="" width="2" height="" column="2" />
+				<control name="description" title="描述" property="description"
+					type="TextBox" edit="Y" required="" format="" width="2" height=""
+					column="2" />
+				<control name="createBy" title="创建人" property="createBy"
+					type="Hidden" edit="Y" required="N"
+					target="Mode=='Add'?session.userInfo.empId:nil" format="" width="1"
+					height="1" column="" />
+				<control name="updateBy" title="更新人" property="updateBy"
+					type="Hidden" edit="Y" required="N" target="session.userInfo.empId"
+					format="" width="1" height="1" column="" />
+				<control name="updateTime" title="更新时间" property="updateTime"
+					type="Hidden" edit="Y" required="N" target="CurrentTime()" format=""
+					width="200" height="1" column="" />
+				<control name="createTime" title="创建时间" property="createTime"
+					type="Hidden" edit="Y" required="N" target="CurrentTime()" format=""
+					width="200" height="1" column="" />
+				<control name="updateCount" title="创建时间" property="updateCount"
+					type="Hidden" edit="Y" required="N" target="" format="" initial="0"
+					width="200" height="1" column="" />
+				<control name="backupsRecordId" title="备份记录编号" property="backupsRecordId"
+					type="Hidden" edit="Y" required="" format="" width="2" height=""
+					column="2" />
+				<control name="resourceFileId" title="文件编号" property="resourceFileId"
+					type="Hidden" edit="Y" required="" format="" width="2" height=""
+					column="2" />
+			</panel>
+			<!-- 页面加载 -->
+			<flow trigger="" event="OnLoad" filter="">
+				<procedure name="jClear" logic="Clear" ifyes="jDecodeId"
+					ifno="" sync="Y">
+					<param name="Out" value="pBackup"></param>
+				</procedure>
+				<procedure name="jDecodeId" server="" logic="DecodeId"
+					ifyes="resourceTypeList" ifno="resourceTypeList">
+					<param name="Out" value="pBackup.resourceFileId" />
+				</procedure>
+				<procedure name="resourceTypeList" logic="List" ifyes="targetList"
+					ifno="" sync="Y">
+					<param name="Out" value="pBackup.type"></param>
+					<param name="Sql" value="resource/resourceType"></param>
+					<param name="Options" value=",[请选择]" />
+				</procedure>
+				<procedure name="targetList" logic="List" ifyes="Query"
+					ifno="" sync="Y">
+					<param name="Out" value="pBackup.targetServer"></param>
+					<param name="Sql" value="resource/originType"></param>
+					<param name="Options" value=",[请选择]" />
+				</procedure>
+			</flow>
+			<flow trigger="pToolbar.btnSave" event="OnClick" filter="">
+				<procedure name="j0" server="" logic="ConfirmMsg" ifyes="jSaveC"
+					ifno="">
+					<param name="Title" value="备份提示"></param>
+					<param name="Msg" value="确认要备份资源吗?"></param>
+				</procedure>
+				<procedure name="jSaveC" logic="Save" ifyes="jsclose"
+					ifno="" sync="Y">
+					<param name="In" value="pBackup" />
+					<param name="Plugin" value="backupResourcePlugins" />
+					<param name="Msg" value="'备份成功'" />
+				</procedure>
+				<procedure name="jsclose" server="" logic="Close" ifyes=""
+					ifno="">
+					<param name="Refresh" value="true"></param>
+				</procedure>
+			</flow>
+			<!--取消 -->
+			<flow trigger="pToolbar.btnCancel" event="OnClick" filter="">
+				<procedure name="jsclose" server="" logic="Close" ifyes=""
+					ifno="">
+					<param name="Refresh" value="true"></param>
+				</procedure>
+			</flow>
+			<!-- 布局 -->
+			<layout>
+				<region location="Center" scale="">
+					<subregion panel="pBackup" location="North" scale="" />
+				</region>
+				<region location="South" scale="">
+					<subregion panel="pToolbar" location="South" scale="" />
+				</region>
+			</layout>
+		</ui>
+	</ui_layer>
+</tsoftware>

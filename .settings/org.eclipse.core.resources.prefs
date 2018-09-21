@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding//src/main/resources/engine/conf/base.properties=UTF-8
+encoding//src/main/resources/engine/conf/redis.properties=UTF-8
+encoding//src/main/resources/engine/i18n/message.properties=UTF-8
+encoding//src/main/webapp/view/common/css/style.css=UTF-8
+encoding//src/main/webapp/view/common/dlgFindSingle.jsp=UTF-8
+encoding//src/main/webapp/view/loginSSO.jsp=UTF-8
+encoding//src/main/webapp/view/mainFrame.jsp=UTF-8
+encoding//src/test/java=UTF-8
+encoding/<project>=UTF-8

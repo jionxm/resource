@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx  
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/task
+	http://www.springframework.org/schema/task/spring-task-3.2.xsd
+	http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	<!-- 引入同文件夹下的redis属性配置文件 -->
+	<import resource="redis-context.xml" />
+	<!-- 启动注解驱动Spring mvc功能，注册请求url和注解POJO类方法的映射 -->
+	<mvc:annotation-driven conversion-service="conversionService">
+		<mvc:message-converters register-defaults="true">
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper">
+					<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+						<property name="serializationInclusion">
+							<value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>
+						</property>
+						<property name="dateFormat">
+							<bean class="java.text.SimpleDateFormat">
+								<constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<bean id="dateConvert" class="com.tedu.base.common.excel.DateConvert" />
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<ref bean="dateConvert" />
+			</set>
+		</property>
+	</bean>
+	<!-- 自动扫描controller包下的所有类，使其认为Spring mvc的控制器 -->
+	<context:component-scan base-package="com.tedu.base,com.tedu.plugin,com.tedu.uc"><!-- com.tedu.base -->
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
+	<bean id="schedulerFactoryBean"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
+	<bean id="springUtils" class="com.tedu.base.task.SpringUtils" />
+	<mvc:interceptors>
+		<!--多个拦截器,顺序执行 -->
+
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/view/**/*.js" />
+			<mvc:exclude-mapping path="/view/**/*.css" />
+			<mvc:exclude-mapping path="/view/**/*.gif" />
+			<mvc:exclude-mapping path="/view/**/*.jpg" />
+			<mvc:exclude-mapping path="/view/**/*.woff" />
+			<mvc:exclude-mapping path="/view/**/*.png" />
+			<mvc:exclude-mapping path="/view/**/*.ico" />
+
+			<mvc:exclude-mapping path="/**/*.png" />
+			<mvc:exclude-mapping path="/**/*.gif" />
+			<mvc:exclude-mapping path="/**/*.jpg" />
+			<mvc:exclude-mapping path="/**/*.woff" />
+			<mvc:exclude-mapping path="/**/*.css" />
+			<mvc:exclude-mapping path="/**/*.jpeg" />
+			<mvc:exclude-mapping path="/**/*.map" />
+			<mvc:exclude-mapping path="/**/*.engine.bpmn" />
+			<mvc:exclude-mapping path="/*.txt" />
+			<mvc:exclude-mapping path="/*.html" />
+			<mvc:exclude-mapping path="/*.ico" />
+			<mvc:exclude-mapping path="/getValidateStatus" />
+			<mvc:exclude-mapping path="/downloadList" />
+			<mvc:exclude-mapping path="/download" />
+			<mvc:exclude-mapping path="/uploadExcelBat" />
+			<mvc:exclude-mapping path="/sendMail" />
+			<mvc:exclude-mapping path="/createMdBat" />
+			<mvc:exclude-mapping path="/saveDocCata" />
+
+			<mvc:exclude-mapping path="/ajaxCheckCodeValue" />
+			<mvc:exclude-mapping path="/toLogin" />
+			<mvc:exclude-mapping path="/login" />
+			<mvc:exclude-mapping path="/downLoadTemp" />
+			<mvc:exclude-mapping path="/loginOut" />
+			<mvc:exclude-mapping path="/view/**/*.*" />
+			<mvc:exclude-mapping path="/" />
+			<!-- 通用功能 begin 权限由view中的触发组件权限决定，不必检测 -->
+			<mvc:exclude-mapping path="/localDownload" />
+			<mvc:exclude-mapping path="/openfile" />
+			<mvc:exclude-mapping path="/logOut" />
+			<mvc:exclude-mapping path="/saveLog" />
+			<mvc:exclude-mapping path="/api/commonquery" />
+			<mvc:exclude-mapping path="/api/close" />
+			<mvc:exclude-mapping path="/refreshXML" />
+			<mvc:exclude-mapping path="/about" />
+			<!-- markdown流程图 -->
+			<mvc:exclude-mapping path="/flowChartMD" />
+			<!-- <mvc:exclude-mapping path="/localUpload"/> -->
+			<mvc:exclude-mapping path="/mdupload" />
+			<!-- 通用功能 end -->
+			<mvc:exclude-mapping path="/open/*" />
+			<!-- pc -->
+			<mvc:exclude-mapping path="/sales/us" />
+			<mvc:exclude-mapping path="/sales/saveBusiness" />
+			<mvc:exclude-mapping path="/sales/find" />
+			<!-- h5 -->
+			<mvc:exclude-mapping path="/workplace" />
+			<mvc:exclude-mapping path="/workdetail/issue" />
+			<mvc:exclude-mapping path="/state" />
+			<mvc:exclude-mapping path="/my" />
+			<mvc:exclude-mapping path="/add/defect" />
+			<mvc:exclude-mapping path="/defect/detail" />
+			<mvc:exclude-mapping path="/defect/list" />
+			<mvc:exclude-mapping path="/list/search" />
+			<mvc:exclude-mapping path="/login/h5" />
+			<mvc:exclude-mapping path="/test/defect" />
+			<mvc:exclude-mapping path="/insertTrainLog" />
+			<!-- uc接口 -->
+			<mvc:exclude-mapping path="/uc-logOut" />
+			<mvc:exclude-mapping path="/uc-login" />
+			<mvc:exclude-mapping path="/uc-index" />
+			<mvc:exclude-mapping path="/uc" />
+			<mvc:exclude-mapping path="/resource-list" />
+			<mvc:exclude-mapping path="/resource-sync" />
+			<!-- <mvc:exclude-mapping path="/*/edit/*/*"/>目前没有一个明确规律匹配到view，先以已知的为准 -->
+			<bean class="com.tedu.base.auth.FormTokenInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+
+	<!-- 定时器引擎 -->
+	<task:annotation-driven />
+	<!-- task扫描注解 -->
+	<tx:annotation-driven />
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:engine/conf/base.properties</value>
+				<value>classpath:engine/conf/git.properties</value>
+				<value>classpath:engine/conf/redis.properties</value>
+				<value>classpath:/uc-api.properties</value>
+				<value>classpath:/ldap.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding" value="utf-8">
+		</property>
+	</bean>
+	<bean id="freemarkerConfig"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/WEB-INF"></property>
+		<property name="templateLoaderPaths">
+			<list>
+				<!-- form engine logic -->
+				<value>classpath:/engine/common/list</value>
+				<value>classpath:/engine/common/find</value>
+				<value>classpath:/engine/common/findByTree</value>
+				<value>classpath:/engine/common/jobsql</value>
+				<value>classpath:/engine/info/sql</value>
+				<value>classpath:/engine/js</value>
+				<!-- form engine base template -->
+				<value>classpath:/engine/ftl</value>
+				<value>/view/ftl</value>
+			</list>
+		</property>
+		<!-- 设置页面中文乱码问题 -->
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="classic_compatible">true</prop>
+				<prop key="defaultEncoding">utf-8</prop>
+				<prop key="template_exception_handler">rethrow</prop>
+			</props>
+		</property>
+	</bean>
+	<import resource="classpath:spring-mybatis.xml" />
+	<!-- 通用formMapper 执行SQL用 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+	<bean class="com.tedu.base.initial.controller.LoadComponents" />
+
+	<!--工作流配置文件 -->
+	<import resource="classpath:spring-activiti.xml" />
+
+</beans>

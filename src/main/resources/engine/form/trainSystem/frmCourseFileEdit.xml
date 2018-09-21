@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+	<ui_layer>
+		<ui name="frmCourseFileEdit" title="课程资料编辑">
+
+			<panel name="pTable" title="课程资料表" object="ttrainfile" type="Group">
+				
+				<control name="courseId" title="课程Id" property="courseId"
+					type="Hidden" edit="Y" required="" format="" width="1" height="1"
+					column="2" />
+				<control name="eq_id" title="id" property="id" type="Hidden"
+					edit="Y" required="" format="" width="" height="" column="" />	
+				<control name="fileName" title="资料名称" property="name" type="TextBox"
+					edit="Y" required="Y" format="" width="1" height="1" column="" />
+					
+				<control name="fileType" title="类别" property="fileType"
+					type="ComboBox" edit="Y" required="Y" format="" width="1" height="1"
+					column="2" />
+				
+				<control name="prepostionFileId" title="前置资料Id" property="prepostionFileId"
+					type="Hidden" edit="Y" required="N" format="" width="1" height="1"
+					column="" />
+						
+				<control name="prepostionFileName" title="前置资料" property="prepostionFileName"
+					type="PopupBox" edit="Y" required="N" format="" width="1" height="1"
+					column="" />
+						
+				<control name="expectStudyTime" title="学习时长(/分钟)" property="expectStudyTime"
+					type="TextBox" edit="Y" required="Y" format="" width="1" height="1"
+					column="2" />
+				<control name="fileid" title="资料ID" property="fileAddress"
+					type="Hidden" edit="Y" required="Y" format="" width="1" height="1"
+					column="2" />	
+				<control name="fileUpload" title="上传资料" property="fileAddressName"
+					type="FileBox" edit="Y" required="Y" format="" width="1" height="1"
+					column="2" />	
+				<control name="fileIntroduction" title="资料介绍" property="fileIntroduction"
+					type="TextBox" edit="Y" required="N" format="" width="2" height="2"
+					column="1" />
+				<control name="updateTime" title="更新日期" property="updateTime"
+					type="Hidden" edit="Y" required="N" target="CurrentTime()" format=""
+					width="1" height="1" column="1" />
+				<control name="updateBy" title="更新人" property="updateBy"
+					type="Hidden" edit="Y" required="N" target="session.userInfo.empId"
+					format="" width="1" height="1" column="1" />
+				<control name="createTime" title="创建日期" property="createTime"
+					type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil"
+					format="" width="1" height="1" column="1" />
+				<control name="createBy" title="创建人" property="createBy"
+					type="Hidden" edit="Y" required="N"
+					target="editMode=='Add'?session.userInfo.empId:nil" format=""
+					width="1" height="1" column="1" />
+			</panel>
+
+			<!-- 控件 -->
+			<panel name="pDown" title="控件" object="" type="Toolbar">
+				<control name="ctlSave" title="确认" property="" type="Button"></control>
+				<control name="ctlCancle" title="取消" property="" type="Button"></control>
+			</panel>
+
+			<!-- 逻辑加载 -->
+			<flow trigger="" event="OnLoad" filter="">
+				<procedure name="jclear" logic="Clear" ifyes="FileTypeList"
+					ifno="">
+					<param name="Out" value="pTable"></param>
+				</procedure>
+			<procedure name="FileTypeList" logic="List" ifyes="jBranch"
+					ifno="">
+					<param name="Out" value="pTable.fileType" />
+					<param name="Sql" value="fileType" />
+				</procedure> 
+				<procedure name="jBranch" logic="Branch" ifyes="getId" ifno="j1">
+					<param name="In" value="getStorage('frmCourseFileEdit_EditMode')=='Add'"></param>
+				</procedure>
+				 <procedure name="getId"  logic="DecodeId" ifyes="" ifno="">
+			        <param name="Out" value="pTable.courseId"></param>
+			    </procedure>
+				<procedure name="j1" server="" logic="DecodeId" ifyes="qid"
+					ifno="">
+					<param name="Out" value="pTable.eq_id" />
+				</procedure>
+				<procedure name="qid" logic="QueryById" ifyes="" ifno="">
+					<param name="In" value="pTable"></param>
+					<param name="Out" value="pTable" />
+					<param name="Sql" value="trainSystem/courseFileQry" />
+				</procedure>
+			</flow>
+
+			<!-- 课程选择 -->
+			<flow trigger="pTable.courseName" event="OnClick" filter="">
+				<procedure name="jsFind" logic="Find" ifyes="" ifno="">
+					<param name="Out" value="pTable"></param>
+					<param name="Sql" value="TrainCourse"></param>
+					<param name="Title" value="课程选择"></param>
+					<param name="Columns" value="id,编码,courseId|name,课程名称,courseName" />
+					<param name="Window" value="Medium"></param>
+				</procedure>
+			</flow>
+			
+			<!-- 前置资料选择 -->
+			<flow trigger="pTable.prepostionFileName" event="OnClick" filter="">
+				<procedure name="jsFind" logic="Find" ifyes="" ifno="">
+					<param name="In" value="pTable.courseId"></param>
+					<param name="Out" value="pTable"></param>
+					<param name="Sql" value="PreFile"></param>
+					<param name="Title" value="前置资料选择"></param>
+					<param name="Columns" value="id,编码,prepostionFileId|name,资料名称,prepostionFileName" />
+					<param name="Window" value="Medium"></param>
+				</procedure>
+			</flow>
+			<!-- 资料上传 -->
+     		<flow trigger="pTable.fileUpload" event="OnClick" filter="">
+      			<procedure name="fileUpload" server="" logic="Upload" ifyes="" ifno="">
+        			<param name="Size" value="9999999"></param>
+        			<param name="Type" value="jpg,txt,mp4,md,pdf,jpeg,gif,png,bmp"></param>
+        			<param name="Bucket" value="private"></param>
+        			<param name="Out" value="pTable.fileid"></param>
+      			</procedure>
+    		</flow>			
+
+			<!-- 确认 -->
+			<flow trigger="pDown.ctlSave" event="OnClick" filter="">
+				<procedure name="jsave" logic="Save" ifyes="jclose" ifno="">
+					<param name="In" value="pTable"></param>
+					 <param name="Plugin" value="insertCoursePlugin" />
+					<param name="Msg" value="资料信息保存成功"></param>
+				</procedure>
+				<procedure name="jclose" logic="Close">
+					<param name="Refresh" value="true"></param>
+				</procedure>
+			</flow>
+
+			<!-- 取消 -->
+			<flow trigger="pDown.ctlCancle" event="OnClick" filter="">
+				<procedure name="jsclose" server="" logic="Close" ifyes=""
+					ifno="">
+					<param name="Refresh" value="false"></param>
+				</procedure>
+			</flow>
+
+
+			<!-- 布局 -->
+			<layout>
+				<region location="Center" scale="">
+					<subregion panel="pTable" location="Center" scale=""></subregion>
+				</region>
+				<region location="South" scale="">
+					<subregion panel="pDown" location="South" scale=""></subregion>
+				</region>
+			</layout>
+		</ui>
+	</ui_layer>
+</tsoftware> 

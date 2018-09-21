@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmMessageLogList" title="异步消息日志">
+	<panel name="pnlUp" title="工具条" object="" type="Toolbar">
+		<control name="ctlQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnExport" title="导出清单" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<!-- 查询条件用op_做前缀 -->
+	<panel name="pCondition" title="查询条件" object="modMessageLog" type="Group">
+		<control name="eq_type" title="类型" property="type" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="de_createTime" title="开始时间" property="createTime" type="DateBox" initial="CurrentTime()" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="lk_topic" title="队列名称" property="topic" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="ge_cost" title="耗时>=(ms)" property="cost" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+	</panel>
+	<panel name="pTable" title="pTable" object="modMessageLog" type="Grid"  multiple="">
+		<control name="id" title="序号" property="id" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="createTime" title="开始时间" property="createTime" type="TextBox"  edit="" required="" format="" width="150" height="" column=""/>
+		<control name="endTime" title="结束时间" property="endTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="cost" title="耗时>=(ms)" property="cost" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="topic" title="队列名称" property="topic" type="TextBox" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="messageClass" title="对象" property="messageClass" type="TextBox" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="typeName" title="类型" property="typeName" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="message" title="消息" property="message" type="TextBox" edit="" required="" format="" width="270" height="" column=""/>
+	</panel>
+    <flow trigger="pnlUp.ctlClear" event="OnClick" filter="">
+      <procedure name="btnClear"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pCondition"></param>
+      </procedure>
+    </flow>
+        <flow trigger="pnlUp.btnExport" event="OnClick" filter="">
+      <procedure name="exportdata" logic="Export" ifyes="" ifno="">
+		<param name="In" value="pCondition" />      
+        <param name="Format" value="pTable"></param>
+        <param name="Sql" value="log/QryMessageLogList"></param>
+      </procedure>
+    </flow>
+	<flow trigger="" event="OnLoad" filter="">
+      <procedure name="initForm"  logic="Clear" ifyes="query" ifno="" >
+           <param name="Out" value="pCondition"></param>
+      </procedure>  
+      <procedure name="query"  logic="Query" ifyes="list1" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="log/QryMessageLogList"></param>
+      </procedure>   
+	  <procedure name="list1"  logic="List" ifyes="" ifno="">
+        <param name="Out" value="pCondition.eq_type" />
+        <param name="Sql" value="" />
+		<param name="Options" value=",全部|consume,消息处理|send,消息发出" />
+      </procedure>             
+    </flow>
+	        <flow trigger="pnlUp.ctlQuery" event="OnClick" filter="">
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="log/QryMessageLogList"></param>
+      </procedure>
+      </flow>
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pnlUp" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+        <subregion panel="pCondition" location="North" scale=""/>
+		<subregion panel="pTable" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>
+  </ui_layer>
+</tsoftware>

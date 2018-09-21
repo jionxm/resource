@@ -1,0 +1,158 @@
+body{
+    width:750px;
+    height:1180px;
+    background:#ebebeb;
+    position:relative;
+}
+.normal-one{
+    width:100%;
+    height:100px;
+    border-bottom:10px solid #ebebeb;
+    padding:20px;
+    background:white;
+}
+.normal-left{
+    font-size:30px;
+    color:black;
+}
+.normal-right{
+    font-size:28px;
+    color:silver;
+}
+.normal-two{
+    width:100%;
+    border-bottom:10px solid #ebebeb;
+    padding:20px;
+    background:white;
+}
+.normal-two:after{
+	content:"";
+	display:block;
+	clear:both;
+	
+	
+}
+.two-left{
+    font-size:30px;
+    color:black;
+}
+.two-right{
+    font-size:28px;
+    color:silver;
+}
+.title{
+    text-align: center;
+    font-size:30px;
+    font-weight: 400;
+}
+#start-work{
+    width:25%;
+    height:100px;
+    background:#0a9eeb;
+    font-size:30px;
+    color:white;
+    border:none;
+}
+#cancel-work{
+    width:25%;
+    height:100px;
+    background:#eb640a;
+    font-size:30px;
+    color:white;
+    border:none;
+}
+#start-test{
+	width:25%;
+    height:100px;
+    background:#e4393c;
+    font-size:30px;
+    color:white;
+    border:none;
+}
+#close-work{
+    width:25%;
+    height:100px;
+    background:green;
+    font-size:30px;
+    color:white;
+    border:none;
+}
+#bg{
+	position:absolute;
+	z-index:66666666;
+	width:100%;
+	height:1400px;
+	background:rgba(0,0,0,0.5);
+}
+#change{
+	position:absolute;
+	z-index:99999999999;
+	width:500px;
+	height:250px;
+	margin-top:300px;
+	margin-left:130px;
+	background:white;
+	border-radius:15px;
+	font-size:30px;
+	text-align:center;
+	padding-top:100px;
+}
+.over{
+	display:none;
+}
+.show{
+	display:block;
+}
+#wkb{
+	position:fixed;
+	bottom:0;
+	width:100%;
+}
+#test-close{
+	width:33.333%;
+	background:green;
+	height:100px;
+	color:white;
+	border:none;
+	font-size:30px;
+}
+#test-reopen{
+	width:33.333%;
+	background:#0a9eeb;
+	height:100px;
+	color:white;
+	border:none;
+	font-size:30px;
+}
+#test-cancel{
+	width:33.333%;
+	background:#eb640a;
+	height:100px;
+	color:white;
+	border:none;
+	font-size:30px;
+}
+#open-start{
+	width:50%;
+	background:#0a9eeb;
+	height:100px;
+	color:white;
+	border:none;
+	font-size:30px;
+}
+#open-cancel{
+	width:50%;
+	background:#eb640a;
+	height:100px;
+	color:white;
+	border:none;
+	font-size:30px;
+}
+#reopen{
+	width:100%;
+	background:#0a9eeb;
+	height:100px;
+	color:white;
+	border:none;
+	font-size:30px;
+}

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmAttenceView" title="考勤核对明细详情">
+  	<panel name="panRiskType" type="Group">
+  		<control name="code" title="code" property="" type="Hidden" edit="Y" initial="'t_issue.risk_result_type'"  
+  		required="" format="" width="2" height="" column=""/>
+  	</panel> 
+	<panel name="hiddenPanel" title="hidden" object="attencecheck" type="Hidden">
+		<control name="eq_Id" title="id" property="Id" type="Hidden" edit="" required="" format="" width="" height="" column="" initial="session.userInfo.empId"/>
+	</panel>
+	<panel name="pForm" title="考勤编辑" object="attencecheck" type="Group">
+		<control name="Id" title="id" property="Id" type="Hidden" edit="N" required="" format="" width="2" height="" column="2"/>
+		<control name="title" title="标题" property="title" type="TextBox" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="empId" title="部门ID" property="empId" type="Hidden" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="empName" title="所属部门" property="empName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="2"/>
+		<control name="managerId" title="部门主管ID" property="managerId" type="Hidden" edit="N" required="N" format="" width="1" height="1" column="2"/>
+		<control name="startTime" title="开始日期" property="startTime" type="DateBox" edit="N" required="N" format="" width="1" height="1" column="" initial="CurrentTime()"/>
+		<control name="endTime" title="结束日期" property="endTime" type="DateBox" edit="N" required="N" format="" width="1" height="1" column="2" initial="CurrentTime()"/>
+		<control name="reamark" title="说明" property="reamark" type="TextBox" edit="N" required="N" format="" width="2" height="2" column="2"/>
+	</panel>
+	<panel name="pTableMemo" title="考核人员明细" object="attencecheckdetail" type="Grid">
+		<control name="Id" title="主表Id" property="Id" type="Hidden" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="attenceId" title="ID" property="attenceId" type="Hidden" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="ctlDetail" title="详情" property="" type="Link" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="userId" title="员工Id" property="userId" type="Hidden" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="userName" title="员工名称" property="userName" type="TextBox" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="commitDay" title="提交日报天数" property="commitDay" type="TextBox" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="commitHours" title="确认的工作小时数" property="commitHours" type="TextBox" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="attenceDay" title="确认出勤天数" property="attenceDay" type="TextBox" edit="" required="Y" format="" width="120" height="" column=""/>
+	</panel>
+	<panel name="pToolbar" title="功能按钮" object="" type="Toolbar">
+		<control name="btnReturn" title="返回" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+    <!-- 继续查看详情 -->
+    <flow trigger="pTableMemo.ctlDetail" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="pTableMemo.attenceId"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmAttenceDetailView"></param>
+        <param name="Mode" value="Readonly"></param>
+         <param name="Window" value="Medium"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Out" value="pTableMemo"></param>
+        <param name="Sql" value="attence/QryAttenceList"></param>
+      </procedure> 
+    </flow>
+    <!-- 加载 -->
+    <flow trigger="" event="OnLoad" filter="" >
+      <procedure name="j1" server="" logic="DecodeId" ifyes="je" ifno="">
+        <param name="Out" value="hiddenPanel.eq_Id"></param>
+      </procedure> 
+      <procedure name="je"  logic="QueryById" ifyes="jeD" ifno="">
+        <param name="In" value="hiddenPanel"></param>
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="attence/QryAttenceList"></param>
+      </procedure> 
+      <procedure name="jeD"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="hiddenPanel"></param>
+        <param name="Out" value="pTableMemo"></param>
+        <param name="Sql" value="attence/QryAttenceCheDetailList"></param>
+      </procedure>  
+    </flow>
+    <!-- 所属部门-->
+    <flow trigger="pForm.empName" event="OnClick" filter="">
+      <procedure name="findOrg"  logic="Find" ifyes="jsquery" ifno="">
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="EmpQueryOrg"></param>
+        <param name="Title" value="部门选择"></param>
+        <param name="Columns" value="name,部门名称,empName|id,编码,empId|managerId,部门主管,managerId"></param> 
+        <param name="Window" value="Large"></param> 
+       </procedure>
+       <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pForm" />
+        <param name="Out" value="pTableMemo" />
+        <param name="Sql" value="attence/QryAttenceDetailList" />
+      </procedure>
+     </flow>
+    <!-- 返回 -->
+    <flow trigger="pToolbar.btnReturn" event="OnClick" filter="root!=''" >
+      <procedure name="jsclose" server="" logic="Back" ifyes="" ifno="">
+         <param name="Mode" value="Edit" />
+      </procedure>
+    </flow>	 
+       
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pToolbar" location="North" scale="" />
+        <subregion panel="pForm" location="Center" scale="" />
+      </region>
+      <region location ="Center" scale="">
+<!--       	<subregion panel="pToolbar" location="North" scale="" />
+        <subregion panel="pForm" location="North" scale="" /> -->
+        <subregion panel="pTableMemo" location="Center" scale=""/>
+        <subregion panel="panRiskType" location="South" scale="" />
+      </region>  
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

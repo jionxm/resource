@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx  
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/task
+	http://www.springframework.org/schema/task/spring-task.xsd">
+
+	<!-- DataSource数据源，使用druid连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${mysql.jdbc.driverClassName}"></property>
+		<property name="url" value="${mysql.jdbc.url}"></property>
+		<property name="username" value="${mysql.jdbc.username}"></property>
+		<property name="password" value="${mysql.jdbc.password}"></property>
+		<!-- 指定连接数据库连接池的最小连接数 -->
+		<property name="minIdle" value="10"></property>
+		<!-- 指定连接数据库连接池的最大连接数 -->
+		<property name="maxActive" value="120"></property>
+		<!--初始化接数据库连接池 -->
+		<property name="initialSize" value="2"></property>
+		<!-- 指定连接数据库连接池的连接的最大空闲时间 -->
+		<property name="maxWait" value="12000"></property>
+		<!--配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒。 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000"></property>
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<!-- 用来检测连接是否有效的sql，要求是一个查询语句 -->
+		<property name="validationQuery" value="SELECT 1 FROM DUAL"></property>
+		<property name="testWhileIdle" value="true"></property>
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计 -->
+		<property name="filters" value="stat" />
+		<!-- 长时间不适用的连接强制关闭 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 超过30分钟开始关闭空闲连接 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		</bean>
+			<bean id="vendorProperties"
+			class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+			<property name="properties">
+				<props>
+					<prop key="Oracle">oracle</prop>
+					<prop key="MySQL">mysql</prop>
+				</props>
+			</property>
+		</bean>
+		<bean id="databaseIdProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+			<property name="properties" ref="vendorProperties" />
+		</bean>
+	<!-- SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="databaseIdProvider" ref="databaseIdProvider" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+		<property name="typeAliasesPackage" value="com.tedu.base.*.dao" />
+	</bean>
+	<!-- scan for mappers and let them be autowired -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.tedu.*.*.dao,com.tedu.base.*.*.dao" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<!--事务管理DataSourceTransactionManager -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+		<property name="globalRollbackOnParticipationFailure" value="false" />
+	</bean>
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="select*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="find*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="get*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="query*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" isolation="READ_COMMITTED" rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="add*" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="edit*" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="eaa*" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="delete*" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="start*" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="*" rollback-for="Exception" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<aop:config>
+		<aop:pointcut id="baseServiceMethods" expression="execution(* com.tedu.*.*.service.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="baseServiceMethods" />
+	</aop:config>
+</beans>

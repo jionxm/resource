@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmAttenceAdd" title="考勤考核">
+	   
+	<panel name="pForm" title="考勤编辑" object="attencecheck" type="Group">
+		<control name="eq_id" title="id" property="Id" type="Hidden" edit="N" required="" format="" width="2" height="" column="2"/>
+		<control name="title" title="标题" property="title" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column=""/>
+		<control name="empId" title="部门ID" property="empId" type="Hidden" edit="Y" required="Y" format="" width="1" height="1" column=""/>
+		<control name="empName" title="部门名称" property="empName" type="PopupBox" edit="Y" required="Y" format="" width="1" height="1" column="2"/>
+		<control name="managerId" title="部门主管ID" property="managerId" type="Hidden" edit="N" required="N" format="" width="1" height="1" column="2"/>
+		<control name="startTime" title="开始日期" property="startTime" type="DateBox" edit="Y" required="Y" format="" width="1" height="1" column="" />
+		<control name="endTime" title="结束日期" property="endTime" type="DateBox" edit="Y" required="Y" format="" width="1" height="1" column="2" initial="CurrentTime()"/>
+		<control name="reamark" title="说明" property="reamark" type="TextBox" edit="Y" required="N" format="" width="2" height="2" column="2"/>
+		
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="N" required="N" target="CurrentTime()" format="" width="2" height="1" column="2"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="N" required="N" target="session.userInfo.empId" format="" width="2" height="1" column="2"  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="N" required="N" target="Mode=='Add'?CurrentTime():nil" format="" width="2" height="1" column="2"  />
+		<control name="createBy" title="考勤人ID" property="createBy" type="Hidden" edit="N" required="N" target="Mode=='Add'?session.userInfo.empId:nil" format="" width="2" height="1" column="2"  />
+	</panel>
+	<panel name="pTableMemo" title="考核人员明细" object="attencecheckdetail" type="Grid">
+		<control name="Id" title="Id" property="Id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+		<control name="attenceId" title="主表ID" property="attenceId" type="Hidden" edit="" required="" format="" width="180" height="" column=""/>
+		<!-- <control name="ctlDetail" title="详情" property="" type="Link" edit="" required="" format="" width="120" height="" column=""/> -->
+		<control name="userId" title="员工Id" property="userId" type="Hidden" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="userName" title="员工名称" property="userName" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="commitDay" title="提交日报天数" property="commitDay" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="commitHours" title="确认的工作小时数" property="commitHours" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="attenceDay" title="确认出勤天数" property="attenceDay" type="TextBox" edit="Y" required="Y" format="" width="180" height="" column=""/>
+		
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="N" required="N" target="CurrentTime()" format="" width="2" height="1" column="2"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="N" required="N" target="session.userInfo.empId" format="" width="2" height="1" column="2"  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="N" required="N" target="Mode=='Add'?CurrentTime():nil" format="" width="2" height="1" column="2"  />
+		<control name="createBy" title="考勤人ID" property="createBy" type="Hidden" edit="N" required="N" target="Mode=='Add'?session.userInfo.empId:nil" format="" width="2" height="1" column="2"  />
+		
+	</panel>
+	<panel name="pButton" title="工具按钮" object="" type="Toolbar">
+		<control name="save" title="确认" property="" type="Button" edit="" required="" format="" width="" height="" column="2"/>
+		<control name="cancel" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column="2"/>
+	</panel>
+	
+	
+	 <flow trigger="pButton.save" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="pForm,pTableMemo.attenceId"></param>
+         <param name="Msg" value="'信息已被保存'"></param>
+         <param name="Mode" value="Add"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+    
+    <flow trigger="" event="OnLoad" filter="" >
+      <procedure name="j1"  logic="Clear" ifyes="list1" ifno="" sync="Y">
+           <param name="Out" value="pForm"></param>
+      </procedure>  
+    </flow>
+    <!-- 所属部门-->
+    <flow trigger="pForm.empName" event="OnClick" filter="">
+      <procedure name="findOrg"  logic="Find" ifyes="jsquery" ifno="">
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="EmpQueryOrg"></param>
+        <param name="Title" value="部门选择"></param>
+        <param name="Columns" value="name,部门名称,empName|id,编码,empId|managerId,部门主管,managerId"></param> 
+        <param name="Window" value="Large"></param> 
+       </procedure>
+       <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pForm" />
+        <param name="Out" value="pTableMemo" />
+        <param name="Sql" value="attence/QryAttenceDetailList" />
+      </procedure>
+     </flow>
+     
+     <!-- 开始时间-->
+    <flow trigger="pForm.startTime" event="OnSelect" filter="">
+       <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pForm" />
+        <param name="Out" value="pTableMemo" />
+        <param name="Sql" value="attence/QryAttenceDetailList" />
+      </procedure>
+     </flow>
+     
+     <!-- 结束时间-->
+    <flow trigger="pForm.endTime" event="OnSelect" filter="">
+       <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pForm" />
+        <param name="Out" value="pTableMemo" />
+        <param name="Sql" value="attence/QryAttenceDetailList" />
+      </procedure>
+     </flow>
+     
+    <flow trigger="pForm.projName" event="OnClick" filter="">
+      <procedure name="search" logic="Find" ifyes="clear1" ifno="reloadSprint">
+        <param name="Sql" value="Project"/>
+        <param name="Out" value="pForm"/>
+        <param name="Title" value="项目选择"/>
+        <param name="Columns" value="id,编码,projId|name,项目,projName"/>
+         <param name="Window" value="Medium"/>
+      </procedure>
+		<procedure name="clear1"  logic="Clear" ifyes="reloadSprint" ifno="" sync="N">
+           <param name="Out" 
+           value="pForm|assignee,assigneeName" />
+      </procedure>        
+      <procedure name="reloadSprint"  logic="List" ifyes="" ifno="">
+        <param name="In" value="pForm"/>
+        <param name="Out" value="pForm.sprintId"/>
+        <param name="Sql" value="sprintA"/>
+		<param name="Options" value=",[选择]"/>
+      </procedure>     
+    </flow>         
+   <flow trigger="pButton.cancel" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>	
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="pButton" location="South" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pForm" location="North" scale="" />
+        <subregion panel="pTableMemo" location="Center" scale=""/>
+      </region>  
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

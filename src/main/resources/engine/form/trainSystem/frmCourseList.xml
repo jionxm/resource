@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+	<ui_layer>
+		<ui name="frmCourseList" title="课程列表">
+			<panel name="pnlUp" title="工具条" object="" type="Toolbar">
+				<control name="ctlQuery" title="查询" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+				<control name="ctlClear" title="清空条件" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+				<control name="ctlAdd" title="新增课程" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+			</panel>
+
+			<panel name="pnlGroup" title="查询条件" object="ttraincourse" type="Group"
+				multiple="Y">
+				<control name="eq_id" title="课程ID" property="id" type="Hidden"
+					edit="Y" required="Y" format="" width="1" height="1" column="" />
+				<control name="ctlCourseName" title="课程名称" property="name"
+					type="PopupBox" edit="Y" required="N" format="" width="1" height="1"
+					column="" />
+				<control name="eq_createBy" title="课程创建人ID" property="createBy"
+					type="Hidden" edit="Y" required="" format="" width="1" height="1"
+					column="" />
+				<control name="ctlCreateByName" title="课程创建人" property="createByName"
+					type="PopupBox" edit="Y" required="" format="" width="1" height="1"
+					column="4" />
+			</panel>
+
+			<panel name="pnlDg" title="课程列表" object="ttraincourse" type="Grid"
+				multiple="">
+				<control name="id" title="id" property="id" type="Hidden"
+					edit="Y" required="" format="" width="" height="" column="" />
+				<control name="ctlEdit" title="编辑" property="" type="Link"
+					edit="" required="" format="" width="100" height="" column="" />
+				<control name="ctlDel" title="删除" property="" type="Link"
+					edit="" required="" format="" width="" height="" column="" />
+				<control name="ctlDisscuss" title="留言" property="" type="Link"
+					edit="" required="" format="" width="" height="" column="" />
+
+				<control name="ctlName" title="课程名称" property="name" type="DataLink"
+					edit="" required="" format="" width="150" height="" column=""  />
+
+				<control name="ctlIntroduction" title="课程介绍" property="courseIntroduction"
+					type="TextBox" edit="" required="" format="" width="400" height=""
+					column="" />
+				<control name="ctlCreateByName" title="创建人" property="createByName"
+					type="TextBox" edit="" required="" format="" width="60" height=""
+					column="" />
+
+				<control name="ctlCreateTime" title="创建时间" property="createTime"
+					type="TextBox" edit="" required="" format="" width="150" height=""
+					column="" />
+
+				<control name="ctlUpdateByName" title="修改人" property="createByName"
+					type="TextBox" edit="" required="" format="" width="60" height=""
+					column="" />
+
+				<control name="ctlUPdateTime" title="修改时间" property="createTime"
+					type="TextBox" edit="" required="" format="" width="150" height=""
+					column="" />
+				<control name="det" title="det" property="det"
+					type="Hidden" edit="" required="" format="" width="150" height=""
+					column="" />
+			</panel>
+
+			<!-- 逻辑加载 -->
+			<flow trigger="" event="OnLoad" filter="">
+				<procedure name="clear" logic="Clear" ifyes="jsquery"
+					ifno="">
+					<param name="Out" value="pnlGroup"></param>
+				</procedure>
+				<procedure name="jsquery" logic="Query" ifyes="" ifno="">
+					<param name="Out" value="pnlDg"></param>
+					<param name="Sql" value="trainSystem/QryCourseList"></param>
+				</procedure>
+			</flow>
+
+			<!--panel pnlGroup 创建人 Find逻辑 -->
+			<flow trigger="pnlGroup.ctlCreateByName" event="OnClick" filter="">
+				<procedure name="search" logic="Find" ifyes="reloadSprint"
+					ifno="reloadSprint">
+					<param name="Sql" value="CourseCreateBy" />
+					<param name="Out" value="pnlGroup" />
+					<param name="Title" value="课程创建人选择" />
+					<param name="Options" value="$RESET,重置"/>
+					<param name="Columns" value="id,编码,eq_createBy|name,课程分类,ctlCreateByName" />
+					<param name="Window" value="Large" />
+				</procedure>
+			</flow>
+
+			<!--panel pnlGroup 课程名称 Find逻辑 -->
+			<flow trigger="pnlGroup.ctlCourseName" event="OnClick" filter="">
+				<procedure name="search" logic="Find" ifyes="reloadSprint"
+					ifno="reloadSprint">
+					<param name="Sql" value="CourseName" />
+					<param name="Out" value="pnlGroup" />
+					<param name="Title" value="课程名称选择" />
+					<param name="Options" value="$RESET,重置"/>
+					<param name="Columns" value="id,编码,eq_id|name,课程分类,ctlCourseName" />
+					<param name="Window" value="Large" />
+				</procedure>
+			</flow>
+
+			<!--留言 -->
+			<flow trigger="pnlDg.ctlDisscuss" event="OnClick" filter="">
+				<procedure name="procEncodeParam" logic="EncodeId" ifyes="procToIssueList"
+					ifno="procToIssueList">
+					<param name="In" value="pnlDg.id"></param>
+				</procedure>
+				<procedure name="procToIssueList" logic="Transition"
+					ifyes="" ifno="">
+					<param name="To" value="frmTrainDisscus"></param>
+					<param name="Mode" value="Edit"></param>
+				</procedure>
+			</flow>
+
+			<!-- panel pnlUp 查询 OnClick -->
+			<flow trigger="pnlUp.ctlQuery" event="OnClick" filter="">
+				<procedure name="jsquery" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pnlGroup"></param>
+					<param name="Out" value="pnlDg"></param>
+					<param name="Sql" value="trainSystem/QryCourseList"></param>
+				</procedure>
+			</flow>
+
+			<!-- panel pnlUp 清空条件 OnClick -->
+			<flow trigger="pnlUp.ctlClear" event="OnClick" filter="">
+				<procedure name="btnClear" logic="Clear" ifyes="" ifno="">
+					<param name="Out" value="pnlGroup"></param>
+				</procedure>
+			</flow>
+
+			<!-- panel pnlUp 新增 OnClick -->
+			<flow trigger="pnlUp.ctlAdd" event="OnClick" filter="">
+				<procedure name="jspopup" logic="Popup" ifyes="jsquery"
+					ifno="">
+					<param name="To" value="frmCourseAdd" />
+					<param name="Mode" value="Add" />
+					<param name="Window" value="Large" />
+				</procedure>
+				<procedure name="jsquery" logic="Query" ifyes="" ifno="">
+					<param name="Out" value="pnlDg"></param>
+					<param name="Sql" value="trainSystem/QryCourseList"></param>
+				</procedure>
+			</flow>
+
+			<!-- 返回 -->
+			<flow trigger="pnlUp.ctlBack" event="OnClick" filter="">
+				<procedure name="jsclose" server="" logic="Back" ifyes=""
+					ifno="">
+				</procedure>
+			</flow>
+
+			<!--panel pnlDg 编辑 -->
+			<flow trigger="pnlDg.ctlEdit" event="OnClick" filter="">
+				<procedure name="jsencodeid" server="" logic="EncodeId"
+					ifyes="jspopup" ifno="">
+					<param name="In" value="pnlDg.id"></param>
+				</procedure>
+				<procedure name="jspopup" logic="Popup" ifyes="jsquery"
+					ifno="">
+					<param name="To" value="frmCourseEdit"></param>
+					<param name="Mode" value="Edit"></param>
+					<param name="Window" value="Large"></param>
+					<param name="Title" value="编辑课程" />
+				</procedure>
+				<procedure name="jsquery" logic="Query" ifyes="" ifno="">
+					<param name="Out" value="pnlDg"></param>
+					<param name="Sql" value="trainSystem/QryCourseList"></param>
+				</procedure>
+			</flow>
+
+			<!--panel pnlDg 删除 -->
+			<flow trigger="pnlDg.ctlDel" event="OnClick" filter="row.det==1">
+				<procedure name="j0" server="" logic="ConfirmMsg" ifyes="j1"
+					ifno="">
+					<param name="Title" value="删除提示" />
+					<param name="Msg" value="确认删除当前课程吗?" />
+				</procedure>
+				<procedure name="j1" server="" logic="EncodeId" ifyes="j2"
+					ifno="">
+					<param name="In" value="pnlDg.id" />
+				</procedure>
+				<procedure name="j2" logic="Delete" ifyes="getCourseDg"
+					ifno="">
+					<param name="In" value="pnlDg" />
+					<param name="Plugin" value="DeleteTraineePlugin"/>
+					<param name="Msg" value="'该课程已删除'" />
+				</procedure>
+				<procedure name="getCourseDg" logic="Query" ifyes="" ifno="">
+					<param name="Out" value="pnlDg"></param>
+					<param name="Sql" value="trainSystem/QryCourseList"></param>
+				</procedure>
+			</flow>
+
+
+			<!-- 课程的详情 -->
+			<flow trigger="pnlDg.ctlName" event="OnClick" filter="">
+				  <procedure name="getId"  logic="EncodeId" ifyes="jTransition" ifno="" >
+			     	 <param name="In" value="pnlDg.id"></param>
+			      </procedure> 
+			      <procedure name="jTransition"  logic="Transition" ifyes="" ifno="" >
+			           <param name="To" value="frmCourseFileList"></param>
+			           <param name="Mode" value="Edit"></param>
+			      </procedure>
+			</flow>
+
+			<!-- 布局 -->
+			<layout>
+				<region location="North" scale="">
+					<subregion panel="pnlUp" location="North" scale="" />
+					<subregion panel="pnlGroup" location="Center" scale="" />
+				</region>
+				<region location="Center" scale="">
+					<subregion panel="pnlDg" location="Center" scale="" />
+				</region>
+			</layout>
+		</ui>
+	</ui_layer>
+</tsoftware>

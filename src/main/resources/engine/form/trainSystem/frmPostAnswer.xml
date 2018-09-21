@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmPostAnswer" title="评论">
+   <panel name="pCondition" title="查询条件" object="tpost" type="Group">
+		<control name="createBy" title="发帖人id" property="createBy" type="Hidden" edit="Y" required="" format="" width="" height="" column="" initial="session.userInfo.empId"/>
+		<control name="content" title="内容" property="content" type="TextBox" edit="Y" required="" format="" width="4" height="4" column="4"/>
+		<control name="updateTime" title="创建时间" property="createTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="2" height="1" column="2"  />
+		<control name="courseId" title="课程名称id" property="courseId" type="Hidden" edit="N" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pToolbar" title="down" object="" type="Toolbar">
+		<control name="confirm" title="保存" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="cancel" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel> 
+	<!-- 初始加载 -->
+    <flow trigger="" event="OnLoad" filter="">  
+      <procedure name="jClear"  logic="Clear" ifyes="getId3" ifno="" >
+           <param name="Out" value="pCondition"></param>
+      </procedure> 
+      <procedure name="getId3"  logic="DecodeId" ifyes="jquery" ifno="">
+        <param name="Out" value="pCondition.courseId"></param>
+    </procedure>  
+    </flow>	
+    <!-- 保存 -->
+    <flow trigger="pToolbar.confirm" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsClose" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pCondition"></param>
+        <param name="Msg" value="'活动已被保存,详情请查看操作日志'"></param>
+      </procedure>
+      <procedure name="jsClose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+    <!-- 取消 -->
+    <flow trigger="pToolbar.cancel" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>
+    <!-- 布局 -->
+    <layout>
+  	  <region location ="Center" scale="">
+        <subregion panel="pCondition" location ="North" scale=""/>
+      </region>
+      <region location ="South" scale="">
+		<subregion panel="pToolbar" location="North" scale=""/>
+      </region>
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

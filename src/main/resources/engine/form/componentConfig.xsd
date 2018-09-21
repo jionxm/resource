@@ -1,0 +1,540 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
+           elementFormDefault="qualified">
+    <xs:element name="tsoftware" type="tsoftwareType"/>
+    <xs:complexType name="propertyType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="[a-zA-Z]"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="type" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Long"/>
+                            <xs:enumeration value="Time"/>
+                            <xs:enumeration value="String"/>
+                            <xs:enumeration value="Double"/>
+                            <xs:enumeration value="Date"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="length">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[0-9.]+"/>
+                            <xs:pattern value=""/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute type="xs:string" name="validate" use="optional"/>
+                <xs:attribute type="xs:string" name="initial" use="optional"/>
+                <xs:attribute name="field" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[a-zA-Z][A-Za-z0-9_]+"/>
+                            <xs:pattern value="[a-zA-Z]"/>
+                            <xs:pattern value=""/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="objectType">
+        <xs:sequence>
+            <xs:element type="propertyType" name="property" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="name" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                    <xs:pattern value="[a-zA-Z]"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="table" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-zA-Z][A-Za-z0-9_]+"/>
+                    <xs:pattern value="[a-zA-Z]"/>
+                    <xs:pattern value=""/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="primary" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-zA-Z][A-Za-z0-9_]+"/>
+                    <xs:pattern value="[a-zA-Z]"/>
+                    <xs:pattern value=""/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="autoinc" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Y"/>
+                    <xs:enumeration value="N"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="unique" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-zA-Z][a-zA-Z0-9_|,]+"/>
+                    <xs:pattern value="[a-zA-Z]"/>
+                    <xs:pattern value=""/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute type="xs:string" name="order" use="optional"/>
+        <xs:attribute type="xs:string" name="father" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="model_layerType">
+        <xs:sequence>
+            <xs:element type="objectType" name="object" maxOccurs="unbounded" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>query model</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="controlType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="lk_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="ge_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="le_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="dl_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="dg_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="de_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="gt_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="lt_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="eq_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="[a-zA-Z]"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="title" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute type="xs:string" name="source" use="optional"/>
+                <xs:attribute type="xs:string" name="target" use="optional"/>
+                <xs:attribute type="xs:string" name="property" use="optional"/>
+                <xs:attribute type="xs:string" name="drill" use="optional"/>
+
+                <xs:attribute name="type" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Button"/>
+                            <xs:enumeration value="Label"/>
+                            <xs:enumeration value="TextBox"/>
+                            <xs:enumeration value="DateBox"/>
+                            <xs:enumeration value="DateTimeBox"/>
+                            <xs:enumeration value="TimeBox"/>
+                            <xs:enumeration value="ComboBox"/>
+                            <xs:enumeration value="MultipleComboBox"/>
+                            <xs:enumeration value="PopupBox"/>
+                            <xs:enumeration value="PasswordBox"/>
+                            <xs:enumeration value="FileBox"/>
+                            <xs:enumeration value="CheckBox"/>
+                            <xs:enumeration value="ImageView"/>
+                            <xs:enumeration value="DataLink"/>
+                            <xs:enumeration value="Link"/>
+                            <xs:enumeration value="Hidden"/>
+                            <xs:enumeration value="KindEditor"/>	
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="edit" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Y"/>
+                            <xs:enumeration value="N"/>
+                            <xs:enumeration value=""/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="required" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Y"/>
+                            <xs:enumeration value="N"/>
+                            <xs:enumeration value=""/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute type="xs:string" name="tip" use="optional"/>
+                <xs:attribute name="multiple" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Y"/>
+                            <xs:enumeration value="N"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute type="xs:string" name="format" use="optional"/>
+                <xs:attribute name="width" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[0-9]+"/>
+                            <xs:pattern value=""/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="height" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[0-9]{1}"/>
+                            <xs:pattern value=""/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="column" use="optional">
+                    <!-- 			<xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                  <xs:pattern value="[1-9]+"/>
+                                  <xs:pattern value=""/>
+                                  </xs:restriction>
+                                </xs:simpleType> -->
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[a-zA-Z0-9]"/>
+                            <xs:pattern value=""/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute type="xs:string" name="initial" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+        <xs:complexType name="fieldType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="lk_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="ge_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="le_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="dl_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="dg_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="de_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="gt_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="lt_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="eq_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="[a-zA-Z]"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+				<xs:attribute name="sign" use="optional">
+                    <xs:simpleType>
+		                <xs:restriction base="xs:string" />
+		            </xs:simpleType>
+                </xs:attribute>         
+				<xs:attribute name="condition" use="optional">
+                    <xs:simpleType>
+		                <xs:restriction base="xs:string" />
+		            </xs:simpleType>
+                </xs:attribute>        
+				<xs:attribute name="conjunction" use="optional">
+                    <xs:simpleType>
+		                <xs:restriction base="xs:string" />
+		            </xs:simpleType>
+                </xs:attribute>                                   
+                </xs:extension>
+                </xs:simpleContent>
+                </xs:complexType>
+    <xs:complexType name="filterType">
+            <xs:sequence>
+            <xs:element type="filterType" name="filter" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="fieldType" name="field" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+                <xs:attribute name="name" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="lk_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="ge_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="le_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="dl_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="dg_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="de_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="gt_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="lt_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="eq_[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="[a-zA-Z]"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="panelType">
+        <xs:sequence>
+            <xs:element type="filterType" name="filter" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="controlType" name="control" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="name" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                    <xs:pattern value="[a-zA-Z]"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="title" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="order" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>        
+        <xs:attribute type="xs:string" name="object" use="optional"/>
+        <xs:attribute name="multiple" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Y"/>
+                    <xs:enumeration value="N"/>
+                    <xs:enumeration value=""/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+         <xs:attribute name="isCheckAll" use="optional">
+             <xs:simpleType>
+                 <xs:restriction base="xs:string">
+                     <xs:enumeration value="Y"/>
+                     <xs:enumeration value="N"/>
+                 </xs:restriction>
+             </xs:simpleType>
+         </xs:attribute>
+        <xs:attribute type="xs:string" name="page" use="optional"/>
+        <xs:attribute name="type" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Toolbar"/>
+                    <xs:enumeration value="Group"/>
+                    <xs:enumeration value="Grid"/>
+                    <xs:enumeration value="HiddenTable"/>
+                    <xs:enumeration value="Tree"/>
+                    <xs:enumeration value="Image"/>
+                    <xs:enumeration value="LineChart"/>
+                    <xs:enumeration value="PieChart"/>
+                    <xs:enumeration value="ColumnChart"/>
+                    <xs:enumeration value="BarChart"/>
+                    <xs:enumeration value="WorkflowList"/>
+                    <xs:enumeration value="Hidden"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="paramType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                            <xs:pattern value="[a-zA-Z]"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute type="xs:string" name="value" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="procedureType">
+        <xs:sequence>
+            <xs:element type="paramType" name="param" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="name" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                    <xs:pattern value="[a-zA-Z]"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute type="xs:string" name="server" use="optional"/>
+        <xs:attribute name="logic" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Z][a-zA-Z0-9]+"/>
+                    <xs:pattern value="[A-Z]"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="ifyes" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-zA-Z][a-zA-Z0-9]+"/>
+                    <xs:pattern value="[a-zA-Z]"/>
+                    <xs:pattern value=""/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="ifno" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-zA-Z][a-zA-Z0-9]+"/>
+                    <xs:pattern value="[a-zA-Z]"/>
+                    <xs:pattern value=""/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="sync" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Y"/>
+                    <xs:enumeration value="N"/>
+                    <xs:enumeration value=""/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="flowType">
+        <xs:sequence>
+            <xs:element type="procedureType" name="procedure" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="trigger" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-zA-Z][A-Za-z0-9_.]+"/>
+                    <xs:pattern value="[a-zA-Z]"/>
+                    <xs:pattern value=""/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="event" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="OnClick"/>
+                    <xs:enumeration value="OnBlur"/>
+                    <xs:enumeration value="OnLoad"/>
+                    <xs:enumeration value="OnSelect"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute type="xs:string" name="filter" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="subregionType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="panel" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[a-zA-Z][a-zA-Z0-9]+"/>
+                            <xs:pattern value="[a-zA-Z]"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="location" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="East"/>
+                            <xs:enumeration value="West"/>
+                            <xs:enumeration value="North"/>
+                            <xs:enumeration value="South"/>
+                            <xs:enumeration value="Center"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="scale" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[0-9]{1,3}px"/>
+                            <xs:pattern value="[0-9]{1,3}%"/>
+                            <xs:pattern value=""/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="regionType">
+        <xs:sequence>
+            <xs:element type="subregionType" name="subregion" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="location" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="East"/>
+                    <xs:enumeration value="West"/>
+                    <xs:enumeration value="North"/>
+                    <xs:enumeration value="South"/>
+                    <xs:enumeration value="Center"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="scale" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[0-9]{1,3}px"/>
+                    <xs:pattern value="[0-9]{1,3}%"/>
+                    <xs:pattern value=""/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="layoutType">
+        <xs:sequence>
+            <xs:element type="regionType" name="region" maxOccurs="unbounded" minOccurs="0">
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="uiType">
+        <xs:sequence>
+            <xs:element type="panelType" name="panel" maxOccurs="unbounded" minOccurs="0">
+            </xs:element>
+            <xs:element type="flowType" name="flow" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="layoutType" name="layout">
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-zA-Z][a-zA-Z0-9]{1,19}"/>
+                    <xs:pattern value="[a-zA-Z]"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="title" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="ui_layerType">
+        <xs:sequence>
+            <xs:element type="uiType" name="ui" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="tsoftwareType">
+        <xs:sequence>
+            <xs:element type="model_layerType" name="model_layer" maxOccurs="1" minOccurs="0"/>
+            <xs:element type="ui_layerType" name="ui_layer" maxOccurs="1" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

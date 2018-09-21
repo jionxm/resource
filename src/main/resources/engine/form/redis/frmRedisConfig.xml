@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmRedisConfig" title="redis配置参数查询">
+	<panel name="pForm" title="配置显示" object="redisConfig" type="Group">
+		<control name="id" title="id" property="id" type="Hidden" edit="Y" required="" format="" width="1" height="" column="1"/>
+		<control name="version" title="服务器版本" property="version" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="1"/>
+		<control name="os" title="操作系统" property="os" type="ComboBox"  edit="N" required="N" format="" width="1" height="1" column="1"/>
+		<control name="runId" title="随机标识符" property="runId" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="1"  />
+		<control name="archBits" title="架构(32,64)" property="archBits" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="1" />
+		<control name="processId" title="进程 PID" property="processId" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="1"/>
+		<control name="port" title="TCP/IP监听端口" property="port" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="1"/>
+  		<control name="clients" title="已连接数量" property="clients" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="1"/>
+	</panel>
+	<panel name="pButton" title="工具按钮" object="" type="Toolbar">
+		<control name="btnClose" title="关闭" property="" type="Button" edit="" required="" format="" width="" height="" column="2"/>
+	</panel>
+	
+	<!-- 加载 -->
+    <flow trigger="" event="OnLoad" filter="" >
+      <procedure name="qid"  logic="Query" ifyes="" ifno="">
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="redis/QryRedisConfig"></param>
+         <param name="Plugin" value="redisConfigPlugin"></param>
+      </procedure>
+	</flow>
+    
+    <!-- 关闭 -->
+    <flow trigger="pButton.btnClose" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>	
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="pButton" location="South" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pForm" location="Center" scale="" />
+      </region>      
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

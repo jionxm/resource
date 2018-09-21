@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmUIList" title="窗体列表"> 
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnRefresh" title="重新装载" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pCondition" title="查询条件" object="role" type="Group">
+		<control name="lk_name" title="文件名" property="name" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="5"/>
+	</panel>	
+	<panel name="pTable" title="查询结果" object="" type="Grid" page="0">
+		<control name="name" title="文件名" property="name" type="TextBox" edit="" required="" format="" width="200" height="" column=""/>
+		<control name="type" title="类型" property="type" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="createTime" title="创建时间" property="createTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="updateTime" title="最后修改时间" property="updateTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="fileSize" title="文件大小" property="fileSize" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="a0" title="文件所在位置" property="filePath" type="TextBox" edit="" required="" format="" width="1000" height="" column=""/>
+	</panel>
+    <flow trigger="" event="OnLoad" filter="">
+      <procedure name="j1"  logic="Clear" ifyes="j2" ifno="" sync="Y">
+           <param name="Out" value="pCondition" />
+      </procedure>  
+      <procedure name="j2"  logic="Transform" ifyes="" ifno="">
+        <param name="In" value="pCondition" />
+        <param name="Out" value="pTable" />
+        <param name="Plugin" value="com.tedu.plugin.conf.UIProcessor" />
+      </procedure>   
+    </flow>	
+    <flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+      <procedure name="j2"  logic="Transform" ifyes="" ifno="">
+        <param name="In" value="pCondition" />
+        <param name="Out" value="pTable" />
+        <param name="Plugin" value="com.tedu.plugin.conf.UIProcessor" />
+      </procedure>                
+    </flow>     
+    <flow trigger="pToolbar.btnClear" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pCondition"></param>
+      </procedure>              
+    </flow>    
+    <flow trigger="pToolbar.btnRefresh" event="OnClick" filter="">
+      <procedure name="j2"  logic="Transform" ifyes="" ifno="">
+        <param name="Plugin" value="com.tedu.plugin.conf.UIReload" />
+      </procedure>                
+    </flow>      
+    <layout>
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+		<subregion panel="pCondition" location="North" scale=""/>
+		<subregion panel="pTable" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>    
+</ui_layer>
+</tsoftware>

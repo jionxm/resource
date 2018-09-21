@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+	<object name="announcement" table="t_announcement" primary="id" unique="" order="id desc" autoinc="Y">
+	<property name="id" type="Long" length="10" initial="" field="id"/>
+	<property name="title" type="String" length="50" field="title"/>
+	<property name="type" type="String" length="20" field="type"/>
+	<property name="orgId" type="Long" length="10" field="org_id"/>
+	<property name="context" type="String" length="2000" field="context"/>
+	
+	<property name="updateBy" type="Long" length="50" validate=""  field="update_by" />
+	<property name="createBy" type="Long" length="50" validate=""  field="create_by" />	
+	<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+	<property name="createTime" type="Date" length="" validate=""  field="create_time" />
+	<property name="orgName" type="String" length="50" validate=""  field="" />
+ <property name="typeName" type="String" length="20" validate=""  field=""/>
+ <property name="updateName" type="String" length="20" validate=""  field="" />
+ <property name="createName" type="String" length="20" validate=""  field="" /> 
+  </object>       
+</model_layer>
+</tsoftware>

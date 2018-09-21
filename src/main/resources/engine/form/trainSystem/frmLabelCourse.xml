@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmLabelCourse" title="设置关联">
+  	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column="" />
+		<control name="btnClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column="" />
+		<control name="btnCreate" title="新增关联" property="" type="Button" edit="" required="" format="" width="" height="" column="" />
+		<control name="save" title="保存" property="" type="Button" edit="" required="" format="" width="" height="" column="2" />
+		<control name="btnImport" title="导入" property="" type="Button" edit="" required="" format="" width="" height="" column="2" />
+		<control name="btnDelete" title="批量删除" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="cancel" title="返回" property="" type="Button" edit="" required="" format="" width="" height="" column="2" />
+	</panel>
+	<panel name="pCondition" title="查询条件" object="labelCourse" type="Group" >
+		<control name="eq_courseId" title="课程Id" property="courseId" type="Hidden" edit="Y" required="N" format="" width="1" height="" column="" />
+		<control name="courseName" title="课程名称" property="courseName" type="PopupBox" edit="Y" required="N" format="" width="1" height="" column="" />
+		<control name="eq_labelId" title="标签名称" property="labelId" type="ComboBox" edit="Y" required="N" format="" width="1" height="" column="4" />
+	</panel>
+	<panel name="pTable" title="新增数据列" object="labelCourse" type="Grid" multiple="Y" >
+		<control name="id" title="id" property="id" type="Hidden" edit="Y" required="N" format="" width="130" height="" column="" />
+		<control name="labelId" title="标签Id" property="labelId" type="Hidden" edit="Y" required="N" format="" width="130" height="" column="" />
+		<control name="labelName" title="标签名称" property="labelName" type="PopupBox" edit="Y" required="N" format="" width="150" height="" column="" />
+		<control name="courseId" title="课程Id" property="courseId" type="Hidden" edit="Y" required="N" format="" width="130" height="" column="" />
+		<control name="courseName" title="课程名称" property="courseName" type="PopupBox" edit="Y" required="N" format="" width="150" height="" column="" />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column="1"  /> 
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil" format="" width="1" height="1" column="1"  />
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />		
+	</panel>
+	<!-- 初始加载 -->
+    <flow trigger="" event="OnLoad" filter="">
+       <procedure name="jClear" logic="Clear" ifyes="labelList" ifno="" sync="Y">
+			<param name="Out" value="pCondition"></param>
+		</procedure>
+		<procedure name="labelList"  logic="List" ifyes="Query" ifno="" sync="Y">
+         	<param name="Out" value="pCondition.eq_labelId"></param>
+         	<param name="Sql" value="trainSystem/labelName"></param>
+         	<param name="Options" value="YorN,[全选/取消]"/>
+        </procedure>
+      <procedure name="Query" logic="Query" ifyes="" ifno="">
+		<param name="Out" value="pTable"></param>
+		<param name="Sql" value="trainSystem/labelCourseQry"></param>
+	  </procedure>
+    </flow>
+	<!-- 批量删除 -->
+    <flow trigger="pToolbar.btnDelete" event="OnClick" filter="">
+      <procedure name="jCMsg" server="" logic="ConfirmMsg" ifyes="jDelete" ifno="">
+       <param name="Title" value="删除提示" />
+       <param name="Msg" value="确认删除当前工作项吗?" />
+      </procedure>
+      <procedure name="jDelete"  logic="Delete" ifyes="jQuery" ifno="">
+        <param name="In" value="pTable" />
+        <param name="Plugin" value="deleteLabelCoursePlugins"/>
+        <param name="Msg" value="'工作项已删除'" />
+      </procedure>
+      <procedure name="jQuery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition" />
+        <param name="Out" value="pTable" />
+        <param name="Sql" value="trainSystem/labelCourseQry" />
+      </procedure>           
+    </flow>
+	<!-- 新增数据  -->
+    <flow trigger="pToolbar.btnCreate" event="OnClick" filter="">
+      <procedure name="jspopup" logic="AddRow" ifyes="" ifno="">
+        <param name="Out" value="pTable" />
+      </procedure>                          
+    </flow>
+    <!-- 查询数据  -->
+    <flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+      <procedure name="jQuery" logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition" />
+        <param name="Out" value="pTable" />
+        <param name="Sql" value="trainSystem/labelCourseQry" />
+      </procedure>                          
+    </flow>
+    <!-- 清空所有 -->
+	<flow trigger="pToolbar.btnClear" event="OnClick" filter="">
+		<procedure name="clear" logic="Clear" ifyes="" ifno=""
+			sync="Y">
+			<param name="Out" value="pCondition"></param>
+		</procedure>
+	</flow>
+    <!-- 保存 --> 
+    <flow trigger="pToolbar.save" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jQuery" ifno="">
+        <param name="In" value=",pTable"></param>
+        <param name="Msg" value="'已保存'"></param>
+      </procedure>
+      <procedure name="jQuery"  logic="Query" ifyes="jsclose" ifno="">
+        <param name="In" value="pCondition" />
+        <param name="Out" value="pTable" />
+        <param name="Sql" value="trainSystem/labelCourseQry" />
+      </procedure>
+    </flow>	
+    
+    <!-- 导入 -->
+     <flow trigger="pToolbar.btnImport" event="OnClick" filter="">
+	     <procedure name="importbat"  logic="BatchImport" ifyes="Query" ifno="">
+	       <param name="In" value="frmLabelCourse.pTable"></param>
+	       <param name="Title" value="批量导入"></param>
+	       <param name="Foreign" value="labelId|t_train_course_label.name|labelName,courseId|t_train_course.name|courseName"></param>
+	       <param name="Dict" value=""></param>
+	       <param name="Window" value="Large"></param>
+	     </procedure>
+	    <procedure name="Query"  logic="Query" ifyes="jsclose" ifno="">
+	        <param name="In" value="pCondition" />
+	        <param name="Out" value="pTable" />
+	        <param name="Sql" value="trainSystem/labelCourseQry" />
+        </procedure> 
+     </flow>
+     
+    <!-- 课程选择事件 -->
+   	<flow trigger="pCondition.courseName" event="OnClick" filter="">
+		<procedure name="search" logic="Find" ifyes="" ifno="">
+			<param name="In" value="pCondition" />
+			<param name="Sql" value="TrainCourse" />
+			<param name="Out" value="pCondition" />
+			<param name="Title" value="课程选择" />
+			<param name="Options" value="$RESET,重置"/>
+			<param name="Columns" value="id,编码,eq_courseId|name,课程名称,courseName"/>
+			<param name="Window" value="Medium" />
+		</procedure>
+	</flow>
+   	
+    <!-- 返回 -->
+	<flow trigger="pToolbar.cancel" event="OnClick" filter="">
+		<procedure name="jsclose" server="" logic="Back" ifyes="" ifno="">
+		</procedure>
+	</flow>
+	<!-- 标签选中事件 -->
+	<flow trigger="pTable.labelName" event="OnClick" filter="">
+		<procedure name="search" logic="Find" ifyes="" ifno="">
+			<param name="In" value="pTable" />
+			<param name="Sql" value="TrainLabel" />
+			<param name="Out" value="pTable" />
+			<param name="Title" value="标签选择" />
+			<param name="Options" value="$RESET,重置"/>
+			<param name="Columns" value="id,编码,labelId|name,标签名称,labelName"/>
+			<param name="Window" value="Medium" />
+		</procedure>
+	</flow>
+	<flow trigger="pTable.courseName" event="OnClick" filter="">
+		<procedure name="search" logic="Find" ifyes="" ifno="">
+			<param name="In" value="pTable" />
+			<param name="Sql" value="TrainCourse" />
+			<param name="Out" value="pTable" />
+			<param name="Title" value="课程选择" />
+			<param name="Options" value="$RESET,重置"/>
+			<param name="Columns" value="id,编码,courseId|name,课程名称,courseName"/>
+			<param name="Window" value="Medium" />
+		</procedure>
+	</flow>
+    <!-- 布局 -->
+	<layout>
+		<region location="North" scale="">
+			<subregion panel="pToolbar" location="North" scale="" />
+			<subregion panel="pCondition" location="Center" scale="" />
+		</region>
+		<region location="Center" scale="">
+			<subregion panel="pTable" location="Center" scale="" />
+		</region>
+	</layout>
+  </ui>
+</ui_layer> 
+</tsoftware>

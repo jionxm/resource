@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmAnnouncementList" title="公告管理"> 
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnCreate" title="新增公告" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pCondition" title="查询条件" object="announcement" type="Group">
+		<control name="lk_title" title="标题" property="title" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="eq_type" title="类型" property="type" type="ComboBox"  multiple="Y" edit="Y" required="N" format="" initial="'system,org'" width="1" height="1" column="4"/>
+		<control name="orgName" title="发布部门" property="" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="" />
+		<control name="createName" title="发布人" property="" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+		
+		<control name="eq_createBy" title="发布人" property="createBy" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="eq_orgId" title="发布部门" property="orgId" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+	</panel>	
+	<panel name="pTable" title="查询结果" object="announcement" type="Grid">
+		<control name="id" title="公告ID" property="id" type="Hidden" edit="" required="" format="" width="200" height="" column=""/>
+		<control name="edit" title="编辑" property="" type="Link" edit="" required="" format="" width="210" height="" column=""/>
+		<control name="delete" title="删除" property="" type="Link" edit="" required="" format="" width="210" height="" column=""/>
+		<control name="title" title="公告标题" property="title" type="DataLink" edit="" required="" format="" width="225" height="" column=""/>
+		<control name="typeName" title="类型" property="typeName" type="TextBox" edit="" required="" format="" width="225" height="" column=""/>
+		<control name="orgName" title="发布部门 " property="orgName" type="TextBox" edit="" required="" format="" width="225" height="" column=""/>
+		<control name="createName" title="发布人" property="createName" type="TextBox" edit="" required="" format="" width="225" height="" column=""/>
+		<control name="createTime" title="发布时间" property="createTime" type="TextBox" edit="" required="N"  format="" width="225" height="1" column=""  />
+	</panel>
+	
+	
+	<!-- 选择发布人 -->
+    <flow trigger="pCondition.createName" event="OnClick" filter="">
+      <procedure name="jSearch" logic="Find" ifyes="" ifno="">
+      	<param name="In" value="pCondition"/>
+        <param name="Sql" value="emp" />
+        <param name="Out" value="pCondition" />
+        <param name="Title" value="发布人选择" />
+        <param name="Options" value="$RESET,重置"/>
+        <param name="Columns" value="id,编码,eq_createBy|name,姓名,createName" />
+         <param name="Window" value="Medium" />
+      </procedure>
+    </flow> 
+    
+    <!-- 选择发布部门 -->
+ <flow trigger="pCondition.orgName" event="OnClick" filter="">
+      <procedure name="joSearch" logic="Find" ifyes="" ifno="">
+       <param name="In" value="pCondition"/>
+        <param name="Sql" value="AnnouncementOrg" />
+        <param name="Out" value="pCondition" />
+        <param name="Title" value="发布部门选择" />
+        <param name="Options" value="$RESET,重置"/>
+        <param name="Columns" value="orgId,部门号,eq_orgId|orgName,部门名称,orgName" />
+         <param name="Window" value="Medium" />
+      </procedure>
+    </flow> 
+   <!-- 逻辑加载 -->
+	<flow trigger="" event="OnLoad" filter="">  
+       <procedure name="jClear"  logic="Clear" ifyes="List" ifno="" sync="Y">
+         <param name="Out" value="pCondition"></param>
+      </procedure>
+      <procedure name="List"  logic="List" ifyes="Query" ifno="" sync="Y">
+         <param name="Out" value="pCondition.eq_type"></param>
+         <param name="Sql" value="announcement/ListAnnouncementType"></param>
+         <param name="Options" value="YorN,[全选/取消]"/>
+      </procedure>
+      <procedure name="Query" logic="Query" ifyes="" ifno="">
+      	<param name="In" value="pCondition"></param>
+         <param name="Out" value="pTable"></param>
+         <param name="Sql" value="announcement/QryAnnouncementList"></param>
+      </procedure>
+    </flow>
+	 
+	<!-- 查询点击事件 -->
+    <flow trigger="pToolbar.btnQuery" event="OnClick" filter="">  
+      <procedure name="Query"  logic="Query" ifyes="" ifno="" sync="Y">
+           <param name="In" value="pCondition"></param>
+           <param name="Out" value="pTable"></param>
+           <param name="Sql" value="announcement/QryAnnouncementList"></param>
+      </procedure> 
+    </flow>
+	 <!-- 清空条件 -->
+    <flow trigger="pToolbar.btnClear" event="OnClick" filter="">  
+      <procedure name="clear"  logic="Clear" ifyes="" ifno="" sync="Y">
+           <param name="Out" value="pCondition"></param>
+      </procedure> 
+    </flow>
+	
+	<!-- 新增 公告-->
+	 <flow trigger="pToolbar.btnCreate" event="OnClick" filter="">
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmAnnouncementEdit" />
+        <param name="Mode" value="Add" />
+         <param name="Window" value="Large" />
+          <param name="Title" value="新增公告" />
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition" />
+        <param name="Out" value="pTable" />
+        <param name="Sql" value="announcement/QryAnnouncementList" />
+      </procedure> 
+ </flow>
+ <!-- 编辑公告 -->
+ <flow trigger="pTable.edit" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="pTable.id"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmAnnouncementEdit" />
+        <param name="Mode" value="Edit" />
+         <param name="Window" value="Medium" />
+         <param name="Title" value="编辑公告" />
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition" />
+        <param name="Out" value="pTable" />
+        <param name="Sql" value="announcement/QryAnnouncementList"/>
+      </procedure>              
+    </flow>
+	<!--删除公告-->
+     <flow trigger="pTable.delete" event="OnClick" filter="">
+      <procedure name="j0" server="" logic="ConfirmMsg" ifyes="j1" ifno="">
+       <param name="Title" value="删除提示" />
+       <param name="Msg" value="确认删除当前公告吗?" />
+      </procedure>
+      <procedure name="j1" server="" logic="EncodeId" ifyes="j2" ifno="">
+        <param name="In" value="pTable.id" />
+      </procedure>
+      <procedure name="j2"  logic="Delete" ifyes="j3" ifno="">
+        <param name="In" value="pTable" />
+        <param name="Msg" value="'公告已删除'" />
+      </procedure>
+      <procedure name="j3"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition" />
+        <param name="Out" value="pTable" />
+        <param name="Sql" value="announcement/QryAnnouncementList" />
+      </procedure>           
+    </flow>  
+	
+	<!--点击详情 -->
+ <flow trigger="pTable.title" event="OnClick" filter="">  
+   <procedure name="annEncodeId" logic="EncodeId"  ifyes="j1" ifno="" >
+    <param name="In" value="pTable.id"></param>
+   </procedure>
+      <procedure name="j1"  logic="Transition" ifyes="" ifno="" >
+           <param name="To" value="frmAnnounceDetail"></param>
+           <param name="Mode" value="ReadOnly"></param>
+      </procedure> 
+    </flow>
+	
+	
+	<!-- 布局 -->
+    <layout>
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+		<subregion panel="pCondition" location="North" scale=""/>
+		<subregion panel="pTable" location="Center" scale=""/>
+      </region>
+    </layout>
+    </ui>
+    </ui_layer>
+    </tsoftware>

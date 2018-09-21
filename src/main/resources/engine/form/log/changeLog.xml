@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+    <model_layer>
+        <object name="changeLog" table="t_change_log" primary="id" unique="" order="">
+            <property name="id" type="Long" length="50" initial="" field="id"/>
+            <property name="type" type="String" length="20" field="type"/>
+            <property name="proc" type="String" length="50" field="proc"/>
+            <property name="url" type="String" length="50" field="url"/>
+            <property name="oldContent" type="String" length="4000" field="old_content"/>
+            <property name="newContent" type="String" length="4000" field="new_content"/>
+            <property name="createTime" type="Date"  field="create_time"/>
+            <property name="createBy" type="String" length="32" field="create_by"/>
+            <property name="entityName" type="String" length="50" field="entity_name"/>
+            <property name="entityId" type="String" length="50" field="entity_id"/>
+            <property name="flowId" type="String" length="32" initial="" field="flow_id"/>
+        </object>
+    </model_layer>
+    <ui_layer>
+        <ui name="frmChangeLogList" title="修改日志">
+            <panel name="pnlToolbar" title="工具条" object="" type="Toolbar">
+                <control name="ctlClose" title="关闭" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+            </panel>
+            <panel name="pnlCondition" title="查询条件" object="changeLog" type="Group">
+                <control name="eq_flowId" title="FlowID" property="flowId" type="Hidden"  edit="" required="" format="" width="1" height="" column=""/>
+            </panel>
+
+            <panel name="pnlList" title="查询结果" object="changeLog" type="Grid">
+
+                <control name="ctlProc" title="过程名称" property="proc" type="TextBox" edit="" required="" format=""
+                         width="100" height="" column=""/>
+                <control name="ctlEntityName" title="对象名称" property="entityName" type="TextBox" edit="" required=""
+                         format=""
+                         width="80" height="" column=""/>
+                <control name="ctlType" title="操作类型" property="type" type="TextBox" edit="" required="N"
+                         format="" width="100" height="1" column=""/>
+                <control name="ctlOldContent" title="原值" property="oldContent" type="TextBox" edit="" required="N"
+                         format="" width="100" height="1" column=""/>
+                <control name="ctlNewContent" title="新值" property="newContent" type="TextBox" edit="" required="N"
+                         format="" width="100" height="1" column=""/>
+                <control name="ctlCreateTime" title="创建时间" property="createTime" type="TextBox" edit="" required="N"
+                         format="" width="100" height="1" column=""/>
+            </panel>
+
+            <flow trigger="" event="OnLoad" filter="">
+                <procedure name="procDecodeId" server="" logic="DecodeId" ifyes="proQuery" ifno="">
+                    <param name="Out" value="pnlCondition.eq_flowId"></param>
+                </procedure>
+                <procedure name="proQuery"  logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlCondition"></param>
+                    <param name="Out" value="pnlList"></param>
+                    <param name="Sql" value="QryChangeLog"></param>
+                </procedure>
+            </flow>
+
+            <flow trigger="pnlToolbar.ctlClose" event="OnClick" filter="">
+                <procedure name="procClose" server="" logic="Close" ifyes="" ifno="">
+                    <param name="Refresh" value="true"></param>
+                </procedure>
+            </flow>
+
+            <layout>
+                <region location ="Center" scale="">
+                    <subregion panel="pnlCondition" location="North" scale=""/>
+                    <subregion panel="pnlList" location="Center" scale="" />
+                </region>
+                <region location ="South" scale="">
+                    <subregion panel="pnlToolbar" location="South" scale="" />
+                </region>
+            </layout>
+        </ui>
+    </ui_layer>
+</tsoftware>

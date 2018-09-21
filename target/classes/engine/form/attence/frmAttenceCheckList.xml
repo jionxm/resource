@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmAttenceCheckList" title="考勤考核列表"> 
+  	<panel name="hiddenPanel" title="hidden" object="org" type="Hidden">
+		<control name="eq_id" title="id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column="" initial="session.userInfo.empId"/>
+	</panel>
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnClear" title="清空条件" property="" type="Button" edit="Y" required="" format="" width="1" height="" column=""/>
+		<control name="btnQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnAdd" title="新增" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pCondition" title="查询条件" object="attencecheck" type="Group">
+		<!-- ge_值大于等于  gt_值大于 lt_值小于  le_值小于等于  eq_等于 -->  
+		<!-- <control name="eq_id" title="id" property="Id" type="Hidden" edit="N" required="" format="" width="2" height="" column="2"/> -->
+		<control name="startTime" title="开始日期" property="startTime" type="DateBox" edit="Y" required="N" format="" width="1" height="1" column="" />
+		<control name="endTime" title="结束日期" property="endTime" type="DateBox" edit="Y" required="N" format="" width="1" height="1" column="4" />
+		<!--<control name="title" title="标题" property="title" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+		 <control name="empId" title="部门ID" property="empId" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="empName" title="部门名称" property="empName" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="5"/>
+		<control name="reamark" title="说明" property="reamark" type="Hidden" edit="Y" required="N" format="" width="2" height="2" column="2"/> -->
+	</panel>	
+	<panel name="pTable" title="查询结果" object="attencecheck" type="Grid" multiple="">
+		<control name="ctlCheck" title="审核" property="" type="Link" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="ctlDel" title="删除" property="" type="Link" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="Id" title="id" property="Id" type="Hidden" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="title" title="标题" property="title" type="DataLink" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="startTime" title="开始日期" property="startTime" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="endTime" title="结束日期" property="endTime" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="empId" title="员工ID" property="empId" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="createByName" title="考勤人" property="createByName" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="reamark" title="说明" property="reamark" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="checkStatus" title="考核状态" property="checkStatus" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="isCheck" title="考核ID" property="isCheck" type="Hidden" edit="" required="" format="" width="180" height="" column=""/>
+	</panel>
+	
+	<!-- 审核操作 -->
+    <flow trigger="pTable.ctlCheck" event="OnClick" filter="row.isCheck !=1 &amp;&amp; row.isCheck !=2"> <!-- 未审核 -->
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="pTable.Id"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Transition" ifyes="j2" ifno="">
+        <param name="To" value="frmAttCheck"></param>
+        <param name="Mode" value="Edit"></param>
+      </procedure>
+     	<procedure name="j2"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="attence/QryAttenceSearList"></param>
+      </procedure>  
+    </flow>
+    
+    <!-- 清空条件 -->
+    <flow trigger="pToolbar.btnClear" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pCondition" />
+      </procedure>             
+    </flow>
+    
+	<!-- 查询 -->
+	<flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+      <procedure name="j2"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="attence/QryAttenceSearList"></param>
+      </procedure>
+    </flow>
+    <!-- 新增 -->
+	<flow trigger="pToolbar.btnAdd" event="OnClick" filter="">
+      <procedure name="jspopup" logic="Popup" ifyes="j2" ifno="">
+        <param name="To" value="frmAttenceAdd" />
+        <param name="Mode" value="Add" />
+         <param name="Window" value="Large" />
+      </procedure>
+     <procedure name="j2"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="attence/QryAttenceSearList"></param>
+      </procedure>
+    </flow>
+	 <!-- 保存 -->
+    <flow trigger="pToolbar.btnShow" event="OnClick" filter="">
+       <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="pCondition,pTable.workid"></param>
+         <param name="Msg" value="'信息已被保存'"></param>
+         <param name="Mode" value="Add"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+    <!-- 加载 -->
+    <flow trigger="" event="OnLoad" filter="">  
+      <procedure name="j1"  logic="Clear" ifyes="j2" ifno="" sync="Y">
+           <param name="Out" value="pCondition"></param>
+      </procedure>
+      <procedure name="j2"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="attence/QryAttenceList"></param>
+      </procedure>
+    </flow>
+    <!-- 查看详情 -->
+    <flow trigger="pTable.title" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="pTable.Id"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Transition" ifyes="" ifno="">
+        <param name="To" value="frmAttenceView"></param>
+        <param name="Mode" value="Edit"></param>
+      </procedure>
+    </flow>
+    <!-- 删除--><!-- 审核通过不允许删除 -->
+    <flow trigger="pTable.ctlDel" event="OnClick" filter="row.isCheck !=2 ">
+      <procedure name="msg" server="" logic="ConfirmMsg" ifyes="deleteData" ifno="">
+       <param name="Title" value="删除"></param>
+       <param name="Msg" value="确认删除当前记录吗?"></param>
+      </procedure>
+      <procedure name="deleteData"  logic="Delete" ifyes="jsquery" ifno="">
+        <param name="In" value="pTable" />
+        <param name="Msg" value="'已删除'" />
+        <param name="Cascade" value="t_attence_check_detail.attence_id;" />
+      </procedure>
+      <!-- <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="attence/QryAttenceList"></param>
+      </procedure> -->
+      <procedure name="jsquery"  logic="Query" ifyes="jQuery" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="attence/QryAttenceSearList"></param>
+      </procedure>
+      <procedure name="jQuery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="attence/QryAttenceList"></param>
+      </procedure> 
+     </flow>
+    <!-- end -->
+    <layout>
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+		<subregion panel="pCondition" location="North" scale=""/>
+		<subregion panel="pTable" location="Center" scale=""/>
+		<subregion panel="hiddenPanel" location="Center" scale="" />
+      </region>
+    </layout>
+    </ui>
+    </ui_layer>
+    </tsoftware>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+      xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmEmpList" title="人员列表">
+  <panel name="empTree" object="tree"  type="Tree" multiple="">
+    <control name="id" title="树id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+    <control name="pid" title="树父id" property="pid" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+    <control name="name" title="树节点" property="name" type="DataLink" edit="" required="" format="" width="" height="" column=""/>
+  </panel>
+  <panel name="empTool" title="工具条" object="" type="Toolbar">
+    <control name="ctlAdd" title="新增人员" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlImport" title="导入人员" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlExport" title="导出清单" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlDlg" title="显示列" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+  </panel>
+  <panel name="empGroup" title="查询条件" object="employee1" type="Hidden"  multiple="Y">
+    <control name="eq_OrgId" title="部门编号" property="orgId" type="TextBox" edit="" required="" format="" width="1" height="1" column="1"/>
+  </panel>
+  <panel name="empDg" title="列表" object="employee1" type="Grid"  multiple="">
+    <control name="ctlEdit" title="编辑" property="" type="Link" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="ctlDel" title="删除" property="" type="Link" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlName" title="人员姓名" property="name" type="DataLink" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="ctlCode" title="人员编码" property="code" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="ctlOrgName" title="部门" property="orgName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="ctlStatusName" title="状态" property="statusName" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="ctlGenderName" title="性别" property="genderName" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="ctlMobile" title="移动电话" property="mobile" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+    <control name="ctlEmail" title="电子邮件" property="email" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+    <!-- <control name="ctlPhoto" title="头像" property="photoId" type="ImageView" edit="" required="" format="" width="150" height="" column=""/> -->
+    <control name="id" title="id" property="empId" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+  </panel>
+  
+   <!-- 逻辑加载 -->
+    <flow trigger="" event="OnLoad" filter="">
+     <!--  <procedure name="clear"  logic="Clear" ifyes="tree" ifno="">
+           <param name="Out" value="empGroup"></param>
+      </procedure> -->  
+      <procedure name="tree"  logic="Query" ifyes="queryTable" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="empTree"></param>
+        <param name="Sql" value="QryOrgList"></param>
+      </procedure>
+     </flow>
+    <flow trigger="empTool.ctlDlg" event="OnClick" filter="">
+      <procedure name="p1" logic="ShowColumn" ifyes="" ifno="">
+        <param name="In" value="empDg" />
+      </procedure>
+    </flow>
+     <!-- 新增 -->
+    <flow trigger="empTool.ctlAdd" event="OnClick" filter="">
+      <procedure name="branch" server="" logic="Branch" ifyes="getMsg" ifno="jsencodeid">
+        <param name="In" value="getPanelControlValue('empGroup.eq_OrgId')==''"></param>
+      </procedure>
+      <procedure name="getMsg" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="请先选择部门"></param>
+      </procedure> 
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="empGroup.eq_OrgId"></param>
+      </procedure>
+      <procedure name="jspopup" server="" logic="Popup" ifyes="jsBranch" ifno="">
+        <param name="To" value="frmEmployeeEdit"></param>
+        <param name="Mode" value="Add"></param>
+        <param name="Window" value="Large"></param>
+      </procedure>
+      <procedure name="jsBranch"  logic="Branch" ifyes="" ifno="queryTable">
+        <param name="In" value="getPanelControlValue('pnlGroup.nodeType')==''"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="empGroup"></param>
+        <param name="Out" value="empDg"></param>
+        <param name="Sql" value="QryEmployeeList"></param>
+      </procedure>  
+    </flow>
+    <!-- 数据导出 -->
+    <flow trigger="empTool.ctlExport" event="OnClick" filter="">
+      <procedure name="exportdata" server="" logic="Export" ifyes="" ifno="">
+        <param name="Format" value="empDg"></param>
+        <param name="In" value="empGroup"></param>
+        <param name="Sql" value="QryEmployeeList"></param>
+      </procedure>
+    </flow>
+    <!-- 树点击事件 -->
+    <flow trigger="empTree" event="OnClick" filter="" >
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="j2" ifno="">
+        <param name="In" value="empTree.id"></param>
+      </procedure>
+      <procedure name="j2" server="" logic="DecodeId" ifyes="queryTable" ifno="">
+        <param name="Out" value="empGroup.eq_OrgId"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="empGroup"></param>
+        <param name="Out" value="empDg"></param>
+        <param name="Sql" value="QryEmployeeList"></param>
+      </procedure>  
+    </flow>
+    <!-- 人员详情 -->
+    <flow trigger="empDg.ctlName" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jsgoto" ifno="">
+        <param name="In" value="empDg.empId"></param>
+      </procedure>
+      <procedure name="jsgoto"  logic="Transition" ifyes="" ifno="">
+        <param name="To" value="frmEmpDetail"></param>
+        <param name="Mode" value="Readonly"></param>
+      </procedure>
+    </flow>
+    <!-- 编辑 -->
+    <flow trigger="empDg.ctlEdit" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="empDg.empId"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmEmployeeEdit"></param>
+        <param name="Mode" value="Edit"></param>
+         <param name="Window" value="Large"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="empGroup"></param>
+        <param name="Out" value="empDg"></param>
+        <param name="Sql" value="QryEmployeeList"></param>
+      </procedure>              
+    </flow>
+    <!-- 删除 -->
+    <flow trigger="empDg.ctlDel" event="OnClick" filter="">
+      <procedure name="msg" server="" logic="ConfirmMsg" ifyes="deleteData" ifno="">
+       <param name="Title" value="删除"></param>
+       <param name="Msg" value="确认删除当前记录吗?"></param>
+      </procedure>
+      <procedure name="deleteData"  logic="Delete" ifyes="jsquery" ifno="">
+        <param name="In" value="empDg" />
+        <param name="Msg" value="model.name+'已删除'" />
+        <param name="Constraints" value="t_user.emp_id|有用户绑定该人员;t_issue.assignee|有工作项绑定该人员;t_issue.test_by|有工作项绑定该人员;t_issue.test_design_by|有工作项绑定该人员;t_issue.reporter|有工作项绑定该人员;" />
+        <param name="Cascade" value="t_assessment.emp_id;t_education.emp_id;t_training.emp_id;t_experience.emp_id" />
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="empGroup"></param>
+        <param name="Out" value="empDg"></param>
+        <param name="Sql" value="QryEmployeeList"></param>
+      </procedure>  
+    </flow>    
+     <flow trigger="empTool.ctlImport" event="OnClick" filter="">
+      <procedure name="importbat"  logic="BatchImport" ifyes="" ifno="">
+        <param name="In" value="frmEmployeeEdit.empGroup"></param>
+        <param name="Title" value="批量导入人员"></param>
+        <param name="Foreign" value="ctlOrgId|t_org.name|ctlOrgName,ctlNationality|t_nationality.name|ctlNationalityName,ctlBirthPlace|t_city.name|ctlBirthPlaceName"></param>
+        <param name="Dict" value="ctlWechat|empPosition,ctlType|employeeType,ctlGender|employeeGender,ctlMarital|employeeMarital,ctlStatus|employeeStatus"></param>
+        <param name="Window" value="Large"></param>
+      </procedure>  
+      </flow>
+    <!-- 布局 --> 
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="empTool" location ="North" scale=""/>
+      </region>
+    <region location ="Center" scale="">
+    <subregion panel="empDg" location="Center" scale=""/>
+      </region>
+      <region location ="West" scale="200px">
+        <subregion panel="empTree" location ="Center" scale="200px"/>
+      </region>
+      <region location ="South" scale="">
+        <subregion panel="empGroup" location="Center" scale="" />
+      </region>
+    </layout>
+  </ui>
+  </ui_layer>
+</tsoftware>

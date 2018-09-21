@@ -1,0 +1,21 @@
+insert into t_user 
+(
+	name,
+	emp_id,
+	auth_type,
+	status,
+	password,
+	create_time,
+	update_time,
+	create_by,
+	update_by) 
+values(
+	#{data.name},
+	#{data.empId},
+	#{data.authType},
+	#{data.status},
+	#{data.password},
+	now(),
+	now(),
+	623,
+	623) 

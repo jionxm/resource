@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<!-- 组织列表 -->
+<model_layer>
+  <object name="res" table="T_RESOURCE" primary="id" unique="name|url" order="" father="parent">
+	<property name="id" type="Long" length="" validate=""  field="id"/>
+	<property name="popupType" type="String" length="" validate=""  field=""/>
+	<property name="nodeType" type="String" length="" validate=""  field=""/>
+	<property name="parent" type="Long" length="" validate=""  field="parent"/>
+	<property name="name" type="String" length="50" validate="" field="name"/>
+	<property name="parentName" type="String" length="50" validate="" field=""/>
+	<property name="parentType" type="String" length="50" validate="" field=""/>
+	<property name="menuName" type="String" length="50" validate="" field=""/>
+	<property name="funcName" type="String" length="50" validate="" field=""/>
+	<property name="url" type="String" length="120" validate="model.resType=='Component'?Contain(self,'.'):Contain(self,'/')" field="url"/>
+	<property name="isAuth" type="String" length="4" validate=""  field="is_auth"/>
+	<property name="type" type="String" length="50" validate="(model.parentType=='Module')?(self=='RelativeURL'||self=='AbsoluteURL'||self=='Module'):((model.parentType=='RelativeURL'||model.parentType=='AbsoluteURL')?self=='Component':true)"  field="type"/>
+	<property name="createTime" type="String" length="" validate=""  field="create_time"/>
+	<property name="createBy" type="String" length="50" validate=""  field="create_by"/>
+	<property name="createByName" type="String" length="50" validate=""  field=""/>
+	<property name="updateTime" type="String" length="" validate=""  field="update_time"/>
+	<property name="updateBy" type="String" length="50" validate=""  field="update_by"/>
+	<property name="updateByName" type="String" length="" validate=""  field="" />
+	<property name="updateCount" type="String" length="6" validate=""  field="update_count" />
+  </object>
+</model_layer>
+<ui_layer>
+
+  <ui name="sysResList" title="资源列表">
+  	<panel name="pnlGroup1" title="pnlGroup1" object="res" type="Hidden">
+		<control name="eq_parent" title="parent" property="parent" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+	</panel>
+	<panel name="pnlGroup2" title="pnlGroup2" object="res" type="Hidden">
+		<control name="eq_id" title="id" property="id" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+	</panel>
+    <panel name="pnlTree" object="res"  type="Tree" multiple="">
+	  <control name="id" title="树id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	  <control name="parent" title="树父id" property="parent" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	  <control name="name" title="树节点" property="name" type="DataLink" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pnlUp" title="工具条" object="" type="Toolbar">
+		<control name="ctlAdd" title="新增资源" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlExport" title="导出清单" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pnlGrid" title="pnlGrid" object="res" type="Grid">
+		<control name="ctlEdit" title="编辑" property="" type="Link" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="ctlDel" title="删除" property="" type="Link" edit="" required="" format="" width="" height="" column=""/>
+		<control name="name" title="资源名称" property="name" type="TextBox" edit="N" required="Y" format="" width="100" height="" column=""/>
+	    <control name="parent" title="上级资源名称" property="parent" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+		<control name="parentName" title="上级资源名称" property="parentName" type="TextBox" edit="N" required="N" format="" width="100" height="" column=""/>
+		<control name="url" title="资源标识" property="url" type="TextBox" edit="N" required="Y" format="" width="100" height="" column=""/>
+		<control name="isAuth" title="参与授权" property="isAuth" type="TextBox" edit="N" required="Y" format="" width="100" height="" column="" />
+		<control name="resType" title="资源类型" property="type" type="TextBox" edit="N" required="Y" format="" width="100" height="" column="" />
+		<control name="createByName" title="创建人" property="createByName" type="TextBox" edit="N" required="N" format="" width="100" height="" column="" />
+		<control name="createTime" title="创建时间" property="createTime" type="TextBox" edit="N" required="N" format="" width="100" height="" column=""/>
+		<control name="updateByName" title="最后修改人" property="updateByName" type="TextBox" edit="N" required="N" format="" width="100" height="" column=""/>
+		<control name="updateTime" title="最后修改时间" property="updateTime" type="TextBox" edit="N" required="N" format="" width="100" height="" column=""/>
+		<control name="funcName" title="相关权限" property="funcName" type="TextBox" edit="N" required="N" format="" width="100" height="" column=""/>
+		<control name="menuName" title="菜单入口" property="menuName" type="TextBox" edit="N" required="N" format="" width="100" height="" column=""/>
+	</panel>
+	<!-- 初始化加载 -->
+    <flow trigger="" event="OnLoad" filter="" >
+       <procedure name="tree1"  logic="Query" ifyes="" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryResList"></param>
+      </procedure>
+    </flow>
+    <!-- 树点击事件 -->
+    <flow trigger="pnlTree" event="OnClick" filter="" >
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="decode" ifno="j0">
+        <param name="In" value="pnlTree.id"></param>
+      </procedure>
+      <procedure name="decode" server="" logic="DecodeId" ifyes="query" ifno="">
+        <param name="Out" value="pnlGroup1.eq_parent"></param>
+      </procedure>  
+      <procedure name="query"  logic="Query" ifyes="" ifno="">
+      <param name="In" value="pnlGroup1"></param>
+        <param name="Out" value="pnlGrid"></param>
+        <param name="Sql" value="QryResDetail"></param>
+      </procedure>  
+    </flow>
+    <flow trigger="pnlGrid.ctlDel" event="OnClick" filter="row.nodeType=='3'">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="decode" ifno="">
+        <param name="In" value="pnlGrid.id"></param>
+      </procedure>
+      <procedure name="decode" server="" logic="DecodeId" ifyes="confirm" ifno="">
+        <param name="Out" value="pnlGroup2.eq_id"></param>
+      </procedure>  
+      <procedure name="confirm" server="" logic="ConfirmMsg" ifyes="j1" ifno="">
+       <param name="Title" value="删除资源"></param>
+       <param name="Msg" value="确认删除当前记录吗?"></param>
+      </procedure>
+      <procedure name="j1"  logic="Delete" ifyes="j4" ifno="">
+        <param name="In" value="pnlGroup2" />
+        <param name="Msg" value="'已删除'" />
+      </procedure>
+      <procedure name="j4"  logic="Query" ifyes="tree1" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryResList"></param>
+      </procedure>
+      <procedure name="tree1"  logic="Query" ifyes="" ifno="">
+         <param name="In" value="pnlGroup1"></param>
+        <param name="Out" value="pnlGrid"></param>
+        <param name="Sql" value="QryResDetail"></param>
+      </procedure>  
+    </flow>
+    <flow trigger="pnlGrid.ctlEdit" event="OnClick">
+   	  <procedure name="je" logic="EncodeId" ifyes="b2" ifno="">
+        <param name="In" value="pnlGrid.id"></param>
+      </procedure>
+      <procedure name="b2"  logic="Branch" ifyes="pop2" ifno="b3">
+      	<param name="In" value="Judge(getPanelControlValue('pnlGrid.popupType'),'IsEq','2')"></param>
+      </procedure>
+      <procedure name="b3"  logic="Branch" ifyes="pop3" ifno="pop4">
+      	<param name="In" value="Judge(getPanelControlValue('pnlGrid.popupType'),'IsEq','3')"></param>
+      </procedure>
+      <procedure name="pop2" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmResEditSubSystem"></param>
+        <param name="Mode" value="Edit"></param>
+        <param name="Window" value="Small"></param>
+        <param name="Title" value="编辑资源"></param>
+      </procedure>
+      <procedure name="pop3" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmResEditModule"></param>
+        <param name="Mode" value="Edit"></param>
+        <param name="Window" value="Medium"></param>
+        <param name="Title" value="编辑资源"></param>
+      </procedure>
+      <procedure name="pop4" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmResEditPage"></param>
+        <param name="Mode" value="Edit"></param>
+        <param name="Window" value="Medium"></param>
+        <param name="Title" value="编辑资源"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="tree1" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryResList"></param>
+      </procedure>
+      <procedure name="tree1"  logic="Query" ifyes="" ifno="">
+         <param name="In" value="pnlGroup1"></param>
+        <param name="Out" value="pnlGrid"></param>
+        <param name="Sql" value="QryResDetail"></param>
+      </procedure>   
+    </flow> 
+    <!-- 新增 -->
+    <flow trigger="pnlUp.ctlAdd" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="b2" ifno="j0">
+        <param name="In" value="pnlTree.id"></param>
+      </procedure>   
+      <procedure name="j0" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="只有选择一个资源，才能新增"></param>
+      </procedure>  
+      
+      <procedure name="b2"  logic="Branch" ifyes="pop2" ifno="b3">
+      	<param name="In" value="getPanelControlValue('pnlTree.popupType')==1"></param>
+      </procedure>
+      <procedure name="b3"  logic="Branch" ifyes="pop3" ifno="b4">
+      	<param name="In" value="getPanelControlValue('pnlTree.popupType')==2"></param>
+      </procedure>
+      <procedure name="b4"  logic="Branch" ifyes="pop4" ifno="pop4">
+      	<param name="In" value="getPanelControlValue('pnlTree.popupType')==3"></param>
+      </procedure>
+      <procedure name="pop2" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmResEditSubSystem"></param>
+        <param name="Mode" value="Add"></param>
+        <param name="Window" value="Small"></param>
+        <param name="Title" value="新增资源"></param>
+      </procedure>
+      <procedure name="pop3" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmResAddModule"></param>
+        <param name="Mode" value="Add"></param>
+        <param name="Window" value="Medium"></param>
+        <param name="Title" value="新增资源"></param>
+      </procedure>
+      <procedure name="pop4" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmResAddPage"></param>
+        <param name="Mode" value="Add"></param>
+        <param name="Window" value="Medium"></param>
+        <param name="Title" value="新增资源"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="tree1" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryResList"></param>
+      </procedure>
+      <procedure name="tree1"  logic="Query" ifyes="" ifno="">
+         <param name="In" value="pnlGroup1"></param>
+        <param name="Out" value="pnlGrid"></param>
+        <param name="Sql" value="QryResDetail"></param>
+      </procedure>
+    </flow>
+        <flow trigger="pnlUp.ctlExport" event="OnClick" filter="">
+      <procedure name="exportdata" server="" logic="Export" ifyes="" ifno="">
+        <param name="Format" value="pnlTree"></param>
+        <param name="In" value="pnlUp"></param>
+        <param name="Sql" value="QryResList"></param>
+        <param name="Tree" value="true"></param>
+      </procedure>
+    </flow>
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pnlUp" location="North" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pnlGrid" location="Center" scale="" />
+      </region>
+      <region location ="West" scale="400px">
+        <subregion panel="pnlTree" location="Center" scale="400px" />
+        <subregion panel="pnlGroup1" location="Center" scale="400px" />
+        <subregion panel="pnlGroup2" location="Center" scale="400px" />
+      </region>
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

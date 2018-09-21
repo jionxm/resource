@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+	<ui_layer>
+		<ui name="frmResourceTypeList" title="系统维护/资源类型管理">
+			<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+				<control name="btnSubmit" title="搜索" property=""
+					type="Button" edit="" required="" format="" width="" height=""
+					column="" />
+				<control name="btnAdd" title="添加新类型" property=""
+					type="Button" edit="" required="" format="" width="" height=""
+					column="" />
+			</panel>
+
+			<panel name="pCondition" title="查询条件" object="resourceType"
+				type="Group">
+				<control name="lk_name" title="资源类型" property="name"
+					type="TextBox" edit="Y" required="N" format="" width="1" height="1"
+					column="4" />
+			</panel>
+
+			<panel name="pTable" title="查询结果" object="resourceType"
+				type="Grid" page="">
+				<control name="id" title="id" property="id" type="Hidden"
+					edit="" required="" format="" width="" height="" column="" />
+				<control name="name" title="资源类型" property="name"
+					type="TextBox" edit="" required="" format="" width="150" height=""
+					column="" />
+				<control name="picName" title="图标" property="picName"
+					type="FileBox" edit="Y" required="Y" format="" width="150" height="1"
+					column="2" />
+				<control name="description" title="描述"
+					property="description" type="TextBox" edit="" required="" format=""
+					width="300" height="" column="" />
+				<control name="picId" title="附件编号" property="picId"
+					type="Hidden" edit="Y" required="N" format="" width="" height=""
+					column="" />
+				<control name="createTime" title="创建时间"
+					property="createTime" type="TextBox" edit="" required="" format=""
+					width="150" height="" column="" />
+				<control name="ctlEdit" title="编辑" property="" type="Link"
+					edit="" required="" format="" width="70" height="" column="" />
+				<control name="ctlDel" title="删除" property="" type="Link"
+					edit="" required="" format="" width="" height="" column="" />
+
+			</panel>
+
+			<flow trigger="pTable.picName" event="OnClick" filter="">
+				<procedure name="jspopup" logic="PreviewFile" ifyes=""
+					ifno="">
+					<param name="In" value="pTable.picId"></param>
+				</procedure>
+			</flow>
+			<!-- 初始化 -->
+			<flow trigger="" event="OnLoad" filter="">
+				<procedure name="jClear" logic="Clear" ifyes="jQuery"
+					ifno="" sync="Y">
+					<param name="Out" value="pCondition"></param>
+				</procedure>
+				<procedure name="jQuery" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pCondition"></param>
+					<param name="Out" value="pTable"></param>
+					<param name="Sql" value="resourceType/QryResourceTypeList"></param>
+				</procedure>
+			</flow>
+
+			<!-- 提交 -->
+			<flow trigger="pToolbar.btnSubmit" event="OnClick" filter="">
+				<procedure name="jsquery" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pCondition" />
+					<param name="Out" value="pTable" />
+					<param name="Sql" value="resourceType/QryResourceTypeList" />
+				</procedure>
+			</flow>
+			<!-- 编辑 -->
+			<flow trigger="pTable.ctlEdit" event="OnClick" filter="">
+				<procedure name="jEncodeid" server="" logic="EncodeId"
+					ifyes="jPopup" ifno="">
+					<param name="In" value="pTable.id"></param>
+				</procedure>
+				<procedure name="jPopup" logic="Popup" ifyes="jquery"
+					ifno="">
+					<param name="To" value="frmResourceTypeEdit" />
+					<param name="Mode" value="Edit" />
+					<param name="Window" value="Small" />
+				</procedure>
+				<procedure name="jquery" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pCondition"></param>
+					<param name="Out" value="pTable"></param>
+					<param name="Sql" value="resourceType/QryResourceTypeList"></param>
+				</procedure>
+			</flow>
+			<!-- 添加新类型 -->
+			<flow trigger="pToolbar.btnAdd" event="OnClick" filter="">
+				<procedure name="jspopup" logic="Popup" ifyes="queryTable"
+					ifno="">
+					<param name="To" value="frmResourceTypeEdit"></param>
+					<param name="Mode" value="Add"></param>
+					<param name="Window" value="Small"></param>
+				</procedure>
+				<procedure name="queryTable" logic="Query" ifyes=""
+					ifno="">
+					<param name="In" value="pCondition"></param>
+					<param name="Out" value="pTable"></param>
+					<param name="Sql" value="resourceType/QryResourceTypeList"></param>
+				</procedure>
+			</flow>
+
+			<!-- 删除 -->
+			<flow trigger="pTable.ctlDel" event="OnClick">
+				<procedure name="j0" server="" logic="ConfirmMsg"
+					ifyes="j1" ifno="">
+					<param name="Title" value="测试删除"></param>
+					<param name="Msg" value="确认删除该资源类型吗?"></param>
+				</procedure>
+				<procedure name="j1" logic="Delete" ifyes="j2" ifno="">
+					<param name="In" value="pTable" />
+					<param name="Msg" value="model.name+'已删除'" />
+				</procedure>
+				<procedure name="j2" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pCondition"></param>
+					<param name="Out" value="pTable"></param>
+					<param name="Sql" value="resourceType/QryResourceTypeList"></param>
+				</procedure>
+			</flow>
+
+			<!-- 删除 -->
+			<flow trigger="pTable.ctlDelete" event="OnClick"
+				filter="row.notProcessId==0">
+				<procedure name="jCMsg" server="" logic="ConfirmMsg"
+					ifyes="jDelete" ifno="">
+					<param name="Title" value="删除提示" />
+					<param name="Msg" value="确认删除当前资源类型吗?" />
+				</procedure>
+				<procedure name="jDelete" logic="Delete" ifyes="jQuery"
+					ifno="">
+					<param name="In" value="pTable" />
+					<param name="Msg" value="已删除'" />
+				</procedure>
+				<procedure name="jQuery" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pCondition" />
+					<param name="Out" value="pTable" />
+					<param name="Sql" value="plant/QryPlantList" />
+				</procedure>
+			</flow>
+
+			<layout>
+
+
+				<region location="North" scale="">
+					<subregion panel="pToolbar" location="North" scale="" />
+				</region>
+				<region location="Center" scale="">
+					<subregion panel="pCondition" location="North" scale="" />
+					<subregion panel="pTable" location="Center" scale="" />
+				</region>
+			</layout>
+		</ui>
+	</ui_layer>
+</tsoftware>

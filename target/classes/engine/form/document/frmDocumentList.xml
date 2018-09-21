@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+      <model_layer>
+	<!-- 知识库目录树model -->
+	<object name="doccata" table="t_doc_cata" primary="ID" unique="" order="" father="pid">
+		<property name="id" type="Long" length="20" initial="" field="ID"/>
+		<property name="pid" type="Long" length="50" initial="" field="PID"/>
+		<property name="name" type="String" length="200" field="name"/>
+		<property name="seq" type="Long" length="20" field="seq"/>
+		<property name="parentName" type="String" length="50" validate="" field=""/>
+		<property name="nodeType" type="String" length="" validate=""  field=""/>
+		<property name="createTime" type="Date" length="" validate=""  field="create_time" />		
+		<property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+		<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+		<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+		<property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+ 	</object>  
+ 	<!-- 文档表model -->
+ 	<object name="documentmd" table="t_document" primary="id" unique="" order="">
+ 		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="fileId" type="Long" length="50" initial="" field="file_id"/>
+		<property name="cataId" type="Long" length="50" initial="" field="cata_id"/>
+		<property name="cataName" type="Long" length="50" initial="" field=""/>
+		<property name="title" type="String" length="50" initial="" field="title"/>
+		<property name="keyword" type="String" length="50" initial="" field="keyword"/>
+		<property name="status" type="String" length="50" initial="" field="status"/>
+		<property name="nodeType" type="String" length="" validate=""  field=""/>
+				
+		<property name="createTime" type="Date" length="" validate=""  field="create_time" />		
+		<property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+		<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+		<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+		<property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+ 	</object>   
+</model_layer>
+<ui_layer>
+  <ui name="frmDocumentList" title="知识库管理列表">
+  <panel name="empTree" object="doccata"  type="Tree" multiple="">
+    <control name="id" title="树id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+    <control name="parent" title="树父id" property="pid" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+    <control name="name" title="树节点" property="name" type="DataLink" edit="" required="" format="" width="" height="" column=""/>
+  	
+  </panel>
+  <panel name="empTool" title="工具条" object="" type="Toolbar">
+    <control name="ctlAdd" title="新增目录" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlEdit" title="编辑目录" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlDel" title="删除目录" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlAddMd" title="新增文档" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+  </panel>
+   <panel name="empGroup" title="查询条件" object="documentmd" type="Hidden"  multiple="Y">
+   	<control name="eq_DocId" title="目录名称" property="id" type="TextBox" edit="" required="" format="" width="1" height="1" column="1"/>
+   	<control name="eq_pid" title="上级目录名称" property="cataId" type="TextBox" edit="" required="" format="" width="1" height="1" column="1"/>
+   	<control name="eq_id" title="目录ID" property="id" type="TextBox" edit="" required="" format="" width="1" height="1" column="1"/>
+  	<control name="nodeType" title="nodeType" property="nodeType" type="Hidden" edit="Y" required="" format="" width="" height="" column=""/>
+  </panel> 
+  <panel name="empDg" title="文档信息表" object="documentmd" type="Grid"  multiple="">
+		<control name="edit" title="编辑" property="" type="Link" edit="" required="" format="" width="140" height="" column=""/>
+		<control name="view" title="预览" property="" type="Link" edit="" required="" format="" width="140" height="" column=""/>
+		<control name="changeF" title="变更所属目录" property="" type="Link" edit="" required="" format="" width="140" height="" column=""/>
+		<!-- <control name="del" title="删除" property="" type="Link" edit="" required="" format="" width="140" height="" column=""/> -->
+		<control name="id" title="目录ID" property="id" type="Hidden" edit="" required="" format="" width="140" height="" column=""/>
+		<control name="cataName" title="所属目录" property="cataName" type="TextBox" edit="" required="" format="" width="130" height="" column=""/>
+		<control name="fileId" title="文件ID" property="fileId" type="Hidden" edit="" required="" format="" width="70" height="" column=""/>
+		<control name="cataId" title="文档信息表ID" property="cataId" type="Hidden" edit="" required="" format="" width="140" height="" column=""/>
+		<control name="title" title="文档名称" property="title" type="TextBox" edit="" required="" format="" width="140" height="" column=""/>
+		<control name="keyword" title="关键词" property="keyword" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="status" title="状态" property="status" type="TextBox" edit="" required="" format="" width="70" height="" column=""/>
+		<control name="createTime" title="创建日期" property="createTime" type="TextBox" edit="" required=""  format="" width="140" height="" column=""  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="" required="" format="" width="110" height="" column=""  />
+  		<control name="updateTime" title="文档更新日期" property="updateTime" type="TextBox" edit="" required=""  format="" width="140" height="" column=""  />
+ 		<control name="nodeType" title="nodeType" property="nodeType" type="Hidden" edit="Y" required="" format="" width="" height="" column=""/>
+ </panel>
+ 
+ 	<!-- 变更所属 -->
+    <flow trigger="empDg.changeF" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="empDg.cataId"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Popup" ifyes="jsBranch" ifno="">
+        <param name="To" value="frmDocCataEdit"></param>
+        <param name="Mode" value="Edit"></param>
+         <param name="Window" value="Medium"></param>
+      </procedure>
+       <procedure name="jsBranch"  logic="Branch" ifyes="" ifno="queryTable">
+        <param name="In" value="getPanelControlValue('empTree.id')==''"></param>
+      </procedure>
+       <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="empGroup"></param>
+        <param name="Out" value="empDg"></param>
+        <param name="Sql" value="QryDocumentDetail"></param>
+      </procedure>  
+                    
+    </flow>
+    
+ 
+	<!-- 编辑目录 -->
+    <flow trigger="empTool.ctlEdit" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="getMsg">
+        <param name="In" value="empTree.id"></param>
+      </procedure>
+       <procedure name="getMsg" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="请选择目录"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmDocumentEdit"></param>
+        <param name="Mode" value="Edit"></param>
+        <param name="Window" value="Medium"></param>
+        <param name="Title" value="编辑目录"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="qid" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="empTree"></param>
+        <param name="Sql" value="QryDocCataList"></param>
+      </procedure>              
+      <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="empGroup.eq_id"></param>
+        <param name="Out" value="empDg"></param>
+        <param name="Sql" value="QryDocumentFilList"></param>
+      </procedure> 
+    </flow>
+    
+    <!-- 逻辑加载 -->
+    <flow trigger="" event="OnLoad" filter="">  
+      <procedure name="tree"  logic="Query" ifyes="queryTable" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="empTree"></param>
+        <param name="Sql" value="QryDocCataList"></param>
+      </procedure>
+     </flow>
+     
+   <!-- 新增 -->
+    <flow trigger="empTool.ctlAdd" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="getMsg">
+        <param name="In" value="empTree.id"></param>
+      </procedure>  
+      <procedure name="getMsg" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="请先选择所属目录"></param>
+      </procedure>
+      <procedure name="jspopup" server="" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmDocumentAdd"></param>
+        <param name="Mode" value="Add"></param>
+        <param name="Window" value="Medium"></param>
+        <param name="Title" value="新增目录"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="qid" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="empTree"></param>
+        <param name="Sql" value="QryDocCataList"></param>
+      </procedure> 
+      <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="empTree"></param>
+        <param name="Out" value="empDg"></param>
+        <param name="Sql" value="QryDocumentFilList"></param>
+      </procedure> 
+    </flow>  
+    
+    <!-- 树点击事件 -->
+   <flow trigger="empTree" event="OnClick" filter="" >
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="j2" ifno="">
+        <param name="In" value="empTree.id"></param>
+      </procedure>
+      <procedure name="j2" server="" logic="DecodeId" ifyes="queryTable" ifno="">
+        <param name="Out" value="empGroup.eq_id"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="empGroup"></param>
+        <param name="Out" value="empDg"></param>
+        <param name="Sql" value="QryDocumentDetail"></param>
+      </procedure>  
+    </flow>
+    
+    <!-- 删除目录 -->
+    <flow trigger="empTool.ctlDel" event="OnClick" filter="">
+     <procedure name="b1"  logic="Branch" ifyes="confirm" ifno="j0">
+      <param name="In" value="empTree.id"></param>
+      </procedure>
+      <procedure name="confirm" server="" logic="ConfirmMsg" ifyes="j1" ifno="">
+       <param name="Title" value="删除目录"></param>
+       <param name="Msg" value="确认删除当前记录吗?"></param>
+      </procedure>
+      <procedure name="j0" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="选择一个子资源才能删除"></param>
+      </procedure>  
+      <procedure name="j1"  logic="Delete" ifyes="j4" ifno="">
+        <param name="In" value="empTree" />
+    <!--<param name="Constraints" value="t_user.emp_id|有用户绑定该人员;t_issue.assignee|有工作项绑定该人员;t_issue.test_by|有工作项绑定该人员;t_issue.test_design_by|有工作项绑定该人员;t_issue.reporter|有工作项绑定该人员;" />
+        <param name="Cascade" value="t_assessment.emp_id;t_education.emp_id;t_training.emp_id;t_experience.emp_id" /> -->
+        <param name="Msg" value="'目录:'+model.name+'已删除'" />
+      </procedure>
+      <procedure name="j4"  logic="Query" ifyes="qid" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="empTree"></param>
+        <param name="Sql" value="QryDocCataList"></param>
+      </procedure>  
+		<procedure name="qid"  logic="Query" ifyes="" ifno="">
+      <param name="In" value="empTree"></param>
+        <param name="Out" value="empGroup"></param>
+        <param name="Sql" value="QryDocCataList"></param>
+      </procedure>
+    </flow>
+    <!-- 新增markDown弹窗 -->
+  	<flow trigger="empTool.ctlAddMd" event="OnClick" filter="">
+  	  <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jsFind" ifno="getMsg">
+        <param name="In" value="empTree.id"></param>
+      </procedure>  
+      <procedure name="getMsg" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="请先选择文档所属目录"></param>
+      </procedure>
+      <procedure name="jsFind"  logic="MarkDown" ifyes="jsBranch" ifno="">
+        <param name="Out" value="empGroup"></param>
+        <param name="In" value="empTree.id"></param>
+        <param name="Sql" value="QryMdFileList"></param>
+        <param name="Title" value="编辑markdown文档"></param>
+        <param name="Mode" value="Add"></param> <!-- Readonly,Add,Edit-->
+        <param name="Columns" value="id,编码,eq_projId|name,文档名称,lk_filename"/>
+        <param name="Window" value="Large"></param> 
+      </procedure>
+      
+      <procedure name="jsBranch"  logic="Branch" ifyes="" ifno="queryTable">
+        <param name="In" value="getPanelControlValue('empTree.id')==''"></param>
+      </procedure>
+       <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="empGroup"></param>
+        <param name="Out" value="empDg"></param>
+        <param name="Sql" value="QryDocumentDetail"></param>
+      </procedure>  
+  	</flow>
+  	
+  	<!-- 编辑markdown弹窗-->
+    <flow trigger="empDg.edit" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jsFind" ifno="">
+        <param name="In" value="empDg.fileId"></param>
+      </procedure>
+      <procedure name="jsFind"  logic="MarkDown" ifyes="jsBranch" ifno="">
+        <param name="Out" value="empGroup"></param>
+        <param name="In" value="empDg.fileId"></param>
+        <param name="Sql" value="QryMdFileList"></param>
+        <param name="Title" value="编辑markdown文档"></param>
+        <param name="Mode" value="Edit"></param>
+        <param name="Columns" value="id,编码,eq_projId|name,文档名称,lk_filename"/>
+        <param name="Window" value="Large"></param> 
+      </procedure>
+      
+       <procedure name="jsBranch"  logic="Branch" ifyes="" ifno="queryTable">
+        <param name="In" value="getPanelControlValue('empTree.id')==''"></param>
+      </procedure>
+       <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="empGroup"></param>
+        <param name="Out" value="empDg"></param>
+        <param name="Sql" value="QryDocumentDetail"></param>
+      </procedure>  
+      
+    </flow>
+    
+    <!-- 预览markdown弹窗-->
+    <flow trigger="empDg.view" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jsFind" ifno="">
+        <param name="In" value="empDg.fileId"></param>
+      </procedure>
+      <procedure name="jsFind"  logic="MarkDown" ifyes="" ifno="">
+        <param name="Out" value="empGroup"></param>
+        <param name="In" value="empDg.fileId"></param>
+        <param name="Sql" value="QryMdFileList"></param>
+        <param name="Title" value="编辑markdown文档"></param>
+        <param name="Mode" value="Readonly"></param>
+        <param name="Columns" value="id,编码,eq_projId|name,文档名称,lk_filename"/>
+        <param name="Window" value="Large"></param> 
+      </procedure>
+    </flow>
+    <!-- 布局 --> 
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="empTool" location ="North" scale=""/>
+      </region>
+    <region location ="Center" scale="">
+    <subregion panel="empDg" location="Center" scale=""/>
+      </region>
+      <region location ="West" scale="200px">
+        <subregion panel="empTree" location ="Center" scale="200px"/>
+      </region>
+      <region location ="South" scale="">
+        <subregion panel="empGroup" location="Center" scale="" />
+      </region>
+    </layout>
+  </ui>
+  </ui_layer>
+</tsoftware>

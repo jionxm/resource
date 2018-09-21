@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+   <!-- change log list -->
+  <ui name="frmAuthzStat" title="角色授权统计">
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnExport" title="导出" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnReturn" title="返回" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pTable" title="查询结果" object="authStat" type="Grid">
+		<control name="a" title="序号" property="changeId" type="TextBox" edit="" required="" format="" width="" height="" column=""/>
+		<control name="b" title="相关权限名称" property="type" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="c" title="上级资源名称" property="oldContent" type="TextBox" edit="" required="" format="" width="300" height="" column=""/>
+		<control name="d" title="资源类型" property="newContent" type="TextBox" edit="" required="" format="" width="300" height="" column=""/>
+		<control name="e" title="资源URL" property="createTime" type="TextBox" edit="" required="" format="" width="300" height="" column=""/>
+	</panel>
+    <flow trigger="" event="OnLoad" filter="">
+      <procedure name="j1" server="" logic="DecodeId" ifyes="j2" ifno="">
+        <param name="PanelId" value="p2"></param>
+        <param name="controlName" value="eq_flowId"></param>
+      </procedure>    
+    </flow>
+    <flow trigger="pToolbar.btnQuery" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>    
+    <flow trigger="pToolbar.btnReturn" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>        
+     <flow trigger="pToolbar.btnExport" event="OnClick" filter="">
+      <procedure name="p1" logic="Export" ifyes="" ifno="">
+        <param name="Format" value="pTable"></param>
+        <param name="Sql" value="issue/QryIssueList"></param>
+      </procedure>
+    </flow>    
+    <layout>
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+		<subregion panel="pTable" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>    
+</ui_layer>
+</tsoftware>

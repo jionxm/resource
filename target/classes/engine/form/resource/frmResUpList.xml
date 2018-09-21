@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+	<ui_layer>
+		<ui name="frmResUpList" title="资源列表">
+			<panel name="pToolbar" title="按钮栏" object="" type="Toolbar">
+				<control name="btnAdd" title="资源上传" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+				<control name="btnQuery" title="搜索" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+				<control name="btnClear" title="清空条件" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+			</panel>
+			<panel name="pForm" title="查询条件" object="resourceFile" type="Group">
+				<control name="lk_name" title="资源名" property="name" type="TextBox"
+					edit="Y" multiple="Y" required="" format="" width="2" height=""
+					column="" />
+				<control name="eq_resourceType" title="资源类型" property="resourceType"
+					type="ComboBox" edit="Y" required="" format="" width="1" height=""
+					column="" />
+				<control name="courseName" title="所属课程" property="courseName"
+					type="PopupBox" edit="Y" required="" format="" width="1" height=""
+					column="4" />
+				<control name="ge_createTime" title="开始时间" property="createTime"
+					type="DateBox" edit="Y" required="" format="" width="1" height=""
+					column="" />
+				<control name="dl_createTime" title="结束时间" property="createTime"
+					type="DateBox" edit="Y" required="" format="" width="1" height=""
+					column="4" />
+				<control name="eq_status" title="状态" property="status"
+					type="Hidden" edit="Y" required="" format="" width="1" height=""
+					column="4" initial="'0'" />
+			</panel>
+			<panel name="pTable" title="查询结果" object="resourceFile" type="Grid">
+				<control name="ctlName" title="资源名称" property="name" type="TextBox"
+					edit="" required="" format="" width="150" height="" column="" />
+				<control name="ctlResourceType" title="类型" property="resourceTypeName"
+					type="TextBox" edit="" required="" format="" width="80" height=""
+					column="" />
+				<control name="courseName" title="所属课程" property="courseName"
+					type="TextBox" edit="" required="" format="" width="150" height=""
+					column="" />
+				<control name="ctlLength" title="大小" property="length" type="TextBox"
+					edit="" required="" format="" width="100" height="" column="" />
+				<control name="fileId" title="大小" property="fileId" type="Hidden"
+					edit="" required="" format="" width="100" height="" column="" />
+				<control name="createTime" title="创建时间" property="createTime"
+					type="TextBox" edit="" required="" format="" width="150" height=""
+					column="" />
+				<control name="ctlDescription" title="描述" property="description"
+					type="TextBox" edit="" required="" format="" width="300" height=""
+					column="" />
+			</panel>
+			<!-- 逻辑加载 -->
+			<flow trigger="" event="OnLoad" filter="">
+				<procedure name="jClear" logic="Clear" ifyes="resourceTypeList"
+					ifno="" sync="Y">
+					<param name="Out" value="pForm"></param>
+				</procedure>
+				<procedure name="resourceTypeList" logic="List" ifyes="Query"
+					ifno="" sync="Y">
+					<param name="In" value="pForm"></param>
+					<param name="Out" value="pForm.eq_resourceType"></param>
+					<param name="Sql" value="resource/resourceType"></param>
+					<param name="Options" value=",[全部]" />
+				</procedure>
+				<procedure name="Query" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pForm"></param>
+					<param name="Out" value="pTable"></param>
+					<param name="Sql" value="resource/QryResFile"></param>
+				</procedure>
+			</flow>
+			<flow trigger="pForm.courseName" event="OnClick" filter="">
+				<procedure name="jSearch" logic="Find" ifyes="" ifno="">
+					<param name="In" value="pCondition" />
+					<param name="Sql" value="Course" />
+					<param name="Out" value="pCondition" />
+					<param name="Title" value="课程选择" />
+					<param name="Options" value="$RESET,重置" />
+					<param name="Columns" value="id,课程编号,eq_courseId|courseName,课程方向名称,courseName|versionName,班级名称,versionName|stageName,课程名称,stageName"/>
+					<param name="Window" value="Medium" />
+				</procedure>
+			</flow>
+			<flow trigger="pTable.ctlDown" event="OnClick" filter="">
+				<procedure name="jspopup" logic="PreviewFile" ifyes=""
+					ifno="">
+					<param name="In" value="pTable.fileId"></param>
+				</procedure>
+			</flow>
+			<!-- 查询点击事件 -->
+			<flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+				<procedure name="jBranch" server="" logic="Branch" ifyes="j0"
+					ifno="Query">
+					<param name="In"
+						value="getPanelControlValue('pForm.ge_createTime') > getPanelControlValue('pForm.dl_createTime')"></param>
+				</procedure>
+				<procedure name="j0" server="" logic="ConfirmMsg" ifyes=""
+					ifno="">
+					<param name="Title" value="提示"></param>
+					<param name="Msg" value="结束时间必须在开始时间之后，请重新选择"></param>
+				</procedure>
+				<procedure name="Query" logic="Query" ifyes="" ifno=""
+					sync="Y">
+					<param name="In" value="pForm"></param>
+					<param name="Out" value="pTable"></param>
+					<param name="Sql" value="resource/QryResFile"></param>
+				</procedure>
+			</flow>
+			<flow trigger="pToolbar.btnAdd" event="OnClick" filter="">
+				<procedure name="jspopup" logic="Popup" ifyes="j3" ifno="">
+					<param name="To" value="frmResourceFileUp"></param>
+					<param name="Mode" value="Add"></param>
+					<param name="Window" value="Medium"></param>
+				</procedure>
+				<procedure name="j3" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pForm"></param>
+					<param name="Out" value="pTable"></param>
+					<param name="Sql" value="resource/QryResFile"></param>
+				</procedure>
+			</flow>
+			<!-- 清空所有 -->
+			<flow trigger="pToolbar.btnClear" event="OnClick" filter="">
+				<procedure name="clear" logic="Clear" ifyes="" ifno=""
+					sync="Y">
+					<param name="Out" value="pForm"></param>
+				</procedure>
+			</flow>
+			<layout>
+				<region location="North" scale="">
+					<subregion panel="pToolbar" location="North" scale="" />
+				</region>
+				<region location="Center" scale="">
+					<subregion panel="pForm" location="North" scale="" />
+					<subregion panel="pTable" location="Center" scale="" />
+				</region>
+			</layout>
+		</ui>
+	</ui_layer>
+</tsoftware>

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+	<ui_layer>
+		<ui name="frmTrainDetail" title="人员详情">
+			<panel name="pnlDetailTool" title="工具条" object="" type="Toolbar">
+				<control name="btnAdd" title="新增绑定人员" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+				<control name="btnAddCourse" title="新增绑定课程" property=""
+					type="Button" edit="" required="" format="" width="" height=""
+					column="" />
+				<control name="ctlBack" title="返回" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+			</panel>
+			<panel name="pRole" title="角色权限" object="ttrainplanemp" type="Hidden">
+				<control name="ctlEmpId" title="empId" property="empId"
+					type="Hidden" edit="" required="" format="" width="120" height=""
+					column="" />
+				<control name="ctlPlanId" title="planId" property="planId"
+					type="Hidden" edit="" required="" format="" width="120" height=""
+					column="1" />
+				<control name="createBy" title="创建人" property="createBy"
+					type="Hidden" edit="Y" required="N"
+					target="editMode=='Add'?session.userInfo.empId:nil" format=""
+					width="1" height="1" column="1" />
+				<control name="createTime" title="创建日期" property="createTime"
+					type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil"
+					format="" width="1" height="1" column="1" />
+				<control name="updateBy" title="更新人" property="updateBy"
+					type="Hidden" edit="Y" required="N" target="session.userInfo.empId"
+					format="" width="1" height="1" column="1" />
+				<control name="updateTime" title="更新日期" property="updateTime"
+					type="Hidden" edit="Y" required="N" target="CurrentTime()" format=""
+					width="1" height="1" column="1" />
+
+			</panel>
+			<panel name="pCourse" title="课程权限" object="ttplancourse" type="Hidden">
+				<control name="ctlCourseId" title="courseId" property="courseId"
+					type="Hidden" edit="" required="" format="" width="120" height=""
+					column="" />
+				<control name="ctlPlanId" title="planId" property="planId"
+					type="Hidden" edit="" required="" format="" width="120" height=""
+					column="" />
+				<control name="createBy" title="创建人" property="createBy"
+					type="Hidden" edit="Y" required="N"
+					target="editMode=='Add'?session.userInfo.empId:nil" format=""
+					width="1" height="1" column="1" />
+				<control name="createTime" title="创建日期" property="createTime"
+					type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil"
+					format="" width="1" height="1" column="1" />
+				<control name="updateBy" title="更新人" property="updateBy"
+					type="Hidden" edit="Y" required="N" target="session.userInfo.empId"
+					format="" width="1" height="1" column="1" />
+				<control name="updateTime" title="更新日期" property="updateTime"
+					type="Hidden" edit="Y" required="N" target="CurrentTime()" format=""
+					width="1" height="1" column="1" />
+
+			</panel>
+			<panel name="pnlDetailGroup" title="绑定人员信息" object="ttrainplanemp"
+				type="Grid">
+
+				<control name="ctlDel" title="解除绑定" property="" type="Link"
+					edit="" required="" format="" width="100" height="" column="" />
+				<control name="ctlid" title="id" property="id" type="Hidden"
+					edit="" required="" format="" width="80" height="" column="" />
+				<control name="ctlName" title="人员姓名" property="name" type="TextBox"
+					edit="" required="" format="" width="100" height="" column="" />
+				<control name="ctlOrgName" title="部门" property="orgName"
+					type="TextBox" edit="" required="" format="" width="150" height=""
+					column="" />
+				<control name="ctlMobile" title="移动电话" property="mobile"
+					type="TextBox" edit="" required="" format="" width="150" height=""
+					column="" />
+				<control name="ctlCreateByName" title="创建人" property="createByName"
+					type="TextBox" edit="" required="" format="" width="100" height=""
+					column="" />
+
+				<control name="ctlCreateTime" title="创建时间" property="createTime"
+					type="TextBox" edit="" required="" format="" width="200" height=""
+					column="" />
+
+				<control name="ctlUpdateByName" title="修改人" property="updateByName"
+					type="TextBox" edit="" required="" format="" width="100" height=""
+					column="" />
+
+				<control name="ctlUPdateTime" title="修改时间" property="createTime"
+					type="TextBox" edit="" required="" format="" width="200" height=""
+					column="" />
+
+			</panel>
+
+
+			<panel name="pnlTrain" title="绑定课程" object="ttplancourse" type="Grid">
+
+				<control name="ctlDel" title="解除绑定" property="" type="Link"
+					edit="" required="" format="" width="80" height="5" column="" />
+				<control name="id" title="id" property="id" type="Hidden"
+					edit="Y" required="" format="" width="" height="" column="" />
+
+				<control name="ctlName" title="课程名称" property="name" type="TextBox"
+					edit="" required="" format="" width="100" height="" column="" />
+
+
+				<control name="ctlIntroduction" title="课程介绍" property="courseIntroduction"
+					type="TextBox" edit="" required="" format="" width="555" height=""
+					column="" />
+				<control name="ctlCreateByName" title="创建人" property="createByName"
+					type="TextBox" edit="" required="" format="" width="100" height=""
+					column="" />
+
+				<control name="ctlCreateTime" title="创建时间" property="createTime"
+					type="TextBox" edit="" required="" format="" width="150" height=""
+					column="" />
+
+				<control name="ctlUpdateByName" title="修改人" property="updateByName"
+					type="TextBox" edit="" required="" format="" width="100" height=""
+					column="" />
+
+				<control name="ctlUPdateTime" title="修改时间" property="createTime"
+					type="TextBox" edit="" required="" format="" width="150" height=""
+					column="" />
+
+			</panel>
+
+
+
+			<!-- 加载 -->
+			<flow trigger="" event="OnLoad" filter="">
+
+				<procedure name="getId" logic="DecodeId" ifyes="jsencodeid"
+					ifno="">
+					<param name="Out" value="pRole.ctlPlanId"></param>
+				</procedure>
+
+				<procedure name="jsencodeid" server="" logic="EncodeId"
+					ifyes="getPlanId" ifno="">
+					<param name="In" value="pRole.ctlPlanId"></param>
+				</procedure>
+
+				<procedure name="getPlanId" logic="DecodeId" ifyes="jsquery"
+					ifno="">
+					<param name="Out" value="pCourse.ctlPlanId"></param>
+				</procedure>
+
+				<procedure name="jsquery" logic="Query" ifyes="jTrain"
+					ifno="">
+					<param name="In" value="pRole" />
+					<param name="Out" value="pnlDetailGroup" />
+					<param name="Sql" value="trainSystem/QryPlanEmp" />
+				</procedure>
+				<procedure name="jTrain" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pCourse" />
+					<param name="Out" value="pnlTrain" />
+					<param name="Sql" value="trainSystem/QryTrain" />
+				</procedure>
+			</flow>
+
+			<!-- 新增绑定人员 -->
+			<flow trigger="pnlDetailTool.btnAdd" event="OnClick" filter="">
+				<procedure name="search" logic="Find" ifyes="jssave" ifno="reloadSprint">
+					<param name="Sql" value="CourseCreateBy" />
+					<param name="Out" value="pRole" />
+					<param name="Title" value="绑定人员" />
+					<param name="Options" value="$RESET,重置" />
+					<param name="Columns" value="id,编码,ctlEmpId|name,角色" />
+					<param name="Window" value="Large" />
+				</procedure>
+
+				<procedure name="jssave" logic="Save" ifyes="jsquery"
+					ifno="">
+					<param name="In" value="pRole" />
+					<param name="Plugin" value="insertPlanEmpPlugin" />
+					<param name="Msg" value="绑定人员成功" />
+				</procedure>
+				<procedure name="jsquery" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pRole" />
+					<param name="Out" value="pnlDetailGroup" />
+					<param name="Sql" value="trainSystem/QryPlanEmp" />
+				</procedure>
+			</flow>
+
+			<!-- 新增绑定课程 -->
+			<flow trigger="pnlDetailTool.btnAddCourse" event="OnClick"
+				filter="">
+				<procedure name="search" logic="Find" ifyes="jssave" ifno="">
+					<param name="Sql" value="CourseName" />
+					<param name="Out" value="pCourse" />
+					<param name="Title" value="课程名称选择" />
+					<param name="Options" value="$RESET,重置" />
+					<param name="Columns" value="id,编码,ctlCourseId|name,课程分类" />
+					<param name="Window" value="Large" />
+				</procedure>
+				<procedure name="jssave" logic="Save" ifyes="jsquery"
+					ifno="">
+					<param name="In" value="pCourse" />
+					<param name="Plugin" value="insertPlanCoursePlugin" />
+					<param name="Msg" value="绑定课程成功" />
+				</procedure>
+				<procedure name="jsquery" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pCourse" />
+					<param name="Out" value="pnlTrain" />
+					<param name="Sql" value="trainSystem/QryTrain" />
+				</procedure>
+			</flow>
+
+			<!--确认 -->
+			<!-- <flow trigger="pnlDetailTool.ctlConfirm" event="OnClick" filter="HasTask('frmEmpDetail_'+model.pnlDetailGroup.ctlId,session.userInfo.userId)"> 
+				<procedure name="procExecActivity" logic="ExecActivity" ifyes="procTransition" 
+				ifno=""> <param name="WorkFlow" value="empEntryProcess"></param> <param name="UiName" 
+				value="frmEmpDetail"></param> <param name="In" value="pnlDetailGroup.ctlId"></param> 
+				<param name="Desc" value="新员工入职流程审核"></param> </procedure> <procedure name="procTransition" 
+				server="/frmEmpList" logic="Back" ifyes="" ifno=""> </procedure> </flow> 
+				<flow trigger="pnlDetailTool.ctlList" event="OnClick" filter=""> <procedure 
+				name="procListActivity" logic="ListActivity" ifyes="" ifno=""> <param name="WorkFlow" 
+				value="empEntryProcess"></param> <param name="UiName" value="frmEmpDetail"></param> 
+				<param name="In" value="pnlDetailGroup.ctlId"></param> </procedure> </flow> -->
+
+			<!-- 解除课程绑定 -->
+			<flow trigger="pnlTrain.ctlDel" event="OnClick" filter="">
+				<procedure name="j0" server="" logic="ConfirmMsg" ifyes="j1"
+					ifno="">
+					<param name="Title" value="删除提示" />
+					<param name="Msg" value="确认删除当前课程吗?" />
+				</procedure>
+				<procedure name="j1" logic="Delete" ifyes="queryTrain"
+					ifno="">
+					<param name="In" value="pnlTrain" />
+					<param name="Plugin" value="deletePlanCoursePlugin" /> 
+					<param name="Msg" value="'工作项已删除'" />
+				</procedure>
+
+				<procedure name="queryTrain" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pCourse"></param>
+					<param name="Out" value="pnlTrain"></param>
+					<param name="Sql" value="trainSystem/QryTrain"></param>
+				</procedure>
+			</flow>
+			<!-- 解除人员绑定 -->
+			<flow trigger="pnlDetailGroup.ctlDel" event="OnClick" filter="">
+				<procedure name="j0" server="" logic="ConfirmMsg" ifyes="j1"
+					ifno="">
+					<param name="Title" value="删除提示" />
+					<param name="Msg" value="确认删除当前人员吗?" />
+				</procedure>
+				<procedure name="j1" logic="Delete" ifyes="jsquery" ifno="">
+					<param name="In" value="pnlDetailGroup" />
+					<param name="Plugin" value="deletePlanEmpPlugin" /> 
+					<param name="Msg" value="'工作项已删除'" />
+				</procedure>
+
+				<procedure name="jsquery" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pRole" />
+					<param name="Out" value="pnlDetailGroup" />
+					<param name="Sql" value="trainSystem/QryPlanEmp" />
+				</procedure>
+			</flow>
+
+
+
+
+
+
+			<!-- 返回 -->
+			<flow trigger="pnlDetailTool.ctlBack" event="OnClick" filter="">
+				<procedure name="jsback" logic="Back" ifyes="" ifno="">
+
+				</procedure>
+			</flow>
+
+
+			<!-- 布局 -->
+			<layout>
+				<region location="North" scale="">
+					<subregion panel="pnlDetailTool" location="North" scale="" />
+					<subregion panel="pRole" location="Center" scale="" />
+				</region>
+				<region location="Center" scale="">
+					<subregion panel="pnlDetailGroup" location="Center"
+						scale="300px" />
+				</region>
+				<region location="South" scale="">
+					<subregion panel="pnlTrain" location="South" scale="300px" />
+				</region>
+
+			</layout>
+		</ui>
+	</ui_layer>
+</tsoftware>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+      xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+  <object name="dict" table="t_dict" primary="id" unique="name,cata_code" order="createTime desc">
+  <property name="id" type="Long" length="50" initial="" field="id"/>
+  <property name="name" type="String" length="50" initial="" field="name"/>
+  <property name="code" type="String" length="20" initial="" field="code"/>
+  <property name="seq" type="Long" length="6" initial="" field="seq"/>
+  <property name="cataCode" type="String" length="50" initial="" field="cata_code"/>
+  <property name="cataCodeName" type="String" length="50" initial="" field=""/>
+  <property name="createTime" type="Date" length="" validate=""  field="create_time" />   
+  <property name="createBy" type="Long" length="10" validate=""  field="create_by" />
+  <property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+  <property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+  <property name="updateCount" type="Long" length="10" validate=""  field="update_count" />
+  <property name="updateByName" type="String" length="50" validate=""  field="" />
+  <property name="createByName" type="String" length="50" validate=""  field="" />
+  </object>       
+</model_layer>
+<ui_layer>
+  <ui name="frmDictList" title=" 字典项列表"> 
+  <panel name="pToolbar" title="工具条" object="" type="Toolbar">
+    <control name="dicQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="dicClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="dicCreate" title="新增字典项" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="sortManagement" title="分类管理" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="ctlExport" title="导出清单" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+  </panel>
+  <panel name="pCondition" title="查询条件" object="dict" type="Group">
+    <control name="lk_code" title="字典项编码" property="code" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+    <control name="lk_name" title="字典项名称" property="name" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+    <control name="eq_cataCode" title="分类编号" property="cataCode" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+    <control name="cataName" title="分类名称" property="cataCodeName" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+  </panel>  
+  <panel name="pTable" title="查询结果" object="dict" type="Grid">
+    <control name="id" title="id" property="id" type="Hidden" edit="Y" required="" format="" width="" height="" column=""/>
+    <control name="dicedit" title="编辑" property="" type="Link" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="dicdelete" title="删除" property="" type="Link" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="d1" title="字典项编码" property="code" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="d2" title="字典项名称" property="name" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+    <control name="d3" title="分类编码" property="cataCode" type="TextBox" edit="" required="" format="" width="200" height="" column=""/>
+    <control name="d4" title="分类名称" property="cataCodeName" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+    <control name="d5" title="顺序号" property="seq" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="d6" title="创建人" property="createByName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="d7" title="创建时间" property="createTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+    <control name="d8" title="最后修改人 " property="updateByName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="d9" title="最后修改时间 " property="updateTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+  </panel>
+    <flow trigger="" event="OnLoad" filter="">
+      <procedure name="j1"  logic="Clear" ifyes="j2" ifno="" sync="Y">
+           <param name="Out" value="pCondition"></param>
+      </procedure>  
+      <procedure name="j2"  logic="Query" ifyes="getDegree" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryDictList"></param>
+      </procedure>   
+    </flow> 
+    <!-- 分类名称 -->
+    <flow trigger="pCondition.cataName" event="OnClick" filter="">
+      <procedure name="find"  logic="Find" ifyes="" ifno="">
+        <param name="Out" value="pCondition"></param>
+        <param name="Sql" value="DictCata"></param>
+        <param name="Title" value="分类选择"></param>
+        <param name="Columns" value="id,编码,eq_cataCode|name,分类名称,cataName"></param> 
+        <param name="Window" value="Medium"></param> 
+        </procedure>
+     </flow>
+    <flow trigger="pTable.dicedit" event="OnClick" filter="row.name!='管理员'">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="pTable.id"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmDictEdit"></param>
+        <param name="Mode" value="Edit"></param>
+         <param name="Window" value="Large"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryDictList"></param>
+      </procedure>              
+    </flow>
+    <flow trigger="pToolbar.dicQuery" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryDictList"></param>
+      </procedure>              
+    </flow>     
+    <flow trigger="pToolbar.dicClear" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pCondition"></param>
+      </procedure>              
+    </flow>    
+    <flow trigger="pTable.dicdelete" event="OnClick" filter="row.empName!='Admin'">
+      <procedure name="j0" server="" logic="ConfirmMsg" ifyes="j1" ifno="">
+       <param name="Title" value="删除提示"></param>
+       <param name="Msg" value="确认删除当前字典项吗?"></param>
+      </procedure>
+      <procedure name="j1" server="" logic="EncodeId" ifyes="j2" ifno="">
+        <param name="In" value="pTable.id"></param>
+      </procedure>
+      <procedure name="j2"  logic="Delete" ifyes="j3" ifno="">
+        <param name="In" value="pTable" />
+        <param name="Msg" value="model.name+'已删除'" />
+      </procedure>
+      <procedure name="j3"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryDictList"></param>
+      </procedure>           
+    </flow>  
+        <!-- 导出清单 -->
+    <flow trigger="pToolbar.ctlExport" event="OnClick" filter="">
+      <procedure name="ctlExport" server="" logic="Export" ifyes="" ifno="">
+        <param name="Format" value="pTable"></param>
+        <param name="In" value="pCondition"></param>
+        <param name="Sql" value="QryDictList"></param>
+      </procedure>
+    </flow>      
+    <flow trigger="pToolbar.dicCreate" event="OnClick" filter="">
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmDictEdit"></param>
+        <param name="Mode" value="Add"></param>
+         <param name="Window" value="Large"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryDictList"></param>
+      </procedure>              
+    </flow>      
+        <flow trigger="pToolbar.sortManagement" event="OnClick" filter="">
+           <procedure name="jsgoto"  logic="Transition" ifyes="jsquery" ifno="">
+        <param name="To" value="frmDictCataList"></param>
+        <param name="Mode" value="Edit"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryDictCataList"></param>
+      </procedure>              
+    </flow>  
+    <layout>
+    <region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+      </region>
+    <region location ="Center" scale="">
+    <subregion panel="pCondition" location="North" scale=""/>
+    <subregion panel="pTable" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>    
+  <ui name="frmDictEdit" title="字典项编辑">
+  <panel name="pForm" title="tab1" object="dict" type="Group">
+    <control name="id" title="id" property="id" type="Hidden" edit="Y" required="" format="" width="" height="" column=""/>
+    <control name="code" title="字典项编码" property="code" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+    <control name="name" title="字典项名称" property="name" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+    <control name="cataName" title="分类名称" property="cataCodeName" type="PopupBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+    <control name="cataCode" title="分类编号" property="cataCode" type="Hidden" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+    <control name="seq" title="顺序号" property="seq" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="1"/>
+    <control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+    <control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />    
+    <control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil" format="" width="1" height="1" column="1"  />
+    <control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column="1"  />
+  </panel>
+  <panel name="pButton" title="工具按钮" object="" type="Toolbar">
+    <control name="save" title="确认" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+    <control name="cancel" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+  </panel>
+    <flow trigger="" event="OnLoad" filter="" >            
+      <procedure name="j1" server="" logic="DecodeId" ifyes="qid" ifno="">
+        <param name="Out" value="pForm.id"></param>
+      </procedure>    
+      <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="QryDictList"></param>  
+      </procedure>   
+    </flow> 
+    <!-- 分类名称 -->
+    <flow trigger="pForm.cataName" event="OnClick" filter="">
+      <procedure name="find"  logic="Find" ifyes="" ifno="">
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="DictCata"></param>
+        <param name="Title" value="分类选择"></param>
+        <param name="Columns" value="id,编码,cataCode|name,分类名称,cataName"></param> 
+        <param name="Window" value="Medium"></param> 
+        </procedure>
+     </flow>
+    <flow trigger="pButton.save" event="OnClick" filter="editMode!='' &amp;&amp; editMode!='Readonly'" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Msg" value="'已保存'"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow> 
+    <flow trigger="pButton.cancel" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>  
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="pButton" location="South" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pForm" location="Center" scale="" />
+      </region>      
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

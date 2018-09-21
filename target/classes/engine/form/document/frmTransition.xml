@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+	<model_layer>
+        <object name="flow3" table="t_project" primary="id" unique="id" order="">
+            <property name="oldTransition" type="String" length="50" validate="" field=""/>  
+            <property name="transition" type="String" length="50" initial=""  field=""/>
+        </object>
+    </model_layer>
+	<ui_layer>
+		<ui name="frmTransition" title="跳转页面列表">
+			<panel name="tran" title="tab1" object="flow3" type="Grid">
+				<control name="oldName" title="原页面" property="oldTransition" type="TextBox"
+					edit="N" required="N" format="" width="150" height="" column="" />
+				<control name="transitionName" title="跳转目标页面" property="transition"
+					type="TextBox" edit="N" required="N" format="" width="150" height=""
+					column="" />
+			</panel>
+			<flow trigger="" event="OnLoad" filter="">
+				<procedure name="procTransform" logic="Transform" ifyes="" ifno=""> 
+					<param name="Out" value="tran" />
+					<param name="Plugin" value=" com.tedu.plugin.flowResource.TransitionList" /> 
+				</procedure>
+			</flow>
+			<layout>
+				<region location="Center" scale="">
+					<subregion panel="tran" location="Center" scale="" />
+				</region>
+			</layout>
+		</ui>
+	</ui_layer>
+</tsoftware>

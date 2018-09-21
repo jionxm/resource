@@ -1,0 +1,54 @@
+#foot {
+  clear: both;
+  position: fixed;
+  bottom: 0;
+  width: 750px;
+  background: white;
+  height:104px;
+}
+#foot ul {
+  width: 100%;
+}
+#foot ul li {
+  float: left;
+  width: 25%;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 24px;
+}
+#foot ul li .icon {
+  width: 45px;
+  height: 50px;
+  margin: 0 auto;
+  margin-bottom: 3px;
+}
+#foot ul li .color-active {
+  color: #36adee;
+}
+#foot ul li .icon-1 {
+  background: url(../img/1.png) no-repeat center center;
+}
+#foot ul li .icon-1-active {
+  background: url(../img/1-active.png) no-repeat center center;
+}
+#foot ul li .icon-2 {
+  background: url(../img/2.png) no-repeat center center;
+}
+#foot ul li .icon-2-active {
+  background: url(../img/2-active.png) no-repeat center center;
+  color: #36adee;
+}
+#foot ul li .icon-3 {
+  background: url(../img/3.png) no-repeat center center;
+}
+#foot ul li .icon-3-active {
+  background: url(../img/3-active.png) no-repeat center center;
+  color: #36adee;
+}
+#foot ul li .icon-4 {
+  background: url(../img/4.png) no-repeat center center;
+}
+#foot ul li .icon-4-active {
+  background: url(../img/4-active.png) no-repeat center center;
+  color: #36adee;
+}

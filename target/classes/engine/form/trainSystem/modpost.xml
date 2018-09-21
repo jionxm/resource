@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+	<object name="tpost" table="t_post" primary="id" unique="id"  order="">
+		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="courseId" type="Long" length="20" initial="" field="course_id"/>
+		<property name="content" type="String" length="200" field="content"/>
+		<property name="createTime" type="Date" length="" field="create_time"/>
+		<property name="createBy" type="Long" length="20" field="create_by"/>
+		
+		<property name="createByName" type="String" length="20" field=""/>
+		<property name="courseIdName" type="String" length="20" field=""/>
+ 	</object>
+ 	<object name="ttraineestudylog" table="t_train_course_result" primary="id" unique="id"  order="">
+		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="traineeId" type="Long" length="20" initial="" field="trainee_id"/>
+		<property name="trainFileId" type="Long" length="20" field="train_file_id"/>
+		<property name="startTime" type="Date" length="" field="start_time"/>
+		<property name="endTime" type="Date" length="" field="end_time"/>
+		<property name="sumTime" type="Long" length="" field="sum_time"/>
+		 
+		<!-- 查询相关，关联表字段等 begin-->
+		<property name="courseId" type="Long" length="20" field=""/>
+		<property name="traineeName" type="String" length="" field=""/>
+		<property name="trainCourseName" type="String" length="" field=""/>
+		<property name="trainFileName" type="String" length="" field=""/>
+		<property name="expectStudyTime" type="Long" length="50" field=""/>
+		<property name="resolvePercent" type="String" length="" field=""/>
+		<!-- end-->
+ 	</object>
+ 	<object name="ttrainfile" table="t_train_file" primary="id" unique="id"  order="createTime ">
+		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="prepostionFileId" type="Long" length="20" initial="" field="prepostion_train_file_id"/>
+		<property name="courseId" type="Long" length="20" initial="" field="train_course_id"/>
+		<property name="name" type="String" length="50" field="name"/>
+		<property name="expectStudyTime" type="Long" length="50" field="expect_study_time"/>
+		<property name="fileType" type="String" length="10" field="file_type"/>
+		<property name="fileAddress" type="String" length="200" field="file_address"/>
+		<property name="fileIntroduction" type="String" length="500" field="train_course_file_introduction"/>
+		<property name="createTime" type="Date" length="" field="create_time"/>
+		<property name="createBy" type="Long" length="50" field="create_by"/>
+		<property name="updateTime" type="Date" length="" field="update_time"/>
+		<property name="updateBy" type="Long" length="50" field="update_by"/>
+		
+		<!-- 查询相关，关联表字段等 begin-->
+		<property name="fileAddressName" type="String" length="200" field=""/>
+		<property name="fileTypeName" type="String" length="100" field=""/>
+		<property name="courseCataId" type="Long" length="20" initial="" field=""/>
+		<property name="courseCataName" type="String" length="100" initial="" field=""/>
+		<property name="courseName" type="String" length="50" initial="" field=""/>
+		<property name="createByName" type="String" length="100" field=""/>
+	    <property name="updateByName" type="String" length="100" field=""/>
+	    <property name="traineeBy" type="Long" length="100" field=""/>
+	    <property name="traineeByName" type="String" length="100" field=""/>
+	    <property name="study" type="String" length="100" field=""/>
+	    <property name="prepostionFileName" type="String" length="20" initial="" field=""/>
+	    <property name="sumTime" type="Long" length="" field=""/>
+	    <property name="resolvePercent" type="String" length="" field=""/>
+	    <property name="state" type="String" length="20" field=""/>
+	    <property name="planId" type="Long" length="20" field=""/>
+	    <property name="det" type="Long" length="10" validate=""  field="" />
+ 	</object>
+ 	<object name="ttraincourse" table="t_train_course" primary="id" unique="id|name"  order="">
+		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="name" type="String" length="50" field="name"/>
+		<property name="courseIntroduction" type="String" length="200" field="train_course_introduction"/>
+		<property name="createTime" type="Date" length="" field="create_time"/>
+		<property name="createBy" type="Long" length="50" field="create_by"/>
+		<property name="updateTime" type="Date" length="" field="update_time"/>
+		<property name="updateBy" type="Long" length="50" field="update_by"/>
+		
+		<!-- 查询相关，关联表字段等 begin-->
+		<property name="labelId" type="String" length="50" field=""/>
+		<property name="labelName" type="String" length="50" field=""/>
+  		<property name="createByName" type="String" length="200" validate=""  field="" />
+     	<property name="updateByName" type="String" length="200" validate=""  field="" />
+     	<property name="traineeBy" type="Long" length="100" validate=""  field="" />
+     	<property name="planName" type="String" length="100" validate=""  field="" />          	
+     	<property name="det" type="Long" length="10" validate=""  field="" />
+     	<property name="planId" type="Long" length="20" validate=""  field="" />    
+  		<!-- end-->
+ 	</object>
+ 	<object name="ttrainee" table="t_trainee" primary="id" unique="id"  order="">
+		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="name" type="String" length="200" initial="" field="name"/>
+		
+		<!-- 查询相关，关联表字段等 begin-->
+		<property name="trainfile" type="Long" length="10" field=""/>
+		<property name="trainfileName" type="String" length="200" field=""/>
+		<!-- end-->
+ 	</object>
+ 	<object name="ttraineefile" table="t_trainee_file" primary="id" unique="trainee_id,train_file_id"  order="">
+		<property name="id" type="Long" length="20" initial="" field="id"/>
+		<property name="traineeId" type="Long" length="20" initial="" field="trainee_id"/>
+		<property name="trainFileId" type="Long" length="20" initial="" field="train_file_id"/>
+		<property name="state" type="String" length="10" field="state"/>
+		<property name="createTime" type="Date" length="" field="create_time"/>
+		<property name="createBy" type="Long" length="50" field="create_by"/>
+		<property name="updateTime" type="Date" length="" field="update_time"/>
+		<property name="updateBy" type="Long" length="50" field="update_by"/>
+		<!-- 查询相关，关联表字段等 begin-->
+		<property name="traineeName" type="String" length="200" initial="" field=""/>
+		<property name="trainFileName" type="String" length="200" field=""/>
+		<property name="createByName" type="String" length="200" validate=""  field="" />
+     	<property name="updateByName" type="String" length="200" validate=""  field="" />
+     	<property name="trainStudyName" type="String" length="200" field=""/>
+     	<property name="name" type="String" length="200" initial="" field=""/>
+     	<property name="courseIntroduction" type="String" length="200" initial="" field=""/>
+     	<property name="trainCourseId" type="String" length="200" initial="" field=""/>
+		<!-- end-->
+ 	</object>
+ 	<object name="ttrainplan" table="t_train_plan" primary="id" unique="id|title"  order="">
+		<property name="id" type="Long" length="10" initial="" field="id"/>
+		<property name="title" type="String" length="50" initial="" field="title"/>
+		<property name="context" type="String" length="500" initial="" field="context"/>
+		<property name="createBy" type="Long" length="20" initial="" field="create_by"/>
+		<property name="createTime" type="Date" length="" initial="" field="create_time"/>
+		<property name="updateBy" type="Long" length="20" initial="" field="update_by"/>
+		<property name="updateTime" type="Date" length="" initial="" field="update_time"/>
+		
+		<property name="createByName" type="Long" length="20" initial="" field=""/>
+		<property name="updateByName" type="Long" length="20" initial="" field=""/>
+		<!-- end-->
+ 	</object>
+ 	
+ 	<object name="ttrainplanemp" table="t_train_plan_emp" primary="id" unique="id,emp_id"  order="">
+		<property name="id" type="Long" length="10" initial="" field="id"/>
+		<property name="planId" type="Long" length="10" initial="" field="plan_id"/>
+		<property name="empId" type="Long" length="10" initial="" field="emp_id"/>
+		<property name="createBy" type="Long" length="20" initial="" field="create_by"/>
+		<property name="createTime" type="Date" length="" initial="" field="create_time"/>
+		<property name="updateBy" type="Long" length="20" initial="" field="update_by"/>
+		<property name="updateTime" type="Date" length="" initial="" field="update_time"/>
+		
+		<!-- 相关 -->
+		<property name="name" type="String" length="100" initial="" field="courseId"/>
+		<property name="orgName" type="String" length="100" initial="" field=""/>
+		<property name="mobile" type="String" length="200" initial="" field=""/>
+		<property name="courseId" type="String" length="200" initial="" field=""/>
+		<property name="createByName" type="Long" length="20" initial="" field=""/>
+		<property name="updateByName" type="Long" length="20" initial="" field=""/>
+		<!-- end-->
+ 	</object>
+ 	
+ 	<object name="ttplancourse" table="t_train_plan_course" primary="id" unique="id,course_id"  order="">
+		<property name="id" type="Long" length="10" initial="" field="id"/>
+		<property name="planId" type="Long" length="10" initial="" field="plan_id"/>
+		<property name="courseId" type="Long" length="10" initial="" field="course_id"/>
+		<property name="createBy" type="Long" length="20" initial="" field="create_by"/>
+		<property name="createTime" type="Date" length="" initial="" field="create_time"/>
+		<property name="updateBy" type="Long" length="20" initial="" field="update_by"/>
+		<property name="updateTime" type="Date" length="" initial="" field="update_time"/>
+		
+		<!-- 相关 -->
+		<property name="name" type="String" length="100" initial="" field=""/>
+		<property name="courseIntroduction" type="String" length="100" initial="" field=""/>
+		<property name="createByName" type="Long" length="20" initial="" field=""/>
+		<property name="updateByName" type="Long" length="20" initial="" field=""/>
+		<!-- end-->
+ 	</object>
+</model_layer>
+</tsoftware>

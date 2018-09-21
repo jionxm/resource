@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+
+  <ui name="frmTrainDisscus" title="留言页面">
+  	<panel name="pToolbar" title="工具栏" object="" type="Toolbar">
+		<control name="find" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="clear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="answer" title="留言" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="back" title="返回" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel> 
+	<panel name="pCondition" title="查询条件" object="ttraincourse" type="Group">
+		<control name="name" title="课程名称" property="name" type="TextBox" edit="N" required="" format="" width="1" height="" column=""/>
+		<control name="lk_createByName" title="留言人" property="createByName" type="TextBox" edit="Y" required="N"  format="" width="1" height="1" column="4"  />
+		<control name="eq_courseId" title="课程id" property="id" type="Hidden" edit="N" required="" format="" width="1" height="1" column=""/>
+	</panel>
+	<panel name="pCondition1" title="查询条件" object="ttraincourse" type="Hidden">
+		<control name="eq_id" title="课程id" property="id" type="Hidden" edit="N" required="" format="" width="1" height="1" column=""/>
+	</panel>
+	<panel name="pForm" title="分类表单" object="tpost" type="Grid">
+		<control name="ctlEdit" title="编辑" property="" type="Link" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="ctlDel" title="删除" property="" type="Link" edit="" required="" format="" width="" height="" column=""/>
+		
+		<control name="id" title="id" property="id" type="Hidden" edit="N" required="" format="" width="100" height="" column=""/>
+		<control name="ctlcontent" title="内容" property="content" type="TextBox" edit="" required="" format="" width="400" height="" column=""/>
+		<control name="ctlCreateByName" title="留言人" property="createByName" type="TextBox" edit="N" required="" format="" width="100" height="" column=""/>
+		<control name="ctlCreateTime" title="创建留言时间" property="createTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		
+	</panel>
+	<!-- 初始加载 -->
+	 <flow trigger="" event="OnLoad" filter="">
+		<procedure name="jClear"  logic="Clear" ifyes="deCodeId" ifno="" >
+        	 <param name="Out" value="pCondition"></param>
+      	</procedure>
+      	<procedure name="deCodeId"  logic="DecodeId" ifyes="jQuery1" ifno="" >
+        	 <param name="Out" value="pCondition1.eq_id"></param>
+      	</procedure>
+      	<procedure name="jQuery1"  logic="QueryById" ifyes="jQuery" ifno="" >
+      		 <param name="In" value="pCondition1"></param>
+      		 <param name="Out" value="pCondition"></param>
+         	<param name="Sql" value="trainSystem/QryDisscusId"></param>
+      	</procedure>
+      	<procedure name="jQuery"  logic="Query" ifyes="" ifno="" >
+      		 <param name="In" value="pCondition"></param>
+      		 <param name="Out" value="pForm"></param>
+         	<param name="Sql" value="trainSystem/QryDisscus"></param>
+      	</procedure>
+	 </flow>
+	 <!-- 编辑 -->
+	 
+    <flow trigger="pForm.ctlEdit" event="OnClick" filter="">
+      <procedure name="jEncodeid" server="" logic="EncodeId" ifyes="jPopup" ifno="">
+        <param name="In" value="pForm.id"></param>
+      </procedure>
+      <procedure name="jPopup" logic="Popup" ifyes="querySchedule" ifno="">
+        <param name="To" value="frmTrainDisscusEdit" />
+        <param name="Mode" value="Edit" />
+         <param name="Window" value="Medium" />
+         <param name="Title" value="留言编辑页面" />
+      </procedure>
+      <procedure name="querySchedule"  logic="Query" ifyes="" ifno="" >
+      		 <param name="In" value="pCondition"></param>
+      		 <param name="Out" value="pForm"></param>
+         	<param name="Sql" value="trainSystem/QryDisscus"></param>
+      	</procedure>
+    </flow>
+	
+	    <!-- 清空所有 -->
+    <flow trigger="pToolbar.clear" event="OnClick" filter="">  
+      <procedure name="clear"  logic="Clear" ifyes="" ifno="" sync="Y">
+           <param name="Out" value="pCondition|lk_createByName"></param>
+      </procedure> 
+    </flow>
+      <!-- 删除 -->
+    <flow trigger="pForm.ctlDel" event="OnClick" filter="">
+    <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jCMsg" ifno="">
+        <param name="In" value="pForm.id"></param>
+      </procedure>
+      <procedure name="jCMsg" server="" logic="ConfirmMsg" ifyes="jDelete" ifno="">
+       <param name="Title" value="删除提示" />
+       <param name="Msg" value="确认删除当前活动吗?" />
+      </procedure>
+      <procedure name="jDelete"  logic="Delete" ifyes="querySchedule" ifno="">
+        <param name="In" value="pForm" />
+        <param name="Msg" value="'活动已删除'" />
+      </procedure>
+       <procedure name="querySchedule"  logic="Query" ifyes="" ifno="" >
+      		 <param name="In" value="pCondition"></param>
+      		 <param name="Out" value="pForm"></param>
+         	<param name="Sql" value="trainSystem/QryDisscus"></param>
+      	</procedure>
+    </flow>
+	   <!-- 返回 -->
+    <flow trigger="pToolbar.back" event="OnClick" filter=""> 
+      <procedure name="Back"  logic="Back" ifyes="" ifno="" >
+      </procedure> 
+    </flow>
+    
+       <!-- 查询点击事件 -->
+    <flow trigger="pToolbar.find" event="OnClick" filter="">  
+      <procedure name="Query"  logic="Query" ifyes="" ifno="" sync="Y">
+           <param name="In" value="pCondition"></param>
+           <param name="Out" value="pForm"></param>
+           <param name="Sql" value="trainSystem/QryDisscus"></param>
+      </procedure> 
+    </flow>
+    
+     <!--评论 -->
+    <flow trigger="pToolbar.answer" event="OnClick" filter="">
+     <procedure name="EncodeId"  logic="EncodeId" ifyes="answer" ifno="" >
+           <param name="In" value="pCondition.eq_courseId"></param>
+      </procedure> 
+       <procedure name="answer" logic="Popup" ifyes="jQuery" ifno="">
+          <param name="To" value="frmPostAnswer"></param>
+          <param name="Mode" value="Add"></param>
+          <param name="Title" value="评论"></param>          
+          <param name="Window" value="Medium"></param>
+       </procedure>
+       <procedure name="jQuery"  logic="Query" ifyes="" ifno="" >
+      		 <param name="In" value="pCondition"></param>
+      		 <param name="Out" value="pForm"></param>
+         	<param name="Sql" value="trainSystem/QryDisscus"></param>
+      	</procedure>
+    </flow>
+
+ 	<!-- 布局 -->
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pToolbar" location="North" scale="" />
+        <subregion panel="pCondition" location="Center" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pForm" location="Center" scale="" />
+      </region>
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

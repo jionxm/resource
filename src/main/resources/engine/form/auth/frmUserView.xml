@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmUserView" title="用户详情"> 
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnAssign" title="分配角色" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnViewEmp" title="人员详情" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnClose" title="返回" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pForm" title="详细信息" object="user" type="Group">
+		<control name="name" title="用户名" property="name" type="TextBox" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="authTypeName" title="认证方式" property="authTypeName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="statusName" title="用户状态" property="statusName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="empStatusName" title="人员状态" property="empStatusName" type="TextBox" edit="N" required="N" format="" width="1" height="" column=""/>
+		<control name="empName" title="人员姓名" property="empName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="5"/>
+		
+		<control name="empCode" title="人员编码" property="empCode" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="" initial=""/>
+		<control name="empTypeName" title="人员类型" property="empTypeName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="" initial=""/>		
+		<control name="genderName" title="性别" property="genderName" type="TextBox" edit="" required="N" format="" width="1" height="1" column=""/>
+		<control name="orgName" title="所属组织" property="orgName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="mobile" title="移动电话" property="mobile" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="5" initial="CurrentTime()"/>
+
+		<control name="email" title="电子邮件" property="email" type="TextBox" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="wechat" title="微信" property="wechat" type="TextBox" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="createByName" title="创建人" property="createByName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="createTime1" title="创建时间" property="createTime" type="TextBox" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="updateByName" title="最后修改人" property="updateByName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="5"/>
+		
+		<control name="updateTime1" title="最后修改时间" property="updateTime" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="5"/>
+		<!-- 隐藏 -->
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column=""  />
+		<control name="eq_userId" title="用户ID" property="id" type="Hidden" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="userId" title="用户ID savecustome" property="" type="Hidden" edit="N" required="N" format="" width="1" height="1" column=""/>		
+		<control name="roleId" title="角色编码" property="roleId" type="Hidden" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="empId" title="empId" property="empId" type="Hidden" edit="N" required="N" format="" width="1" height="1" column=""/>		
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="N" required="N" target="session.userInfo.empId" format="" width="1" height="1" column=""  />		
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="N" required="N" target="session.userInfo.empId" format="" width="1" height="1" column=""  />
+	</panel>
+	<panel name="pTable1" title="所属角色" object="userrole" type="Grid"><!-- userrole -->
+		<control name="remove" title="移除" property="id" type="Link" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="id" title="userRoleId" property="id" type="Hidden" edit="" required="" format="" width="40" height="" column=""/>		
+		<control name="name" title="角色名称" property="name" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="description" title="角色说明" property="description" type="TextBox" edit="" required="" format="" width="450" height="" column=""/>
+	</panel>
+	<panel name="pTable2" title="权限范围" object="function" type="Grid">
+		<control name="a1" title="权限名称" property="name" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="a2" title="权限说明" property="description" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="a3" title="授权人" property="createByName" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="a4" title="授权时间" property="createTime" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="a5" title="url" property="url" type="Hidden" edit="" required="" format="" width="180" height="" column=""/>
+	</panel>	
+    <flow trigger="" event="OnLoad" filter="" >
+      <procedure name="j1" server="" logic="DecodeId" ifyes="j2" ifno="jclear">
+        <param name="Out" value="pForm.eq_userId"></param>
+      </procedure>
+      <procedure name="j2"  logic="QueryById" ifyes="j3" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="QryUserList"></param>
+      </procedure>  
+      <procedure name="j3"  logic="Query" ifyes="je" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Out" value="pTable1"></param>
+        <param name="Sql" value="QryUserRoleList"></param>
+      </procedure>     
+      <procedure name="je" server="" logic="EncodeId" ifyes="jd" ifno="">
+        <param name="In" value="pForm.eq_userId"></param>
+      </procedure>      
+      <procedure name="jd" server="" logic="DecodeId" ifyes="q2" ifno="">
+        <param name="Out" value="pForm.userId"></param>
+      </procedure>      
+      <procedure name="q2"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Out" value="pTable2"></param>
+        <param name="Sql" value="QryUserFuncList"></param>
+      </procedure>  
+    </flow>	
+    <flow trigger="pToolbar.btnClose" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Back" ifyes="" ifno="">
+      </procedure>
+    </flow>	   
+    <flow trigger="pToolbar.btnAssign" event="OnClick" filter="" >
+      <procedure name="search"  logic="Find" ifyes="save" ifno="">
+        <param name="In" value="pForm.eq_userId"></param>
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="RoleForUser"></param>
+        <param name="Title" value="角色分配"></param>
+        <param name="Columns" value="id,编码,roleId|name,角色"></param>
+      </procedure>
+      <procedure name="save" logic="SaveCustom" ifyes="queryTable" ifno="">
+        <param name="Sql" value="insertUserRole"></param>
+        <param name="In" value="pForm"></param>
+        <param name="Msg" value="操作成功"></param>
+      </procedure>       
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Out" value="pTable1"></param>
+        <param name="Sql" value="QryUserRoleList"></param>
+      </procedure>             
+    </flow>
+    <flow trigger="pToolbar.btnViewEmp" event="OnClick" filter=""><!--model.pForm.empId!=nil empId空时没有关联用户 -->
+      <procedure name="je" server="" logic="EncodeId" ifyes="jsgoto" ifno="toast">
+        <param name="In" value="pForm.empId" />
+      </procedure>      
+      <procedure name="toast" server="" logic="ToastMsg" ifyes="" ifno="">
+        <param name="Title" value="提示信息" />
+        <param name="Msg" value="该用户没有关联人员信息" />
+      </procedure>   
+      <procedure name="jsgoto" logic="Transition" ifyes="" ifno="">
+        <param name="To" value="frmEmpDetail"></param>
+        <param name="Mode" value="Readonly"></param>
+      </procedure>
+    </flow>
+    <flow trigger="pTable1.remove" event="OnClick" filter="">
+      <procedure name="j0" server="" logic="ConfirmMsg" ifyes="j1" ifno="">
+       <param name="Title" value="删除提示"></param>
+       <param name="Msg" value="确认移除当前用户的角色吗?"></param>
+      </procedure>
+      <procedure name="j1" server="" logic="EncodeId" ifyes="j2" ifno="">
+        <param name="In" value="pTable1.id"></param>
+      </procedure>
+      <procedure name="j2"  logic="Delete" ifyes="j3" ifno="">
+        <param name="In" value="pTable1" />
+        <param name="Msg" value="'已删除'" />
+      </procedure>
+      <procedure name="j3"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Out" value="pTable1"></param>
+        <param name="Sql" value="QryUserRoleList"></param>
+      </procedure>           
+    </flow>        
+    <layout>
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+        <subregion panel="pForm" location ="Center" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+		<subregion panel="pTable1" location="Center" scale=""/>
+		<subregion panel="pTable2" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>    
+</ui_layer>
+</tsoftware>

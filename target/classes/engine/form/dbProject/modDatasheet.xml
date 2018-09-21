@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+
+    <!-- xieyangkai 数据表model -->
+	<object name="tdatasheet" table="" primary="" unique=""  order="">
+		<property name="tableName" field="" type="String" length="40"></property>
+		<property name="tableComment" field="" type="String" length="40"></property>
+		 
+		<property name="filed" field="" type="String" length="40"></property>
+		<property name="colkey" field="" type="String" length="40"></property>
+		<property name="dataTypeAndLength" field="" type="String" length="40"></property>
+		<property name="isNull" field="" type="String" length="40"></property>
+		<property name="columnComment" field="" type="String" length="40"></property>
+		<property name="extra" field="" type="String" length="40"></property>
+		<property name="extraNumber" field="" type="String" length="40"></property>
+		<property name="fieldNum" field="" type="Long" length="40"></property>
+		<property name="recordNum" field="" type="Long" length="40"></property>
+		<property name="updateTime" field="" type="Date" length="80"></property>
+ 	</object>
+ 	
+</model_layer>
+
+</tsoftware>

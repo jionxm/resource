@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+
+
+<ui_layer>
+  <ui name="frmStudyFileList" title="在线课程资料列表">
+	<panel name="pnlUp" title="工具条" object="" type="Toolbar">
+		<control name="ctlBack" title="返回" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pnlGroup" title="查询条件" object="ttrainfile" type="Group">
+		<control name="eq_courseId" title="课程id" property="courseId" type="Hidden" edit="" required="" format="" width="1" height="1" column=""/>
+		<control name="eq_fileType" title="资料类别" property="fileType" type="Hidden" edit="Y" required="N" multiple="Y" format="" width="1" height="1" column=""/>
+		<control name="lk_courseName" title="课程名称" property="courseName" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="lk_name" title="资料名称" property="name" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+		<control name="traineeBy" title="学生ID" property="traineeBy" type="Hidden" edit="" required="" format="" width="1" height="" column="4" initial="session.userInfo.empId"/>
+		<control name="eq_planId" title="计划id" property="planId" type="Hidden" edit="N" required="N" multiple="Y" format="" width="1" height="1" column="4"/>
+		<control name="id" title="id" property="id" type="Hidden" edit="" required="" format="" width="1" height="1" column="1"/>
+	</panel> 
+	
+	
+	<panel name="pnlDg" title="pnlDg" object="ttrainfile" type="Grid"  multiple=""   >
+		<control name="id" title="id" property="id" type="Hidden" edit="" required="" format="" width="1" height="1" column="1"/>
+    	<control name="ctlStudy" title="开始学习" property="" type="Link" edit="" required="" format="" width="100" height="" column=""/>
+    	<control name="ctlEnd" title="结束学习" property="" type="Link" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="planId" title="计划id" property="planId" type="Hidden" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="name" title="资料名称" property="name" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="fileTypeName" title="资料类别" property="fileTypeName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="prepostionFileId" title="前置资料ID" property="prepostionFileId" type="Hidden" edit="" required="" format="" width="100" height="" column=""/>
+    	<control name="prepostionFileName" title="前置资料名称" property="prepostionFileName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="fileIntroduction" title="资料介绍" property="fileIntroduction" type="TextBox" edit="" required="" format="" width="400" height="" column=""/>
+		<control name="expectStudyTime" title="学习预计时长(/分钟)" property="expectStudyTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="sumTime" title="学习实际时长(/分钟)" property="sumTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="resolvePercent" title="完成百分比" property="resolvePercent" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="study" title="study" property="study" type="Hidden" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="fileAddress" title="fileAddress" property="fileAddress" type="Hidden" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="state" title="state" property="state" type="Hidden" edit="" required="" format="" width="100" height="" column=""/>
+	</panel>
+	<!-- 加载 -->
+    <flow trigger="" event="OnLoad" filter="">
+    	<procedure name="jClear"  logic="Clear" ifyes="jsQuery" ifno="" sync="Y">
+           <param name="Out" value="pnlGroup"></param>
+      </procedure>              
+       <procedure name="jsQuery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="trainSystem/QryState"></param>
+      </procedure>
+    </flow>
+   
+	
+     
+   <!-- 学习 -->
+    <flow trigger="pnlDg.ctlStudy" event="OnClick"  filter="row.study=='可以学习'">
+      <procedure name="encode"  logic="EncodeId" ifyes="Decode" ifno="" sync="Y">
+           <param name="In" value="pnlDg.id"></param>
+      </procedure>
+         <procedure name="Decode"  logic="DecodeId" ifyes="jssave" ifno="" sync="Y">
+           <param name="Out" value="pnlGroup.id"></param>
+      </procedure>      
+		<procedure name ="jssave" logic="SaveCustom" ifyes="Query" ifno="">
+			<param name="Sql" value="trainSystem/fileFilter"/>
+       		<param name="In" value="pnlGroup"/>
+		</procedure>      
+		<procedure name="Query"  logic="Query" ifyes="jplay" ifno="">
+	        <param name="In" value="pnlGroup"></param>
+	        <param name="Out" value="pnlDg"></param>
+	        <param name="Sql" value="trainSystem/QryState"></param>
+      </procedure>
+      <procedure name="jplay"  logic="Play" ifyes="" ifno="">
+	        <param name="In" value="pnlDg.fileAddress"></param>
+	        <param name="Business" value="pnlGroup.eq_planId"></param>
+      </procedure>
+	</flow>
+	
+	 <flow trigger="pnlDg.ctlEnd" event="OnClick" filter="row.study=='结束学习'" >
+	  <procedure name="encode"  logic="EncodeId" ifyes="Decode" ifno="" sync="Y">
+           <param name="In" value="pnlDg.id"></param>
+      </procedure>
+         <procedure name="Decode"  logic="DecodeId" ifyes="jssave" ifno="" sync="Y">
+           <param name="Out" value="pnlGroup.id"></param>
+      </procedure>
+	 <procedure name ="jssave" logic="SaveCustom" ifyes="jsave" ifno="">
+			<param name="Sql" value="trainSystem/fileFilterUpdate"/>
+       		<param name="In" value="pnlGroup"/>
+        	<param name="Msg" value="'您结束学习'"/>
+		</procedure>
+      <procedure name ="jsave" logic="SaveCustom" ifyes="Query" ifno="">
+			<param name="Sql" value="trainSystem/fileSumTimeSave"/>
+       		<param name="In" value="pnlGroup"/>
+		</procedure>
+		<procedure name="Query"  logic="Query" ifyes="" ifno="">
+	        <param name="In" value="pnlGroup"></param>
+	        <param name="Out" value="pnlDg"></param>
+	        <param name="Sql" value="trainSystem/QryState"></param>
+      </procedure>
+     </flow> 
+  <!--  返回-->
+ 	 <flow trigger="pnlUp.ctlBack" event="OnClick"  filter="">
+		  <procedure name="jsclose" server="" logic="Back" ifyes="" ifno="">
+		  </procedure>
+	</flow>
+
+
+    
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pnlUp" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="North" scale=""/>
+		<subregion panel="pnlDg" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>
+  </ui_layer>
+</tsoftware>

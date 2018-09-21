@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmUserEditableList" title="用户可编辑列表"> 
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnImport" title="奚健光的批量导入" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="bClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnNew" title="新增" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnSave" title="保存" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnExport" title="导出" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pCondition" title="查询条件" object="user" type="Group">
+		<control name="lk_name" title="用户名" property="name" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="lk_empName" title="人员姓名" property="empName" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="lk_email" title="电子邮件" property="email" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="lk_mobile" title="移动电话" property="mobile" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+		<control name="eq_authType" title="认证方式" property="authType" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column="" initial=""/>
+		<control name="eq_status" title="状态" property="status" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column="" initial="" source=""/>
+		<control name="eq_empStatus" title="状态" property="empStatus" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column="" initial="" source=""/>
+		<control name="eq_empType" title="人员类型" property="empType" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+	</panel>	
+	<panel name="pTable" title="查询结果" object="user" type="Grid" page="0">
+		<control name="edit" title="编辑" property="" type="Link" edit="" required="" format="" width="70" height="" column=""/>
+		<control name="lock" title="禁用" property="" type="Link" edit="" required="" format="" width="" height="" column=""/>
+		<control name="unlock" title="启用" property="" type="Link" edit="" required="" format="" width="" height="" column=""/>		
+		<control name="id" title="id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+		<control name="name" title="用户名" property="name" type="DataLink" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="empId" title="人员ID" property="empId" type="Hidden" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="empName" title="人员姓名" property="empName" type="DataLink" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="email" title="电子邮件" property="email" type="TextBox" edit="" required="" format="" width="220" height="" column=""/>		
+		<control name="mobile" title="移动电话" property="mobile" type="TextBox" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="authTypeName" title="认证方式" property="authTypeName" type="TextBox" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="statusName" title="状态 " property="statusName" type="TextBox" edit="Y" required="" format="" width="80" height="" column=""/>
+		<control name="status" title="可编辑状态" property="status" type="ComboBox" edit="Y" required="" format="" width="140" height="" column=""/>
+		
+		<!-- 更新标记 savecustom用-->
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />
+	</panel>
+    <flow trigger="" event="OnLoad" filter="">
+      <procedure name="j1"  logic="Clear" ifyes="list1" ifno="" sync="Y">
+           <param name="Out" value="pCondition"></param>
+      </procedure>
+      <procedure name="list1"  logic="List" ifyes="list2" ifno="">
+        <param name="Out" value="pCondition.eq_authType"></param>
+        <param name="Sql" value="authType"></param>
+      </procedure>  
+      <procedure name="list2"  logic="List" ifyes="list3" ifno="">
+        <param name="Out" value="pCondition.eq_status"></param>
+        <param name="Sql" value="userStatus"></param>
+      </procedure>  
+      <procedure name="list3"  logic="List" ifyes="list4" ifno="">
+        <param name="Out" value="pCondition.eq_empStatus"></param>
+        <param name="Sql" value="employeeStatus"></param>
+      </procedure>
+      <procedure name="list4"  logic="List" ifyes="list5" ifno="">
+        <param name="Out" value="pCondition.eq_empType"></param>
+        <param name="Sql" value="employeeType"></param>
+      </procedure>       
+      <procedure name="list5"  logic="List" ifyes="j2" ifno="">
+        <param name="Out" value="pTable.status"></param>
+        <param name="Sql" value="userStatus"></param>
+      </procedure>        
+      <procedure name="j2"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryUserList"></param>
+      </procedure>   
+    </flow>	
+    <flow trigger="pTable.edit" event="OnClick" filter="row.id!=1">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="pTable.id"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmUserEdit"></param>
+        <param name="Mode" value="Edit"></param>
+         <param name="Window" value="Medium"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryUserList"></param>
+      </procedure>              
+    </flow>
+    <flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryUserList"></param>
+      </procedure>              
+    </flow>     
+    <flow trigger="pToolbar.bClear" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pCondition"></param>
+      </procedure>              
+    </flow>   
+    <flow trigger="pToolbar.btnSave" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+      	<param name="Mode" value="Edit" />
+        <param name="In" value=",pTable" />
+        <param name="Msg" value="信息已被保存" />
+      </procedure>
+    </flow>    
+    <flow trigger="pTable.lock" event="OnClick" filter="row.status=='enable' &amp;&amp; row.id!=1">
+      <procedure name="js2" logic="SaveCustom" ifyes="queryTable" ifno="">
+        <param name="Sql" value="updateUserDisable"></param>
+        <param name="In" value="pTable"></param>
+        <param name="Msg" value="'已禁用'"></param>
+      </procedure>      
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryUserList"></param>
+      </procedure>          
+    </flow>     
+    <flow trigger="pTable.unlock" event="OnClick" filter="row.status=='disable' &amp;&amp; row.id!=1">
+      <procedure name="js2" logic="SaveCustom" ifyes="queryTable" ifno="">
+        <param name="Sql" value="updateUserEnable"></param>
+        <param name="In" value="pTable"></param>
+        <param name="Msg" value="'已成功启用'"></param>
+      </procedure>      
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryUserList"></param>
+      </procedure>          
+    </flow>        
+    <flow trigger="pTable.name" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jsgoto" ifno="">
+        <param name="In" value="pTable.id"></param>
+      </procedure>
+      <procedure name="jsgoto"  logic="Transition" ifyes="" ifno="">
+        <param name="To" value="frmUserView"></param>
+        <param name="Mode" value="Readonly"></param>
+      </procedure>
+    </flow>        
+    <flow trigger="pTable.empName" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jsgoto" ifno="">
+        <param name="In" value="pTable.empId"></param>
+      </procedure>
+      <procedure name="jsgoto"  logic="Transition" ifyes="" ifno="">
+        <param name="To" value="frmEmpDetail"></param>
+        <param name="Mode" value="Readonly"></param>
+      </procedure>
+    </flow>       
+    <flow trigger="pToolbar.btnNew" event="OnClick" filter="">
+      <procedure name="jspopup" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmUserEdit"></param>
+        <param name="Mode" value="Add"></param>
+        <param name="Window" value="Medium"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryUserList"></param>
+      </procedure>      
+    </flow>    	
+    <flow trigger="pToolbar.btnExport" event="OnClick" filter="">
+      <procedure name="p1" logic="Export" ifyes="" ifno="">
+        <param name="Format" value="pTable"></param>
+        <param name="In" value="pCondition"></param>
+        <param name="Sql" value="QryUserList"></param>
+      </procedure>
+    </flow>
+    <layout>
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+		<subregion panel="pCondition" location="North" scale=""/>
+		<subregion panel="pTable" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>    
+</ui_layer>
+</tsoftware>

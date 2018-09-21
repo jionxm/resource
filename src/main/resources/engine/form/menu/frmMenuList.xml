@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<!-- 组织列表 -->
+<model_layer>
+  <object name="menu" table="T_MENU" primary="CODE" unique="NAME" order="" father="parent">
+	<property name="code" type="String" length="" validate=""  field="CODE"/>
+	<property name="nodeType" type="String" length="" validate=""  field=""/>
+	<property name="levels" type="String" length="" validate=""  field=""/>
+	<property name="id" type="Long" length="" validate=""  field=""/>
+	<property name="parent" type="String" length="" validate=""  field="PARENT"/>
+	<property name="parentName" type="String" length="" validate=""  field=""/>
+	<property name="name" type="String" length="" validate=""  field="NAME"/>
+      <property name="type" type="String" length="20" validate=""  field="type"/>
+      <property name="typeName" type="String" length="20" validate=""  field=""/>
+      <property name="seq" type="Long" length="3" validate=""  field="seq"/>
+
+	<property name="resId" type="Long" length="50" validate="" field="RES_ID"/>
+	<property name="resName" type="String" length="50" validate="" field=""/>
+	<property name="target" type="String" length="50" validate="" field="TARGET"/>
+	<property name="createTime" type="String" length="" validate=""  field="CREATE_TIME"/>
+	<property name="createBy" type="String" length="50" validate=""  field="CREATE_BY"/>
+	<property name="createByName" type="String" length="50" validate=""  field=""/>
+	<property name="updateTime" type="String" length="" validate=""  field="UPDATE_TIME"/>
+	<property name="updateBy" type="String" length="50" validate=""  field="UPDATE_BY"/>
+	<property name="updateByName" type="String" length="" validate=""  field="" />
+	<property name="updateCount" type="String" length="6" validate=""  field="UPDATE_COUNT" />
+  </object>
+</model_layer>
+<ui_layer>
+  <ui name="sysMenuList" title="菜单列表">
+  
+    <panel name="pnlTree" object="menu"  type="Tree" multiple="">
+	  <control name="id" title="编码" property="code" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	  <control name="parent" title="父菜单id" property="parent" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	  <control name="name" title="菜单名" property="name" type="DataLink" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pnlUp" title="工具条" object="" type="Toolbar">
+		<control name="ctlSave" title="保存数据" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlAdd" title="新增菜单" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlDel" title="删除菜单" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<!-- <control name="ctlExport" title="导出清单" property="" type="Button" edit="" required="" format="" width="" height="" column=""/> -->
+	</panel>
+	<panel name="pnlGroup" title="pnlGroup" object="menu" type="Group">
+		<control name="code" title="菜单编码" property="code" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+		<control name="nodeType" title="nodeType" property="nodeType" type="Hidden" edit="Y" required="" format="" width="" height="" column=""/>
+		<control name="levels" title="levels" property="levels" type="Hidden" edit="Y" required="" format="" width="" height="" column=""/>
+		<!-- 标记是否能删除 -->
+		<control name="name" title="菜单名称" property="name" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+        <control name="typeName" title="菜单类型" property="typeName" type="TextBox" edit="N" required="Y" format="" width="1" height="1" column="1"/>
+        <control name="type" title="菜单类型" property="type" type="Hidden" edit="N" required="Y" format="" width="" height="" column=""/>
+        <control name="seq" title="菜单排序" property="seq" type="TextBox" edit="Y" required="" format="" width="1" height="1" column="1"/>
+
+
+
+        <control name="parentName" title="上级菜单" property="parentName" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="1"/>
+		<control name="parent" title="上级菜单id" property="parent" type="Hidden" edit="Y" required="" format="" width="1" height="1" column="" />
+		<control name="resName" title="访问资源" property="resName" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="1"/>
+		<control name="res" title="访问资源id" property="resId" type="Hidden" edit="Y" required="" format="" width="1" height="1" column="" />
+		<control name="target" title="打开方式" property="target" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column="1" />
+		<control name="createByName" title="创建人" property="createByName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="1" />
+		<control name="createTime" title="创建时间" property="createTime" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="1" target="editMode=='Add'?CurrentTime():nil"/>
+		<control name="updateByName" title="最后修改人" property="updateByName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="1" />
+		<control name="updateTime" title="最后修改时间" property="updateTime" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="1" target="CurrentTime()"/>
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />		
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column="1"  />
+	</panel>
+	<!-- 初始化加载 -->
+    <flow trigger="" event="OnLoad" filter="" >
+       <procedure name="tree1"  logic="Query" ifyes="jsdict1" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryMenuList"></param>
+      </procedure>
+      <procedure name="jsdict1"  logic="List" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup.target"></param>
+        <param name="Sql" value="target"></param>
+      </procedure>
+
+    </flow>
+    <!-- 树点击事件 -->
+    <flow trigger="pnlTree" event="OnClick" filter="" >
+      <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="pnlTree"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryMenuDetail"></param>
+      </procedure> 
+    </flow>
+    <!-- 新增 -->
+    <flow trigger="pnlUp.ctlAdd" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="b1" ifno="j0">
+        <param name="In" value="pnlTree.id"></param>
+      </procedure>   
+      <procedure name="j0" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="只有选择一个菜单，才能新增"></param>
+      </procedure>  
+      
+    	<procedure name="b1"  logic="Branch" ifyes="j1" ifno="b2">
+      	<param name="In" value="getPanelControlValue('pnlGroup.type')=='mainMenu'&amp;&amp;getPanelControlValue('pnlGroup.levels')==2"></param>
+      </procedure>
+      
+            <procedure name="j1" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="主菜单最多新增三级"></param>
+      </procedure>  
+      
+          	<procedure name="b2"  logic="Branch" ifyes="j2" ifno="b3">
+      	<param name="In" value="getPanelControlValue('pnlGroup.type')=='index'&amp;&amp;getPanelControlValue('pnlGroup.levels')==1"></param>
+      </procedure>
+                  <procedure name="j2" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="主页最多新增两级"></param>
+      </procedure>  
+     
+               	<procedure name="b3"  logic="Branch" ifyes="j3" ifno="jspopup">
+      	<param name="In" value="getPanelControlValue('pnlGroup.type')=='quickMenu'&amp;&amp;getPanelControlValue('pnlGroup.levels')==1"></param>
+      </procedure>
+                  <procedure name="j3" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="快捷菜单最多新增两级"></param>
+      </procedure>  
+      
+            <procedure name="jspopup" server="" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmMenuEdit"></param>
+        <param name="Mode" value="Add"></param>
+        <param name="Window" value="Medium"></param>
+        <param name="Title" value="新增菜单"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="qid" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryMenuList"></param>
+      </procedure>
+            <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="pnlTree"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryMenuDetail"></param>
+      </procedure>   
+    </flow>
+    <!-- 保存修改 -->  
+    <flow trigger="pnlUp.ctlSave" event="OnClick" filter="">
+    	<procedure name="b1"  logic="Branch" ifyes="j0" ifno="jssave">
+      	<param name="In" value="Judge(getPanelControlValue('pnlGroup.nodeType'),'IsEq','')"></param>
+      </procedure>
+      <procedure name="jssave"  logic="Save" ifyes="j4" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Mode" value="Edit"></param>
+        <param name="Msg" value="'菜单'+model.name+'的信息已被保存,详情请查看操作日志'"></param>
+      </procedure>
+            <procedure name="j0" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="只有选择一个菜单，才能保存"></param>
+      </procedure>  
+                  <procedure name="j4"  logic="Query" ifyes="qid" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryMenuList"></param>
+        </procedure>
+                    <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="pnlTree"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryMenuDetail"></param>
+      </procedure>   
+    </flow>
+    <!-- 删除组织 -->
+     <flow trigger="pnlUp.ctlDel" event="OnClick" filter="">
+               <procedure name="b1"  logic="Branch" ifyes="confirm" ifno="j0">
+      <param name="In" value="Judge(getPanelControlValue('pnlGroup.nodeType'),'IsEq','3')"></param>
+      </procedure>
+      <procedure name="confirm" server="" logic="ConfirmMsg" ifyes="j1" ifno="">
+       <param name="Title" value="测试删除"></param>
+       <param name="Msg" value="确认删除当前记录吗?"></param>
+      </procedure>
+      <procedure name="j1"  logic="Delete" ifyes="j4" ifno="">
+        <param name="In" value="pnlGroup" />
+        <param name="Msg" value="'已删除'" />
+      </procedure>
+      <procedure name="j0" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="选择一个子菜单才能删除"></param>
+      </procedure>  
+      <procedure name="j4"  logic="Query" ifyes="qid" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryMenuList"></param>
+      </procedure>  
+                    <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="pnlTree"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryMenuDetail"></param>
+      </procedure> 
+    </flow>
+    <!-- 选择上级菜单 -->
+    <flow trigger="pnlGroup.parentName" event="OnClick" filter="">
+          <procedure name="b1"  logic="Branch" ifyes="searchMenu" ifno="j0">
+      <param name="In" value="getPanelControlValue('pnlGroup.nodeType')=='3'"></param>
+      </procedure>
+       <procedure name="j0" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="选择一个子菜单才能变更上级菜单"></param>
+      </procedure>    
+      <procedure name="searchMenu"  logic="Find" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="menu"></param>
+        <param name="Options" value="$RESET,重置"/>
+        <param name="In" value="pnlGroup.code"></param>
+        <param name="Title" value="选择上级菜单"></param>
+        <param name="Window" value="Medium"></param>
+        <param name="Columns" value="id,菜单id,parent,0|name,菜单名字,parentName|parentName,上级菜单"></param> 
+      </procedure>
+    </flow>
+    <flow trigger="pnlGroup.resName" event="OnClick" filter="">
+          <procedure name="b1"  logic="Branch" ifyes="searchRes" ifno="j0">
+      <param name="In" value="getPanelControlValue('pnlGroup.nodeType')=='3'"></param>
+      </procedure>
+       <procedure name="j0" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="只有页面才能配置资源"></param>
+      </procedure> 
+      <procedure name="searchRes"  logic="Find" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="res2"></param>
+        <param name="Options" value="$RESET,重置"/>
+        <param name="Title" value="访问资源"></param>
+        <param name="Columns" value="id,资源编码,res|name,资源名字,resName"></param> 
+      </procedure>
+    </flow>
+<!--     <flow trigger="pnlUp.ctlExport" event="OnClick" filter="">
+      <procedure name="exportdata" server="" logic="Export" ifyes="" ifno="">
+        <param name="Format" value="pnlTree"></param>
+        <param name="In" value="pnlUp"></param>
+        <param name="Sql" value="QryMenuList"></param>
+      </procedure>
+    </flow> -->
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pnlUp" location="North" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="Center" scale="" />
+      </region>
+      <region location ="West" scale="400px">
+        <subregion panel="pnlTree" location="Center" scale="400px" />
+      </region>
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

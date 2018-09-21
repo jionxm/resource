@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmFileMdList" title="markDown文档列表">
+	<panel name="pnlUp" title="工具条" object="" type="Toolbar">
+		<control name="ctlQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlprojectName" title="新建MD文档" property="projName" type="Button" edit="N" required="Y" format="" width="1" height="1" column=""/>
+	</panel>
+	<!-- 查询条件用op_做前缀 -->
+	<panel name="pnlGroup" title="pnlGroup" object="fileIndex" type="Group">
+		<control name="eq_uuid" title="文件id" property="uuid" type="Hidden" edit="N" required="N" format="" width="1" height="1" column=""/>
+		<control name="lk_filename" title="文件名称" property="filename" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="1"/>
+	</panel>
+	<panel name="pnlDg" title="pnlDg" object="fileIndex" type="Grid"  multiple="">
+		<control name="id" title="id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+		<control name="edit" title="编辑" property="" type="Link" edit="" required="" format="" width="70" height="" column=""/>
+		<control name="uuid" title="文件编号" property="uuid" type="TextBox" edit="" required="" format="" width="230" height="" column=""/>
+		<control name="filename" title="文件名称" property="filename" type="TextBox" edit="" required="" format="" width="230" height="" column=""/>
+		<control name="fileType" title="文件类型" property="fileType" type="TextBox" edit="" required="" format="" width="140" height="" column=""/>
+		<control name="fileLength" title="文件大小" property="fileLength" type="TextBox" edit="" required="" format="" width="140" height="" column=""/>
+		<control name="storageTypeName" title="存储类型" property="storageTypeName" type="TextBox" edit="" required="" format="" width="140" height="" column=""/>
+		<control name="accessTypeName" title="访问类型" property="accessTypeName" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="sourceName" title="文件来源" property="sourceName" type="TextBox" edit="" required="" format="" width="140" height="" column=""/>
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="" required="" format="" width="140" height="" column=""/>
+		<control name="createByName" title="创建人" property="createByName" type="Hidden" edit="" required="" format="" width="140" height="" column=""/>
+	</panel>
+	
+    <flow trigger="" event="OnLoad" filter="">
+       <procedure name="initForm"  logic="Clear" ifyes="jsdict1" ifno="" >
+           <param name="Out" value="pnlGroup"></param>
+      </procedure>  
+      <procedure name="j4"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="QryMdFileList"></param>
+      </procedure>
+    </flow>
+    <flow trigger="pnlUp.ctlQuery" event="OnClick" filter="">
+      <procedure name="testJs"  logic="Validate" ifyes="" ifno="queryTable">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Options" value="CheckEmail(param.pnlGroup.lk_filename)"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="QryMdFileList"></param>
+      </procedure>
+    </flow>
+    <flow trigger="pnlUp.ctlClear" event="OnClick" filter="">
+      <procedure name="btnClear"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+      </procedure>
+    </flow>
+    <!-- 编辑 -->
+    <flow trigger="pnlDg.edit" event="OnClick" filter=""><!-- row.fileType !='jpg.dat' &amp;&amp; row.fileType !='xls.dat' -->
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="pTable.id"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmPositionEdit"></param>
+        <param name="Mode" value="Edit"></param>
+         <param name="Window" value="Medium"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryPositionList"></param>
+      </procedure>              
+    </flow>
+    <!-- 新增md文件 -->
+    <flow trigger="pnlUp.btnNew" event="OnClick" filter="">
+      <procedure name="jspopup" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmUserEdit"></param>
+        <param name="Mode" value="Add"></param>
+        <param name="Window" value="Medium"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryUserList"></param>
+      </procedure>      
+    </flow> 
+      <!-- 新增markDown编辑 -->
+  	<flow trigger="pnlUp.ctlprojectName" event="OnClick" filter="">
+      <procedure name="jsFind"  logic="MarkDown" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryMdFileList"></param>
+        <param name="Title" value="Md文档编辑"></param>
+        <param name="Mode" value="Add"></param> <!-- Readonly,Add,Edit-->
+        <param name="Columns" value="id,编码,eq_projId|name,文档名称,lk_filename"/>
+        <param name="Window" value="Medium"></param> 
+      </procedure> 
+  	</flow>
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pnlUp" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="North" scale=""/>
+		<subregion panel="pnlDg" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>
+  </ui_layer>
+</tsoftware>

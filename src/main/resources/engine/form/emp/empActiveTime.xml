@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+      xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+
+<ui_layer>
+  <ui name="empActiveTime" title="工作项日志列表">
+  <panel name="pnlUp" title="工具条" object="" type="Toolbar">
+	<control name="ctlQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	<control name="ctlBack" title="返回" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+  </panel>
+  <panel name="pnlGroup" title="查询条件" object="employee1" type="Group">
+    <control name="lk_name" title="人员姓名" property="name" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+  </panel>
+  <panel name="pnlDg" title="pnlDg" object="employee1" type="Grid"  multiple="">
+    <control name="ctlName" title="人员姓名" property="name" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="ctlCode" title="人员编码" property="code" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="ctlOrgName" title="所属部门" property="orgName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+    <control name="ctlGenderName" title="性别" property="genderName" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+    <control name="ctlMobile" title="移动电话" property="mobile" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+    <control name="ctlEmail" title="电子邮件" property="email" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+    <control name="ctlTypeName" title="人员类型" property="typeName" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+  	<control name="ctlLastTime" title="最后操作时间" property="lastTime" type="TextBox" edit="" required="" format="" width="140" height="" column=""/>
+  </panel>
+  	<!-- 加载 -->
+    <flow trigger="" event="OnLoad" filter="">
+       <procedure name="jsQuery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="emp/QryEmpActive"></param>
+      </procedure>
+    </flow>
+  	<!-- 查询 -->
+    <flow trigger="pnlUp.ctlQuery" event="OnClick" filter="">
+       <procedure name="jsQuery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlDg"></param>
+        <param name="Sql" value="emp/QryEmpActive"></param>
+      </procedure>
+    </flow>
+    <!-- 返回 -->
+    <flow trigger="pnlUp.ctlBack" event="OnClick" filter="">
+        <procedure name="jsback" logic="Back" ifyes="" ifno="">
+        </procedure>
+    </flow>
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pnlUp" location ="North" scale=""/>
+      </region>
+    <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="North" scale=""/>
+    <subregion panel="pnlDg" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>
+  </ui_layer>
+</tsoftware>

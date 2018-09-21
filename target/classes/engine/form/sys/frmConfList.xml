@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmConfList" title="XML资源树"> 
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnRefresh" title="重新装载" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pCondition" title="查询条件" object="role" type="Group">
+		<control name="lk_name" title="名称" property="name" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="5"/>
+	</panel>	
+	<panel name="pTable" title="查询结果" object="" type="Grid" page="">
+		<control title="UI名称" name="name" property="uiName" type="TextBox" edit="" required="" format="" width="120" height="" column=""/>
+		<control title="UI标题" name="value" property="title" type="TextBox" edit="" required="" format="" width="120" height="" column=""/>
+		<control title="包含Panel" name="panel" property="panel" type="TextBox" edit="" required="" format="" width="120" height="" column=""/>
+		<control title="包含Model" name="model" property="model" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>		
+		<control title="包含逻辑" name="logic" property="Logic" type="TextBox" edit="" required="" format="" width="120" height="" column=""/>
+		<control title="SQL模板" name="SQL" property="SQL" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>		
+		<control title="消息表达式" name="Msg" property="Msg" type="TextBox" edit="" required="" format="" width="360" height="" column=""/>
+		<control title="权限表达式" name="Filter" property="Filter" type="TextBox" edit="" required="" format="" width="360" height="" column=""/>		
+	</panel>	
+	<panel name="pForm" title="表单" object="" type="Group">
+		<control name="name" title="参数名" property="name" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="value" title="参数值" property="value" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="2"/>
+		<control name="ifyes" title="是分支" property="ifyes" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="ifno" title="否分支" property="ifno" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="2"/>
+	</panel>		
+    <panel name="pTree" object="menu"  type="Tree" multiple="">
+	  <control name="id" title="树id" property="code" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	  <control name="parent" title="树父id" property="parent" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	  <control name="name" title="树节点" property="name" type="DataLink" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+    <panel name="pTreeConf" object=""  type="Tree" multiple="">
+	  <control name="id" title="树id" property="code" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	  <control name="parent" title="树父id" property="parent" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	  <control name="name" title="树节点" property="name" type="DataLink" edit="" required="" format="" width="" height="" column=""/>
+	</panel>	
+    <flow trigger="" event="OnLoad" filter="">
+      <procedure name="j1"  logic="Clear" ifyes="grid" ifno="" sync="Y">
+           <param name="Out" value="pCondition" />
+      </procedure>  
+<!--        <procedure name="tree"  logic="Transform" ifyes="grid" ifno=""> -->
+<!--         <param name="In" value="" /> -->
+<!--         <param name="Out" value="pTreeConf" /> -->
+<!--         <param name="Plugin" value="com.tedu.plugin.conf.UIConfList" /> -->
+<!--       </procedure>         -->
+      <procedure name="grid"  logic="Transform" ifyes="j3" ifno="">
+        <param name="In" value="pCondition" />
+        <param name="Out" value="pTable" />
+        <param name="Plugin" value="com.tedu.plugin.conf.UIConfList" />
+      </procedure>      
+    </flow>	
+    <flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+      <procedure name="grid"  logic="Transform" ifyes="j3" ifno="">
+        <param name="In" value="pCondition" />
+        <param name="Out" value="pTable" />
+        <param name="Plugin" value="com.tedu.plugin.conf.UIConfList" />
+      </procedure>               
+    </flow>     
+    <flow trigger="pToolbar.btnClear" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pCondition"></param>
+      </procedure>              
+    </flow>    
+    <flow trigger="pToolbar.btnRefresh" event="OnClick" filter="">
+      <procedure name="j2"  logic="Transform" ifyes="" ifno="">
+        <param name="Plugin" value="plugin.UIReload"></param>
+        <param name="Out" value="pTree"></param>
+      </procedure>                
+    </flow>      
+    <layout>
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+		<subregion panel="pCondition" location="North" scale=""/>
+<!-- 		<subregion panel="pTreeConf" location="West" scale=""/> -->
+		<subregion panel="pTable" location="Center" scale=""/>
+		<subregion panel="pForm" location="South" scale=""/>
+      </region>
+    </layout>
+  </ui>    
+</ui_layer>
+</tsoftware>

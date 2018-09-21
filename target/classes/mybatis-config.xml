@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration   
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 打印查询语句 -->
+<!--         <setting name="logImpl" value="LOG4J" /> -->
+         <setting name="mapUnderscoreToCamelCase" value="true"/>
+         <setting name="cacheEnabled" value="true"/>
+         <setting name="callSettersOnNulls" value="true"/>
+    </settings>
+ <plugins>  
+    <plugin interceptor="com.tedu.base.common.page.PageInterceptor"/>
+<!--  	<plugin interceptor="com.tedu.base.common.page.ParameterInterceptor"/> -->
+</plugins> 
+</configuration>

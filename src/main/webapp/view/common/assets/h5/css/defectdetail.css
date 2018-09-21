@@ -1,0 +1,97 @@
+body {
+  background: #ebebeb;
+}
+.title {
+  box-sizing: border-box;
+  height: 90px;
+  line-height: 90px;
+ 
+  background: white;
+  font-size: 38px;
+  margin-bottom: 10px;
+  font-weight: normal;
+}
+#Defect li {
+  clear: both;
+  width: 750px;
+  padding: 15px 35px;
+  margin-bottom: 10px;
+  background: white;
+}
+#Defect li span {
+  float: left;
+  width: 35%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 32px;
+}
+#Defect li input,
+#Defect li select,
+#Defect li option {
+  float: right;
+  width: 65%;
+  font-size: 26px;
+  height: 50px;
+  text-align: right;
+  border: none;
+  outline: none;
+  color: #cecece;
+  direction: rtl;
+}
+#Defect .liM {
+  clear: both;
+  width: 750px;
+
+  padding: 15px 35px;
+  border-bottom: 4px solid #ebebeb;
+  background: white;
+}
+#Defect .liM span {
+  float: left;
+  width: 35%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 32px;
+}
+#Defect .liM textarea {
+  float: right;
+  width: 65%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 28px;
+}
+#Defect .add {
+  position: relative;
+  height: 500px;
+  margin-bottom: 97px;
+}
+#Defect .add input {
+  visibility: hidden;
+}
+
+  .right-cre{
+    display: inline-block;
+    text-align: right;
+    font-size: 32px;
+    color: #cecece;
+    word-wrap: break-word;
+    width: 440px;
+  }
+  .img-cre{
+    display: block;
+    background: #cecece;
+    position: absolute;
+    left: 100px;
+    top: 100px;
+  }
+  .img-cre>img{
+  width:550px;
+  height:350px;
+  }
+  .return{
+    float: left;
+    padding:40px 40px;
+    background: url(../img/show.png) no-repeat 30px  28px;
+    margin-right: 230px;
+}

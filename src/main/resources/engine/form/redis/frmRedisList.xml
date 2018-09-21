@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+	<object name="redisModel" table="t_redis" primary="id" unique="" order="id desc" autoinc="Y">
+	<property name="id" type="Long" length="20" initial="" field="id"/>
+	<property name="redisKey" type="String" length="100" initial="" field="redis_key"/>
+	<property name="redisValue" type="String" length="2000" initial="" field="redis_value"/>
+	
+  </object>
+             
+</model_layer>
+<ui_layer>
+  <ui name="frmRedisList" title="Redis数据"> 
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnDetail" title="查看Redis配置" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>	
+	<panel name="pTable" title="查询结果" object="redisModel" type="Grid" page="">
+	
+	<control name="redisKey" title="RedisKey值" property="redisKey" type="TextBox" edit="" required="" format="" width="300" height="" column=""/>
+	<control name="redisValue" title="RedisValue值" property="redisValue" type="TextBox" edit="" required="" format="" width="1200" height="" column=""/>
+	<control name="id" title="id" property="id" type="Hidden" edit="" required="" format="" width="10" height="" column=""/>
+	</panel>
+	<!-- 逻辑加载 -->
+    <flow trigger="" event="OnLoad" filter="">
+      <procedure name="j2"  logic="Query" ifyes="" ifno="">
+         <param name="Out" value="pTable"></param>
+         <param name="Sql" value="redis/QueryRedis"></param>
+         <param name="Plugin" value="redisPlugin"/>
+     	
+      </procedure>   
+    </flow>	
+    <!-- 点击查看 -->
+     <flow trigger="pToolbar.btnDetail" event="OnClick" filter="">
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmRedisConfig" />
+        <param name="Mode" value="ReadOnly" />
+        <param name="Window" value="Large" />
+        <param name="Title" value="Redis配置参数查看" />
+      </procedure>     
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="redis/QueryRedis"></param>
+      </procedure>            
+    </flow>  
+    <layout>
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+		<subregion panel="pTable" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>    
+</ui_layer>
+</tsoftware>

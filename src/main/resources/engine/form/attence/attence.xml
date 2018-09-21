@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+	<object name="attencecheck" table="t_attence_check" primary="id" unique="" order="" autoinc="Y">
+	<property name="Id" type="Long" length="10" initial="" field="id"/>
+	<property name="title" type="String" length="50" initial="" field="title"/>
+	<property name="startTime" type="Date" length="50" initial="" field="start_time"/>
+	<property name="endTime" type="Date" length="200" initial="" field="end_time"/>
+	<property name="empId" type="Long" length="10" field="emp_id"/>
+	<property name="createBy" type="Long" length="20" field="create_by"/>
+	<property name="reamark" type="String" length="" field="remark"/>
+	<property name="checkStatus" type="Long" length="50" field="check_status"/>
+	<property name="createTime" type="Date" length="50" field="create_time"/>
+	<property name="updateBy" type="Long" length="10" validate=""  field="" />
+	<property name="updateByName" type="String" length="50" validate=""  field="" />
+	<property name="createByName" type="String" length="50" validate=""  field="" />
+	<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+	
+	<property name="empName" type="String" length="50" validate=""  field="" />
+	<property name="projName" type="String" length="50" validate=""  field="" />
+	<property name="projId" type="String" length="50" validate=""  field="" />
+	<property name="managerId" type="String" length="50" validate=""  field="" />
+	<property name="isCheck" type="String" length="50" validate=""  field="" />
+  </object>
+  
+  <object name="attencecheckdetail" table="t_attence_check_detail" primary="id" unique="" order="" autoinc="Y">
+	<property name="Id" type="Long" length="10" initial="" field="id"/>
+	<property name="attenceId" type="Long" length="10" initial="" field="attence_id"/>
+	<property name="userId" type="Long" length="50" initial="" field="user_id"/>
+	<property name="commitDay" type="Long" length="10" initial="" field="commit_day"/>
+	<property name="commitHours" type="Double" length="5.1" field="commit_hours"/>
+	<property name="attenceDay" type="Double" length="5.1" field="attence_day"/>
+	<property name="updateBy" type="Long" length="10" validate=""  field="update_by" />
+	<property name="updateByName" type="String" length="50" validate=""  field="" />
+	<property name="createBy" type="Long" length="10" validate=""  field="create_by" />	
+	<property name="createByName" type="String" length="50" validate=""  field="" />
+	<property name="updateTime" type="Date" length="" validate=""  field="update_time" />
+	<property name="createTime" type="Date" length="" validate=""  field="create_time" />
+	
+	<property name="userName" type="String" length="50" initial="" field=""/>
+	<property name="projName" type="String" length="50" validate=""  field="" />
+	<property name="projId" type="String" length="50" validate=""  field="" />
+	
+  </object>              
+</model_layer>
+</tsoftware>

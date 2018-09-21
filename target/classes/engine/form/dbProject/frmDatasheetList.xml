@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmDatasheetList" title="数据表列表"> 
+	<panel name="pToolbar" title="按钮栏" object="" type="Toolbar">
+		<control name="btnQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pForm" title="查询条件" object="tdatasheet" type="Group">
+		<control name="lk_tableName" title="数据表名称" property="tableName"  type="TextBox" edit="Y" multiple="Y" required="" format="" width="1" height="" column="4"/>
+	</panel> 
+	<panel name="pTable" title="查询结果" object="tdatasheet" type="Grid">
+		<control name="tableName" title="数据表名称" property="tableName" type="DataLink" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="tableComment" title="数据表注释" property="tableComment" type="TextBox" edit="N" required="" format="" width="150" height="" column=""></control>
+	    <control name="tableAuto" title="自增长值" property="extraNumber" type="TextBox" edit="N" required="" format="" width="80" height="" column=""></control>
+		<control name="fieldNum" title="字段总数" property="fieldNum" type="TextBox" edit="N" required="" format="" width="80" height="" column=""></control>
+		<control name="recordNum" title="记录数" property="recordNum" type="TextBox" edit="N" required="" format="" width="80" height="" column=""></control>
+		<control name="updateTime" title="修改时间" property="updateTime" type="TextBox" edit="N" required="" format="" width="150" height="" column=""></control>
+	</panel>
+		 
+	<!-- 逻辑加载 -->
+	<flow trigger="" event="OnLoad" filter="">  
+       <procedure name="jClear"  logic="Clear" ifyes="tableQry" ifno="">
+         <param name="Out" value="pForm"></param>
+      </procedure>
+      <procedure name="tableQry"  logic="Query" ifyes="" ifno="">
+         <param name="In" value="pForm"></param>
+         <param name="Out" value="pTable"></param>
+         <param name="Sql" value="datasheet/QryTableList"></param>
+      </procedure>
+    </flow>
+    
+    <!-- 数据表查询 -->
+    <flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+       <procedure name="tableQuery" logic="Query" ifyes="" ifno="">
+          <param name="In" value="pForm"></param>
+          <param name="Out" value="pTable"></param>
+          <param name="Sql" value="datasheet/QryTableList"></param>
+       </procedure>
+    </flow>
+    
+    <!-- 清空条件 -->
+    <flow trigger="pToolbar.btnClear" event="OnClick" filter="">
+       <procedure name="clear" logic="Clear" ifyes="tableQuery" ifno="">
+           <param name="Out" value="pForm"></param>
+       </procedure>
+       <procedure name="tableQuery" logic="Query" ifyes="" ifno="">
+          <param name="In" value="pForm"></param>
+          <param name="Out" value="pTable"></param>
+          <param name="Sql" value="datasheet/QryTableList"></param>
+       </procedure>
+    </flow>
+ 
+    <!-- 数据表编辑 -->   
+    <flow trigger="pTable.tableName" event="OnClick" filter="">
+        <procedure name="getName"  logic="EncodeId" ifyes="Transition" ifno="" >
+     	 <param name="In" value="pTable.tableName"></param>
+         </procedure> 
+       <procedure name="Transition"  logic="Transition" ifyes="" ifno="" >
+           <param name="To" value="frmTableListDetail"></param>
+           <param name="Mode" value="Readonly"></param>
+       </procedure> 
+    </flow>
+    
+    
+    <layout>
+      <region location="North" scale="">
+          <subregion panel="pToolbar" location="North" scale=""/>
+      </region>
+      <region location="Center" scale="">
+      	  <subregion panel="pForm" location="North" scale=""/>
+          <subregion panel="pTable" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>
+</ui_layer> 
+</tsoftware>

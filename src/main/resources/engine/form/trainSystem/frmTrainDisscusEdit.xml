@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+
+  <ui name="frmTrainDisscusEdit" title="留言编辑页面">
+  	<panel name="pToolbar" title="工具栏" type="Toolbar">
+	    <control name="btnSave" title="确定" type="Button" edit="" required="" format="" width="" height="" column=""></control>
+	    <control name="btnCancle" title="取消" type="Button" edit="" required="" format="" width="" height="" column=""></control>
+	</panel>
+	<panel name="pForm" title="分类表单" object="tpost" type="Group">
+		<control name="eq_cId" title="id" property="id" type="Hidden" edit="N" required="" format="" width="" height="" column=""/>
+		<control name="courseIdName" title="课程名称" property="courseIdName" type="TextBox" edit="N" required="" format="" width="1" height="" column=""/>
+		<control name="createByName" title="留言人" property="createByName" type="TextBox" edit="N" required="" format="" width="1" height="" column="3"/>
+		<control name="ctlcontent" title="内容" property="content" type="TextBox" edit="Y" required="" format="" width="4" height="4" column="4"/>
+	</panel>
+	
+	 <flow trigger="" event="OnLoad" filter="">
+		<procedure name="j1" server="" logic="DecodeId" ifyes="qid" ifno="">
+			<param name="Out" value="pForm.eq_cId" />
+		</procedure>
+		<procedure name="qid" logic="QueryById" ifyes="" ifno="">
+			<param name="In" value="pForm" />
+			<param name="Out" value="pForm" />
+			<param name="Sql" value="trainSystem/QryDisscusEdit" />
+		</procedure>
+	 </flow>
+	 
+	 <!-- 确认 -->
+    <flow trigger="pToolbar.btnSave" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+         <param name="In" value="pForm"></param>
+        <param name="Msg" value="'留言信息已被保存,详情请查看操作日志'"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+    
+    <!-- 取消 -->
+    <flow trigger="pToolbar.btnCancle" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+         <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>	
+    
+	 
+	
+    <layout>
+    <region location ="Center" scale="">
+        <subregion panel="pForm" location="Center" scale="" />
+      </region>
+      <region location ="South" scale="">
+        <subregion panel="pToolbar" location="South" scale="" />
+      </region>
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

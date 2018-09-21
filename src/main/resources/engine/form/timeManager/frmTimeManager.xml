@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<model_layer>
+	<object name="time" table="dim_day" primary="ID" unique="" order="" autoinc="Y">
+	<property name="id" type="Long" length="10" initial="" field="ID"/>
+	<property name="dayShort" type="Date" length="10" initial="" field="DAY_SHORT_DESC"/>
+	<property name="dayLong" type="String" length="10" initial="" field="DAY_LONG_DESC"/>
+	<property name="week" type="String" length="10" initial="" field="WEEK_DESC"/>
+	<property name="weekId" type="String" length="10" initial="" field="WEEK_ID"/>
+	<property name="weekLong" type="String" length="10" initial="" field="WEEK_LONG_DESC"/>
+	<property name="monthId" type="String" length="10" initial="" field="MONTH_ID"/>
+	<property name="monthLong" type="String" length="10" initial="" field="MONTH_LONG_DESC"/>
+	<property name="quarterId" type="String" length="10" initial="" field="QUARTER_ID"/>
+	<property name="quarterLong" type="String" length="10" initial="" field="QUARTER_LONG_DESC"/>
+	<property name="yearId" type="String" length="10" initial="" field="YEAR_ID"/>
+	<property name="yearLong" type="String" length="10" initial="" field="YEAR_LONG_DESC"/>
+	<property name="type" type="Long" length="10" initial="" field="type"/>
+ </object>
+	
+</model_layer>	
+	<ui_layer>
+		<ui name="frmTimeManager" title="万年历管理">
+			<panel name="pToolbar" title="工具条" object="time" type="Toolbar">
+				<control name="btnClear" title="清空条件" property="" type="Button"
+				    edit="Y" required="" format="" width="1" height="" column=""/>
+				<control name="btnQuery" title="查询" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+			</panel>
+			<panel name="pCondition" title="查询条件" object="time"
+				type="Group">
+				
+				
+				<control name="lk_dayShort" title="提交时间" property="dayShort"
+					type="DateBox" edit="Y" required="N" format="" width="1" height="1"
+					column="4" />
+
+
+			</panel>
+			<panel name="pTable" title="查询结果" object="time" type="Grid"
+				multiple="">
+                <control name="ctlEdit" title="设为工作日" property="" type="Link"
+					edit="" required="" format="" width="120" height="" column="" />
+				<control name="ctlDel" title="设为非工作日" property="" type="Link"
+					edit="" required="" format="" width="120" height="" column="" />
+				
+
+				<control name="ctlDayLong" title="年" property="dayLong"
+					type="TextBox" edit="" required="" format="" width="200" height=""
+					column="" />
+
+				<control name="ctlmMonthLong" title="月" property="monthLong"
+					type="TextBox" edit="" required="" format="" width="200" height=""
+					column="" />
+
+				<control name="ctlQuarterLong" title="季度" property="quarterLong"
+					type="TextBox" edit="" required="" format="" width="200" height=""
+					column="" />
+				
+				<control name="ctlWeek" title="周" property="week"
+					type="TextBox" edit="" required="" format="" width="80" height=""
+					column="" />
+				<control name="ctlType" title="工作日" property="type"
+					type="TextBox" edit="" required="" format="" width="80" height=""
+					column="" />
+				
+
+			</panel>
+
+
+			<!-- 加载 -->
+			<flow trigger="" event="OnLoad" filter="">
+				<procedure name="j1" logic="Clear" ifyes="jsquery" ifno=""
+					sync="Y">
+					<param name="Out" value="pCondition"></param>
+				</procedure>
+				<procedure name="jsquery" logic="Query" ifyes="" ifno="">
+					<param name="Out" value="pTable" />
+					<param name="Sql" value="timeManager/QryTime" />
+				</procedure>
+			</flow>
+			
+			<!-- 清空条件 -->
+		    <flow trigger="pToolbar.btnClear" event="OnClick" filter="">
+		      <procedure name="jsquery"  logic="Clear" ifyes="" ifno="">
+		        <param name="Out" value="pCondition" />
+		      </procedure>             
+		    </flow>
+			
+			 <!-- 查询 -->
+            <flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+                <procedure name="jsquery" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pCondition" />
+					<param name="Out" value="pTable" />
+					<param name="Sql" value="timeManager/QryTime" />
+				</procedure>
+            </flow> 
+
+            <!-- 设为非工作日 -->
+			<flow trigger="pTable.ctlDel" event="OnClick" filter="row.type=='是'">
+				<procedure name="j0" server="" logic="ConfirmMsg" ifyes="jSave"
+					ifno="">
+					<param name="Title" value="更改" />
+					<param name="Msg" value="确认更改为非工作日吗?" />
+				</procedure>
+				<procedure name="jSave" logic="SaveCustom" ifyes="jQuery" ifno="">
+					<param name="Sql" value="timeManager/UpdateClose"></param>
+					<param name="In" value="pTable"></param>
+					<param name="Msg" value="更换成功"></param>
+				</procedure>
+				<procedure name="jQuery" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pCondition" />
+					<param name="Out" value="pTable" />
+					<param name="Sql" value="timeManager/QryTime" />
+				</procedure>
+			</flow>
+			 <!-- 设为工作日 -->
+			<flow trigger="pTable.ctlEdit" event="OnClick" filter="row.type=='否'">
+				<procedure name="j0" server="" logic="ConfirmMsg" ifyes="jS"
+					ifno="">
+					<param name="Title" value="更改" />
+					<param name="Msg" value="确认更改为工作日吗?" />
+				</procedure>
+				<procedure name="jS" logic="SaveCustom" ifyes="jQuery" ifno="">
+					<param name="Sql" value="timeManager/UpdateOpen"></param>
+					<param name="In" value="pTable"></param>
+					<param name="Msg" value="更换成功"></param>
+				</procedure>
+				<procedure name="jQuery" logic="Query" ifyes="" ifno="">
+					<param name="In" value="pCondition" />
+					<param name="Out" value="pTable" />
+					<param name="Sql" value="timeManager/QryTime" />
+				</procedure>
+			</flow>
+
+			<layout>
+				<region location="North" scale="">
+					<subregion panel="pToolbar" location="North" scale="" />
+				</region>
+				<region location="Center" scale="">
+					<subregion panel="pCondition" location="North" scale="" />
+					<subregion panel="pTable" location="Center" scale="" />
+				</region>
+			</layout>
+		</ui>
+	</ui_layer>
+</tsoftware>

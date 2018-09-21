@@ -1,0 +1,115 @@
+
+.x-header{overflow: hidden; height: 54px !important;background-color:#fff; color: #fff;padding: 0 5px;}
+.west_nav{ width:200px;}
+.welcom{ padding:80px 100px; font-size:16px; text-align:center;}
+#nav_list p{cursor: pointer;}
+p.current,#nav_list p:hover{ color:#fff!important;}
+.header-right{margin-top:8px;margin-right:20px;float: right; text-align: right}
+.header-left{margin-top:0px;margin-left:-5px;float: left;height:54px;width:147px}
+.tedu-logo{margin-top:0px;margin-left:2px;float: left;height:50px;width:147px}
+a{text-decoration: none; color: #000;}
+a:hover,a:active{color: #000}
+
+.tedu-logo{
+    display: inline-block;
+}
+
+body {
+    margin:0;
+    padding: 0;
+    font-style: 12px;
+}
+/* .tabs-panels .panel-body{ */
+/*     padding:2px; */
+/* } */
+
+.panel-body,.datagrid-htable, .datagrid-btable, .datagrid-ftable {
+    color: #000;
+}
+.btn-group-header span a {
+    cursor: pointer;    
+    color: #000;
+    font-size: 12px;
+    margin-bottom: 6px
+}
+
+.btn-group-header span a:hover,a:active{
+    color: #1de5ff;
+}
+.btn-group-header span  {
+    color: #000;
+}
+.btn-group {
+    padding: 8px 0;
+    color: black;
+    /*border-bottom:2px solid #eee;*/
+    border-bottom:1px solid #f3f3f3;
+}
+.input-box {
+    padding-top: 12px;
+    border-bottom:2px solid #eee;
+    margin-bottom:15px;
+    margin-left:5px;
+    margin-right:5px;
+}
+.input-group-inline{
+    display: inline-block;
+    margin-right:15px;
+    margin-bottom:15px;
+}
+.input-group-block{
+    display: block;
+    margin-bottom:15px;
+}
+.textbox {
+    border-radius: 0;
+}
+.input-group-inline .textbox .textbox-text{
+    display: inline-block;
+    border-radius:0;
+    background-color: #f9f9f9;
+}
+.x-win-bottom {
+    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
+    height:40px;
+    position: fixed;
+    text-align: right;
+    width: 100%;
+    bottom: 0;
+    right: 0;
+    padding-right:5px;
+    line-height: 40px;
+    background: #fafafa;
+}
+.x-accordion-cont p{
+    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    line-height:26px;
+    padding-left:30px;    
+}
+.validatebox-invalid,.textbox-invalid{
+    background-color: transparent;
+}
+
+/**wangdanfeng updated:toolbar鏄痙atagrid鐨勬暣浣擄紝鍗曠嫭瀹氫箟鍑烘潵鏃舵棤娉曞噯纭喅瀹氶珮搴︼紝鍥犳灏唗oolbar閮ㄥ垎鐨勬牱寮忚皟鎴愬敖閲忓拰璁捐鏍峰紡涓�鑷达紝骞朵粛鏃ч噰鐢╠atagrid toolbar瀹炵幇**/
+.datagrid-toolbar, .datagrid-pager {
+    background: #fff;
+}
+/**杩欎釜鎵嶆槸鎺у埗tabpanel涓庡唴閮ㄧ粍浠剁殑杈圭紭鐣欑櫧鐨勶紝涓嶆槸.panel-body **/
+.tabs-panels .panel{
+    padding:6px;
+}
+
+.input-group-inline label{
+	display: inline-block;
+	width:90px;
+	color:#000;
+	text-align:right;
+	padding-right:6px;
+}
+#nav_list p {
+    cursor: pointer;
+    color: #A1B7D4;
+}
+/**Chart容器公用样式**/

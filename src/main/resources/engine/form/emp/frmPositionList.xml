@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmPositionList" title="岗位管理列表">  
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="bClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnNew" title="新增" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pCondition" title="查询条件" object="position" type="Group">
+		<control name="lk_name" title="岗位名称" property="name" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="4"/>
+	</panel>	
+	<panel name="pTable" title="查询结果" object="position" type="Grid" page="">
+		<control name="id" title="id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column="" />
+	    <control name="edit" title="编辑" property="" type="Link" edit="" required="" format="" width="70" height="" column=""/>
+		<control name="del" title="删除" property="" type="Link" edit="" required="" format="" width="70" height="" column=""/>
+		<control name="name" title="岗位名称" property="name" type="DataLink" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="remark" title="岗位描述" property="remark" type="TextBox" edit="" required="" format="" width="200" height="" column=""/>
+		<control name="empCount" title="挂岗人员数" property="" type="Hidden" edit="" required="" format="" width="200" height="" column=""/>
+		
+		<!-- 更新标记 savecustom用-->
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />
+	</panel>
+	<!-- 逻辑加载 -->
+    <flow trigger="" event="OnLoad" filter="">
+      <procedure name="j1"  logic="Clear" ifyes="j2" ifno="" sync="Y">
+           <param name="Out" value="pCondition"></param>
+      </procedure>  
+      <procedure name="j2"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryPositionList"></param>
+      </procedure>   
+    </flow>	
+    <!-- 编辑 -->
+    <flow trigger="pTable.edit" event="OnClick" filter=""> <!-- filter="row.id!=1" -->
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="pTable.id"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmPositionEdit"></param>
+        <param name="Mode" value="Edit"></param>
+         <param name="Window" value="Medium"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryPositionList"></param>
+      </procedure>              
+    </flow>
+   	<!-- 删除操作 -->
+    <flow trigger="pTable.del" event="OnClick" filter="row.empCount ==0">
+      <procedure name="b1"  logic="Branch" ifyes="confirm" ifno="j0">
+      <param name="In" value="pTable.id"></param>
+      </procedure>
+      <procedure name="confirm" server="" logic="ConfirmMsg" ifyes="j1" ifno="j0">
+       <param name="Title" value="删除岗位"></param>
+       <param name="Msg" value="确认删除当前岗位信息吗?"></param>
+      </procedure>
+      <procedure name="j0" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="只有未编排人员的岗位才能删除！"></param>
+      </procedure>  
+      <procedure name="j1"  logic="Delete" ifyes="qid" ifno="">
+        <param name="In" value="pTable" />
+        <param name="Msg" value="'岗位:'+model.name+'已删除'" />
+      </procedure>
+	  <procedure name="qid"  logic="Query" ifyes="" ifno="">
+      <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryPositionList"></param>
+      </procedure> 
+    </flow>
+    
+    <!-- 查询 -->
+    <flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryPositionList"></param>
+      </procedure>              
+    </flow>  
+    <!-- 清除查询条件 -->   
+    <flow trigger="pToolbar.bClear" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pCondition"></param>
+      </procedure>              
+    </flow>  
+    <!-- 人员详情 -->       
+    <flow trigger="pTable.name" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jsgoto" ifno="">
+        <param name="In" value="pTable.id"></param>
+      </procedure>
+     <procedure name="jsgoto"  logic="Transition" ifyes="" ifno="">
+        <param name="To" value="frmPositionView"></param>
+        <param name="Mode" value="Readonly"></param>
+      </procedure>
+    </flow> 
+    <!-- 新增 -->       
+    <flow trigger="pToolbar.btnNew" event="OnClick" filter="">
+      <procedure name="jspopup" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmPositionEdit"></param>
+        <param name="Mode" value="Add"></param>
+        <param name="Window" value="Medium"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryPositionList"></param>
+      </procedure>      
+    </flow>    	
+    <layout>
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+		<subregion panel="pCondition" location="North" scale=""/>
+		<subregion panel="pTable" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>    
+</ui_layer>
+</tsoftware>

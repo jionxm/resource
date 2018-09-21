@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+/*!
+图片控件样式
+
+*/
+       *{
+            padding: 0;
+            margin: 0;
+        }
+		body{background-color: #272727}
+        /*父容器样式*/
+        .carousel{
+            position: relative;
+            margin: 0 auto;
+            top: 1rem;
+            border: 0rem solid #000;
+        }
+        /*子元素样式*/
+        /*.slider-main-img img{*/
+            /*/!*手动设定图片的宽高度*!/*/
+        /*}*/
+        .slider-main-img{
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .slider-ctrl {
+            position: absolute;
+            bottom: 0.05rem;                        /*圆圈位置*/
+            left: 50%;
+            transform: translate(-50%);
+        }
+        .slider-ctrl-con{
+            display: inline-block;
+            width: 0.2rem;                        /*圆圈大小*/
+            height: 0.2rem;
+            border-radius: 50%;
+            background-color: #fff;              /*圆圈开始颜色*/
+            margin-right: 0.1rem;                 /*圆圈间距*/
+            cursor: pointer;                    /*圆圈手势*/
+        }
+        .slider-ctrl .slider-ctrl-con-active {
+            background-color: #000;             /*圆圈变更颜色*/
+        }

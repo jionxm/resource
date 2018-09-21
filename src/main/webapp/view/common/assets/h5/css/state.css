@@ -1,0 +1,49 @@
+body{
+    font-size: 32px;
+    background: #eee;
+}
+a{
+    color: #fff;
+}
+.none{
+    display: none;
+}
+.outermost{
+    width: 100%;
+    height: 100px;
+    padding: 26px 0 34px 32px; 
+    /* border: 1px solid #eee; */
+    margin-top: 0;
+    background: #fff;
+}
+.outermost-title{
+    height: 122px;
+    border-bottom:14px solid #eee;
+    padding: 26px 0;
+}
+.title{
+    display:block;
+    font-size:36px;
+}
+.content-describe{
+    width: 500px;
+    min-height: 100px;
+    word-break: break-all;
+}
+.content{
+    display: inline-block;
+    margin-right: 32px;
+    color: #666;
+}
+.font-size{
+    font-size: 32px;
+}
+.weui-cells_checkbox .weui-icon-checked:before{
+    font-size:36px;
+}
+.return{
+    float: left;
+    padding:40px 40px;
+    background: url(../img/show.png) no-repeat 30px  8px;
+    margin-right: 260px;
+}

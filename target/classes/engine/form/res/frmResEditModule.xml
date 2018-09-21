@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+<!-- 新建组织 -->
+  <ui name="frmResEditModule" title="组织弹出">
+	<panel name="pnlDown" title="pnlDown" object="" type="Toolbar">
+		<control name="ctlSave" title="确认" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlCancel" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pnlGroup" title="pnlGroup" object="res" type="Group">
+		<control name="id" title="id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+		<control name="url" title="url" property="url" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+		<control name="parent" title="id" property="parent" type="Hidden" edit="" required="" format="" width="1" height="1" column=""/>
+		<control name="name" title="资源名称" property="name" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="parentName" title="上级资源名称" property="parentName" type="PopupBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="createTime" title="创建时间" property="createTime" type="Hidden" edit="N" required="N" format="" width="1" height="1" column="1" target="editMode=='Add'?CurrentTime():nil"/>
+		<control name="updateTime" title="最后修改时间" property="updateTime" type="Hidden" edit="N" required="N" format="" width="1" height="1" column="1" target="CurrentTime()"/>
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column=""  />		
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column=""  />
+	</panel>
+	 <flow trigger="" event="OnLoad" filter="">
+      <procedure name="j1" server="" logic="DecodeId" ifyes="qid" ifno="">
+        <param name="Out" value="pnlGroup.id"></param>
+      </procedure>
+            <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="pnlGroup"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryResParentName"></param>
+      </procedure>
+	 </flow>
+    <flow trigger="pnlGroup.parentName" event="OnClick" filter="">
+      <procedure name="searchEmp"  logic="Find" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+        <param name="In" value="pnlGroup.id"></param>
+        <param name="Sql" value="findSubSystemres"></param>
+        <param name="Title" value="上级资源"></param>
+        <param name="Columns" value="id,编码,parent|name,资源,parentName"></param> 
+        <param name="Window" value="Large"></param> 
+      </procedure>
+    </flow>
+	<!-- 保存 -->
+    <flow trigger="pnlDown.ctlSave" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Msg" value="'资源'+model.name+'的信息已被保存,详情请查看操作日志'"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+        <flow trigger="pnlDown.ctlCancel" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="pnlDown" location="South" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="Center" scale="" />
+      </region>
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

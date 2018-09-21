@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+    <model_layer>
+        <object name="workFlowParam" table="" primary="id" unique="" order="">
+            <property name="id" type="Long" length="20" initial=""/>
+            <property name="processDefinitionKey" type="String" length="50" initial=""/>
+            <property name="modelId" type="String" length="50" initial=""/>
+            <property name="auditGuideline" type="String" length="50" initial=""/>
+            <property name="startTime" type="String" length="50" initial=""/>
+            <property name="endTime" type="String" length="50" initial=""/>
+            <property name="assignee" type="String" length="50" initial=""/>
+            <property name="doneTitle" type="String" length="50" initial=""/>
+            <property name="completeTitle" type="String" length="50" initial=""/>
+            <property name="doingTitle" type="String" length="50" initial=""/>
+            <property name="title" type="String" length="50" initial=""/>
+
+        </object>
+    </model_layer>
+    <ui_layer>
+        <ui name="frmWorkflowList" title="工作流管理">
+            <panel name="pnlWorkflowList" title="工作流实例列表控件" object="workFlowParam" type="WorkflowList">
+                <control name="view" title="查看" property="" type="Link" edit="" format=""/>
+                <control name="doingTitle" title="待办事项" type="TextBox" property="doingTitle"/>
+                <control name="doneTitle" title="已办事项" type="TextBox" property="doneTitle"/>
+                <control name="completeTitle" title="完成事项" type="TextBox" property="completeTitle"/>
+                <control name="title" title="事项名称" type="TextBox" property="title"/>
+                <control name="startTime" title="开始时间" type="TextBox" property="startTime"/>
+                <control name="endTime" title="结束时间" type="TextBox" property="endTime"/>
+                <control name="assignee" title="处理人" type="Hidden" property="assignee" initial=""/>
+            </panel>
+            <flow trigger="" event="OnLoad" filter="">
+                <procedure name="procTransform"  logic="Transform" ifyes="" ifno="">
+                    <param name="In" value="pnlWorkflowList" />
+                    <param name="Out" value="pnlWorkflowList" />
+                    <param name="Plugin" value=" com.tedu.plugin.workflow.WorkflowList" />
+                </procedure>
+            </flow>
+            <flow trigger="pnlWorkflowList" event="OnClick" filter="">
+                <procedure name="procTransform"  logic="Transform" ifyes="" ifno="">
+                    <param name="In" value="pnlWorkflowList" />
+                    <param name="Out" value="pnlWorkflowList" />
+                    <param name="Plugin" value=" com.tedu.plugin.workflow.WorkflowList" />
+                </procedure>
+            </flow>
+
+            <layout>
+                <region location="Center" scale="">
+                <subregion panel="pnlWorkflowList" location="Center" scale=""/>
+                </region>
+            </layout>
+        </ui>
+    </ui_layer>
+</tsoftware>

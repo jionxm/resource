@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+	<ui_layer>
+		<ui name="frmTrainPlanEdit" title="新增学习计划">
+
+			<panel name="pTable" title="课程资料表" object="ttrainplan" type="Group">
+
+
+				<control name="id" title="id" property="id" type="Hidden"
+					edit="Y" required="" format="" width="1" height="1" column="1" />
+				<control name="ctlTitle" title="学习计划" property="title" type="TextBox"
+					edit="Y" required="Y" format="" width="1" height="1" column="2" />
+				<control name="ctlContext" title="学习内容" property="context"
+					type="TextBox" edit="Y" required="N" format="" width="2" height="3"
+					column="2" />
+				<control name="createBy" title="创建人" property="createBy"
+					type="Hidden" edit="Y" required="N"
+					target="editMode=='Add'?session.userInfo.empId:nil" format=""
+					width="1" height="1" column="1" />
+				<control name="createTime" title="创建日期" property="createTime"
+					type="Hidden" edit="Y" required="N" target="editMode=='Add'?CurrentTime():nil"
+					format="" width="1" height="1" column="1" />
+				<control name="updateBy" title="更新人" property="updateBy"
+					type="Hidden" edit="Y" required="N" target="session.userInfo.empId"
+					format="" width="1" height="1" column="1" />
+				<control name="updateTime" title="更新日期" property="updateTime"
+					type="Hidden" edit="Y" required="N" target="CurrentTime()" format=""
+					width="1" height="1" column="1" />
+
+
+
+			</panel>
+
+			<!-- 控件 -->
+			<panel name="pDown" title="控件" object="" type="Toolbar">
+				<control name="ctlSave" title="确认" property="" type="Button"></control>
+				<control name="ctlCancle" title="取消" property="" type="Button"></control>
+			</panel>
+
+			<!-- 初始加载 -->
+			<flow trigger="" event="OnLoad" filter="">
+				<procedure name="jclear" logic="Clear" ifyes="getId"
+					ifno="">
+					<param name="Out" value="pTable"></param>
+				</procedure>
+				<procedure name="getId"  logic="DecodeId" ifyes="jQuery" ifno="">
+			        <param name="Out" value="pTable.id"></param>
+			    </procedure>
+			    <procedure name="jQuery" logic="QueryById" ifyes="" ifno="">
+					<param name="In" value="pTable" />
+					<param name="Out" value="pTable" />
+					<param name="Sql" value="trainSystem/QryPlan" />
+				</procedure>
+			    
+				
+			</flow>
+			<!-- 确认 -->
+			<flow trigger="pDown.ctlSave" event="OnClick" filter="">
+				<procedure name="jsave" logic="Save" ifyes="jclose" ifno="">
+					<param name="In" value="pTable"></param>
+					<param name="Msg" value="学习计划保存成功"></param>
+				</procedure>
+				<procedure name="jclose" logic="Close">
+					<param name="Refresh" value="true"></param>
+				</procedure>
+			</flow>
+
+			<!-- 取消 -->
+			<flow trigger="pDown.ctlCancle" event="OnClick" filter="">
+				<procedure name="jsclose" server="" logic="Close" ifyes=""
+					ifno="">
+					<param name="Refresh" value="false"></param>
+				</procedure>
+			</flow>
+
+
+			<!-- 布局 -->
+			<layout>
+				<region location="Center" scale="">
+					<subregion panel="pTable" location="Center" scale=""></subregion>
+				</region>
+				<region location="South" scale="">
+					<subregion panel="pDown" location="South" scale=""></subregion>
+				</region>
+			</layout>
+		</ui>
+	</ui_layer>
+</tsoftware> 

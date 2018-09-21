@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+    <model_layer>
+        <object name="statChart" table="" primary="" unique="" order="">
+            <property name="projectName" type="String" length="" initial=""/>
+            <property name="status" type="String" length="" initial=""/>
+            <property name="empCnt" type="String" length="" initial=""/>
+            <property name="orgName" type="String" length="" initial=""/>
+            <property name="postName" type="String" length="" initial=""/>
+            <property name="projId" type="Long" length="" initial=""/>
+        </object>
+    </model_layer>
+    <ui_layer>
+        <ui name="frmEmpStat" title="人员统计">
+            <panel name="pnlCondition" title="传值条件" object="statChart" type="Hidden">
+                <control name="eq_status" title="按状态" property="status" type="Hidden" initial=""/>
+            </panel>
+            <panel name="pnlCondition1" title="传值条件" object="statChart" type="Hidden">
+                <control name="eq_projId" title="按项目" property="projId" type="Hidden" initial=""/>
+            </panel>
+            <panel name="pnlOrgEmpPieChart" title="按部门统计人数" object="statChart" type="PieChart">
+                <control name="orgName" title="部门名称" property="orgName" type="TextBox" initial=""/>
+                <control name="empCnt" title="人数" property="empCnt" type="TextBox" initial=""/>
+            </panel>
+            <panel name="pnlPostEmpPieChart" title="按岗位统计人数" object="statChart" type="PieChart">
+                <control name="postName" title="岗位名称" property="postName" type="TextBox" initial=""/>
+                <control name="empCnt" title="人数" property="empCnt" type="TextBox" initial=""/>
+            </panel>
+            <panel name="pnlProjEmpBarChart" title="项目人员分布" object="statChart" type="BarChart">
+                <control name="empCnt" title="人数" type="TextBox" property="empCnt"/>
+                <control name="projectName" title="项目名称" type="DataLink" property="projectName"/>
+                <control name="projId" title="项目ID" type="Hidden" property="projId"/>
+            </panel>
+            <panel name="pnlEmpStatusBarChart" title="按状态统计人数" object="statChart" type="ColumnChart">
+                <control name="status" title="状态" type="DataLink" property="status"/>
+                <control name="empCnt" title="人数" type="TextBox" property="empCnt"/>
+            </panel>
+
+            <flow trigger="" event="OnLoad" filter="">
+                <procedure name="procQueryStatOrgEmp" logic="Query" ifyes="procQueryEmpStatus">
+                    <param name="Out" value="pnlOrgEmpPieChart"></param>
+                    <param name="Sql" value="stat/StatOrgEmp"></param>
+                </procedure>
+                <procedure name="procQueryEmpStatus" logic="Query" ifyes="procQueryProjEmp">
+                    <param name="Out" value="pnlEmpStatusBarChart"></param>
+                    <param name="Sql" value="stat/StatEmpStatus"></param>
+                </procedure>
+                <procedure name="procQueryProjEmp" logic="Query" ifyes="procQueryPostEmp">
+                    <param name="Out" value="pnlProjEmpBarChart"></param>
+                    <param name="Sql" value="stat/StatProjectEmp"></param>
+                </procedure>
+                <procedure name="procQueryPostEmp" logic="Query" ifyes="" ifno="">
+                    <param name="Out" value="pnlPostEmpPieChart"></param>
+                    <param name="Sql" value="stat/StatPostEmp"></param>
+                </procedure>
+            </flow>
+
+            <flow trigger="pnlEmpStatusBarChart.status" event="OnClick" filter="">
+                <procedure name="procEncodeId" logic="EncodeId" ifyes="procDecodeId" ifno="">
+                    <param name="In" value="pnlEmpStatusBarChart.status"></param>
+                </procedure>
+                <procedure name="procDecodeId" logic="DecodeId" ifyes="procQueryPostEmp" ifno="">
+                    <param name="Out" value="pnlCondition.eq_status"></param>
+                </procedure>
+                <procedure name="procQueryPostEmp" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlCondition"></param>
+                    <param name="Out" value="pnlOrgEmpPieChart"></param>
+                    <param name="Sql" value="stat/StatOrgEmpByStatus"></param>
+                </procedure>
+            </flow>
+            <flow trigger="pnlProjEmpBarChart.projectName" event="OnClick" filter="">
+                <procedure name="procEncodeId" logic="EncodeId" ifyes="procDecodeId" ifno="">
+                    <param name="In" value="pnlProjEmpBarChart.projId"></param>
+                </procedure>
+                <procedure name="procDecodeId" logic="DecodeId" ifyes="procQueryPostEmp" ifno="">
+                    <param name="Out" value="pnlCondition1.eq_projId"></param>
+                </procedure>
+                <procedure name="procQueryPostEmp" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlCondition1"></param>
+                    <param name="Out" value="pnlPostEmpPieChart"></param>
+                    <param name="Sql" value="stat/StatPostEmpByProject"></param>
+                </procedure>
+            </flow>
+            <layout>
+                <region location="North" scale="180px">
+                    <subregion panel="pnlCondition" location="West"/>
+                    <subregion panel="pnlCondition1" location="West"/>
+                    <subregion panel="pnlEmpStatusBarChart" location="West" scale="50%"/>
+                    <subregion panel="pnlOrgEmpPieChart" location="East" scale="50%"/>
+                </region>
+                <region location="Center" scale="300px">
+                    <subregion panel="pnlPostEmpPieChart" location="East" scale="50%"/>
+                    <subregion panel="pnlProjEmpBarChart" location="West" scale="50%"/>
+                </region>
+            </layout>
+        </ui>
+    </ui_layer>
+</tsoftware>

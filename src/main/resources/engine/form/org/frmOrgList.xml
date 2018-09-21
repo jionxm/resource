@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<!-- 组织列表 -->
+<model_layer>
+  <object name="org" table="T_ORG" primary="ID" unique="name|code" order="" father="pid">
+	<property name="id" type="Long" length="" validate=""  field="ID"/>
+	<property name="pid" type="Long" length="" validate=""  field="pid"/>
+	<property name="nodeType" type="String" length="" validate=""  field=""/>
+	<property name="name" type="String" length="50" validate="" field="name"/>
+	<property name="code" type="String" length="20" validate="" field="code"/>
+	<property name="fullname" type="String" length="50" validate=""  field="fullname"/>
+	<property name="extCode" type="String" length="20" validate=""  field="ext_code"/>
+	<property name="phone" type="String" length="13" validate="CheckPhone(self)"  field="phone"/>
+	<property name="fax" type="String" length="13" validate="CheckPhone(self)"  field="fax"/>
+	<property name="address" type="String" length="200" validate=""  field="address"/>
+	<property name="postcode" type="String" length="6" validate=""  field="postcode"/>
+	<property name="managerId" type="Long" length="20" validate=""  field="manager_id"/>
+	<property name="managerName" type="String" length="50" validate=""  field=""/>
+	<property name="description" type="String" length="200" validate=""  field="description"/>
+	<property name="createTime" type="String" length="" validate=""  field="create_time"/>
+	<property name="createBy" type="String" length="50" validate=""  field="create_by"/>
+	<property name="createByName" type="String" length="50" validate=""  field=""/>
+	<property name="updateTime" type="String" length="" validate=""  field="update_time"/>
+	<property name="updateBy" type="String" length="50" validate=""  field="update_by"/>
+	<property name="updateByName" type="String" length="" validate=""  field="" />
+	<property name="updateCount" type="String" length="6" validate=""  field="update_count" />
+  </object>
+</model_layer>
+<ui_layer>
+  <ui name="orgList" title="部门详情">
+    <panel name="pnlTree" object="org"  type="Tree" multiple="">
+	  <control name="id" title="树id" property="id" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	  <control name="pid" title="树父id" property="pid" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	  <control name="name" title="树节点" property="name" type="DataLink" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pnlUp" title="工具条" object="" type="Toolbar">
+		<control name="ctlSave" title="保存数据" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlAdd" title="新增部门" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlUpdate" title="变更所属" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlDel" title="删除部门" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pnlGroup" title="pnlGroup" object="org" type="Group">
+		<control name="id" title="必须选中一个部门才能保存" property="id" type="Hidden" edit="Y" required="Y" format="" width="" height="" column=""/>
+		<control name="pid" title="pid" property="pid" type="Hidden" edit="Y" required="" format="" width="" height="" column=""/>
+		<control name="nodeType" title="nodeType" property="nodeType" type="Hidden" edit="Y" required="" format="" width="" height="" column=""/>
+		<!-- 标记是否能删除 -->
+		<control name="name" title="部门名称" property="name" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column=""/>
+		<control name="code" title="部门编码" property="code" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="2"/>
+		<control name="fullname" title="长名称" property="fullname" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="extCode" title="外部编码" property="extCode" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="2" />
+		<control name="phone" title="电话" property="phone" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="" />
+		<control name="fax" title="传真" property="fax" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="2" />
+		<control name="address" title="地址" property="address" type="TextBox" edit="Y" required="N" format="" width="2" height="1" column="2" />
+		<control name="postcode" title="邮政编码" property="postcode" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="" />
+		<control name="managerName" title="部门主管" property="managerName" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="2" />
+		<control name="managerId" title="部门主管" property="managerId" type="Hidden" edit="Y" required="" format="" width="1" height="1" column="" />
+		<control name="description" title="描述" property="description" type="TextBox" edit="Y" required="N" format="" width="2" height="2" column="2" />
+		<control name="createByName" title="创建人" property="createByName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="" />
+		<control name="createTime" title="创建时间" property="createTime" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="2" target="editMode=='Add'?CurrentTime():nil"/>
+		<control name="updateByName" title="最后修改人" property="updateByName" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="" />
+		<control name="updateTime" title="最后修改时间" property="updateTime" type="TextBox" edit="N" required="N" format="" width="1" height="1" column="2" target="CurrentTime()"/>
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column=""  />		
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="editMode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column=""  />
+	</panel>
+	<!-- 初始化加载 -->
+    <flow trigger="" event="OnLoad" filter="" >
+       <procedure name="tree1"  logic="Query" ifyes="" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryOrgList"></param>  
+      </procedure>
+    </flow>
+    <!-- 树点击事件 -->
+    <flow trigger="pnlTree" event="OnClick" filter="" >
+      <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="pnlTree"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryOrgDetail"></param>
+      </procedure>  
+    </flow>
+    <!-- 新增组织 -->
+    <flow trigger="pnlUp.ctlAdd" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="j0">
+        <param name="In" value="pnlTree.id"></param>
+      </procedure>   
+      <procedure name="j0" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="只有选择一个部门，才能新增"></param>
+      </procedure>  
+          <procedure name="jspopup" server="/frmEmpEdit" logic="Popup" ifyes="queryTable" ifno="">
+        <param name="To" value="frmOrgEdit"></param>
+        <param name="Title" value="新增部门"></param>
+        <param name="Mode" value="Add"></param>
+        <param name="Window" value="Large"></param>
+      </procedure>
+      <procedure name="queryTable"  logic="Query" ifyes="qid" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryOrgList"></param>
+      </procedure>
+      
+            <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="pnlTree"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryOrgDetail"></param>
+      </procedure>  
+    </flow>
+ 	<!-- 变更所属 -->
+    <flow trigger="pnlUp.ctlUpdate" event="OnClick" filter="">
+              <procedure name="b1"  logic="Branch" ifyes="j0" ifno="jsencodeid">
+      <param name="In" value="Judge(getPanelControlValue('pnlGroup.nodeType'),'IsEq','1')"></param>
+      </procedure>
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="search" ifno="j1">
+        <param name="In" value="pnlTree.id"></param>
+      </procedure>   
+       <procedure name="j0" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="根机构不能变更所属"></param>
+      </procedure>    
+             <procedure name="j1" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="选择一个机构才能变更所属"></param>
+      </procedure>    
+      <procedure name="search"  logic="Find" ifyes="js2" ifno="">
+      <param name="In" value="pnlTree.id"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="org"></param>
+        <param name="Title" value="选择部门"></param>
+        <param name="Columns" value="id,部门编码,pid|name,部门名称|pName,所属部门"></param>
+      </procedure>
+
+      <procedure name="js2" logic="SaveCustom" ifyes="j4" ifno="">
+      <param name="Sql" value="updateOrgManager"></param>
+        <param name="In" value="pnlGroup"></param>
+        <param name="Msg" value="'变更成功'"></param>
+      </procedure>
+
+            <procedure name="j4"  logic="Query" ifyes="qid" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryOrgList"></param>
+        </procedure> 
+            <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="pnlTree"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryOrgDetail"></param>
+      </procedure>   
+    </flow>
+    <!-- 保存修改 -->  
+    <flow trigger="pnlUp.ctlSave" event="OnClick" filter="">
+            	<procedure name="b1"  logic="Branch" ifyes="j0" ifno="jssave">
+      	<param name="In" value="Judge(getPanelControlValue('pnlGroup.nodeType'),'IsEq','')"></param>
+      </procedure>
+    
+      <procedure name="jssave"  logic="Save" ifyes="j4" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Mode" value="Edit"></param>
+        <param name="Msg" value="'部门已被保存,详情请查看操作日志'"></param>
+      </procedure>
+      <procedure name="j4"  logic="Query" ifyes="qid" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryOrgList"></param>
+        </procedure> 
+            <procedure name="j0" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="只有选择一个部门，才能保存"></param>
+      </procedure>
+            <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="pnlTree"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryOrgDetail"></param>
+      </procedure>   
+
+    </flow>
+    <!-- 删除组织 -->
+     <flow trigger="pnlUp.ctlDel" event="OnClick" filter="">
+      <procedure name="b1"  logic="Branch" ifyes="confirm" ifno="j3">
+      <param name="In" value="Judge(getPanelControlValue('pnlGroup.nodeType'),'IsEq','3')"></param>
+      </procedure>
+      <procedure name="confirm" server="" logic="ConfirmMsg" ifyes="j1" ifno="">
+       <param name="Title" value="删除"></param>
+       <param name="Msg" value="确认删除当前记录吗?"></param>
+      </procedure>
+      <procedure name="j1"  logic="Delete" ifyes="j4" ifno="j3">
+        <param name="In" value="pnlGroup" />
+        <param name="Msg" value="'已删除'" />
+      </procedure>
+      <procedure name="j3" server="" logic="InfoMsg" ifyes="" ifno="">
+       <param name="Msg" value="选择一个子机构才能删除"></param>
+       <param name="Title" value="删除"></param>
+      </procedure>  
+      <procedure name="j4"  logic="Query" ifyes="qid" ifno="">
+        <param name="In" value=""></param>
+        <param name="Out" value="pnlTree"></param>
+        <param name="Sql" value="QryOrgList"></param>
+      </procedure> 
+      <procedure name="qid"  logic="QueryById" ifyes="" ifno="">
+      <param name="In" value="pnlTree"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryOrgDetail"></param>
+      </procedure>   
+    </flow>
+    <!-- 选择部门主管 -->
+    <flow trigger="pnlGroup.managerName" event="OnClick" filter="">
+      <procedure name="searchEmp"  logic="Find" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="emp"></param>
+        <param name="Title" value="选择部门主管"></param>
+        <param name="Columns" value="name,人员姓名,managerName|id,人员编码,managerId|oName,所属部门"></param> 
+      </procedure>
+    </flow> 
+    <layout>
+      <region location ="North" scale="">
+        <subregion panel="pnlUp" location="North" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="Center" scale="" />
+      </region>
+      <region location ="West" scale="200px">
+        <subregion panel="pnlTree" location="Center" scale="200px" />
+      </region>
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

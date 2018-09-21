@@ -1,0 +1,26 @@
+insert into t_sales_clues(
+proname,
+content,
+customer_id,
+init_contacts,
+init_contacts_tel,
+reportor,
+report_contact,
+reportorg,
+create_time,
+update_time,
+create_by,
+update_by,
+stage
+)
+values(
+#{data.proName},
+#{data.content},
+#{data.customerId},
+#{data.initName},
+#{data.initPhone},
+#{data.reportName},
+#{data.reportContact},
+#{data.reportOrgName},
+now(),
+now(),0,0,'potentialbusiness');

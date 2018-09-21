@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+    <model_layer>
+        <object name="accessLog" table="t_access_log" primary="id" unique="" order="id desc,accessTime desc">
+            <property name="id" type="Long" length="50" initial="" field="id"/>
+            <property name="accessTime" type="Date" initial="" field="access_time"/>
+            <property name="userId" type="Long" initial="" field="user_id"/>
+            <property name="userName" type="String" initial="" field=""/>
+            <property name="empId" type="Long" initial="" field="emp_id"/>
+            <property name="empName" type="String" initial="" field=""/>
+            <property name="url" type="String" length="200" initial="" field="url"/>
+            <property name="clientIp" type="String" length="40" initial="" field="client_ip"/>
+            <property name="userAgent" type="String" length="200" initial="" field="user_agent"/>
+            <property name="serverIp" type="String" length="40" initial="" field="server_ip"/>
+            <property name="serverPort" type="String" length="5" initial="" field="server_port"/>
+            <property name="result" type="String" length="50" initial="" field="result"/>
+            <property name="cost" type="Long" initial="" field="cost"/>
+        </object>
+    </model_layer>
+    <ui_layer>
+        <ui name="frmAccessLogList" title="资源访问日志">
+            <panel name="pnlToolbar" title="工具条" object="" type="Toolbar">
+                <control name="ctlSearch" title="查询" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlClear" title="清空条件" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlExport" title="导出清单" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+            </panel>
+            <panel name="pnlCondition" title="查询条件" object="accessLog" type="Group">
+                <control name="lk_id" title="日志编号" property="id" type="TextBox" edit="Y" required="N" format=""
+                         width="1" height="1" column=""/>
+                <control name="ge_accessTime" title="访问时间从" property="accessTime" initial="CurrentTime()" type="DateBox" edit="Y"
+                         required="N" format="" width="1" height="1" column=""/>
+                <control name="dl_accessTime" title="至" property="accessTime" initial="CurrentTime()" type="DateBox" edit="Y" required="N"
+                         format="" width="1" height="1" column=""/>
+                <control name="lk_userName" title="用户名" property="userName" type="TextBox" edit="Y" required="N" format=""
+                         width="1" height="1" column="4"/>
+                <control name="lk_empName" title="人员名称" property="empName" type="TextBox" edit="Y" required="N"
+                         format="" width="1" height="1" column=""/>
+                <control name="lk_url" title="资源URL" property="url" type="TextBox" edit="Y" required="N"
+                         format="" width="1" height="1" column=""/>
+                <control name="lk_clientIp" title="客户端IP" property="clientIp" type="TextBox" edit="Y" required="N"
+                         format="" width="1" height="1" column=""/>
+                <control name="lk_serverIp" title="服务端IP" property="serverIp" type="TextBox" edit="Y" required="N"
+                         format="" width="1" height="1" column="4"/>
+                <control name="lk_result" title="响应结果" property="result" type="TextBox" edit="Y" required="N" format=""
+                         width="1" height="1" column=""/>
+                <control name="lk_cost" title="响应时间阈值" property="cost" type="TextBox" edit="Y" required="N" format=""
+                         width="1" height="1" column=""/>
+                <control name="lk_userAgent" title="User Agent" property="userAgent" type="TextBox" edit="Y"
+                         required="N" format="" width="2" height="1"  column="4"/>
+            </panel>
+
+            <panel name="pnlList" title="查询结果" object="accessLog" type="Grid">
+                <control name="ctlId" title="日志编号" property="id" type="TextBox" edit="" required="" format="" width="80"
+                         height="" column=""/>
+                <control name="ctlAccessTime" title="访问时间" property="accessTime" type="TextBox" edit="" required=""
+                         format="" width="140" height="" column=""/>
+                <control name="ctlUserId" title="用户名" property="userName" type="TextBox" edit="" required="" format=""
+                         width="100" height="" column=""/>
+                <control name="ctlUserName" title="人员姓名" property="empName" type="TextBox" edit="" required="" format=""
+                         width="100" height="" column=""/>
+                <control name="url" title="资源URL" property="url" type="TextBox" edit="" required="" format=""
+                         width="150" height="" column=""/>
+                <control name="ctlClientIp" title="客户端IP" property="clientIp" type="TextBox" edit="" required=""
+                         format="" width="100" height="" column=""/>
+                <control name="ctlUserAgent" title="UserAgent" property="userAgent" type="TextBox" edit="" required=""
+                         format="" width="280" height="" column=""/>
+                <control name="ctlServerIp" title="服务端IP" property="serverIp" type="TextBox" edit="" required=""
+                         format="" width="100" height="" column=""/>
+                <control name="ctlServerPort" title="端口" property="serverPort" type="TextBox" edit="" required=""
+                         format="" width="50" height="" column=""/>
+                <control name="ctlResult" title="响应结果" property="result" type="TextBox" edit="" required="" format=""
+                         width="80" height="" column=""/>
+                <control name="ctlCost" title="响应时间" property="cost" type="TextBox" edit="" required="" format=""
+                         width="80" height="" column=""/>
+
+            </panel>
+            <flow trigger="" event="OnLoad" filter="">
+                <procedure name="procClear" logic="Clear" ifyes="procQuery" ifno="" sync="Y">
+                    <param name="Out" value="pnlCondition"></param>
+                </procedure>
+                <procedure name="procQuery" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlCondition"></param>
+                    <param name="Out" value="pnlList"></param>
+                    <param name="Sql" value="QryAccessLogList"></param>
+                </procedure>
+            </flow>
+            <flow trigger="pnlToolbar.ctlSearch" event="OnClick" filter="">
+                <procedure name="proQuery" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlCondition"></param>
+                    <param name="Out" value="pnlList"></param>
+                    <param name="Sql" value="QryAccessLogList"></param>
+                </procedure>
+            </flow>
+            <flow trigger="pnlToolbar.ctlClear" event="OnClick" filter="">
+                <procedure name="procClear" logic="Clear" ifyes="" ifno="">
+                    <param name="Out" value="pnlCondition"></param>
+                </procedure>
+            </flow>
+            <flow trigger="pnlToolbar.ctlExport"  event="OnClick" filter="">
+                <procedure name="procExport" logic="Export" ifyes="" ifno="">
+                    <param name="In" value="pnlCondition"></param>
+                    <param name="Format" value="pnlList"></param>
+                    <param name="Sql" value="QryAccessLogList"></param>
+                </procedure>
+            </flow>
+            <layout>
+                <region location="North" scale="">
+                    <subregion panel="pnlToolbar" location="North" scale=""/>
+                </region>
+                <region location="Center" scale="">
+                    <subregion panel="pnlCondition" location="North" scale=""/>
+                    <subregion panel="pnlList" location="Center" scale=""/>
+                </region>
+            </layout>
+        </ui>
+    </ui_layer>
+</tsoftware>

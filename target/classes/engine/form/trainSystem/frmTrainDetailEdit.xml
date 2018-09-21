@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+	<ui_layer>
+		<ui name="frmTrainDetailEdit" title="新增学习计划">
+
+			<panel name="pnlAddGroup" title="新增学习计划" object="ttraineefile"
+				type="Group">
+				<control name="trainFileId" title="课程ID" property="trainFileId" type="Hidden"
+					edit="Y" required="Y" format="" width="1" height="1" column="" />
+				<control name="ctlCourseName" title="课程名称" property="trainFileName"
+					type="PopupBox" edit="Y" required="Y" format="" width="1" height="1"
+					column="1" />
+				<control name="ctlTraineeId" title="培训者Id" property="traineeId"
+					type="Hidden" edit="Y" required="Y" format="" width="1" height="1"
+					column="1" />
+				<control name="ctlsState" title="状态" property="state" type="Hidden"
+					edit="Y" required="Y" format="" width="1" height="1" initial="'start'"
+					column="1" />
+				<control name="ctlCreateBy" title="创建人" property="createBy"
+					type="Hidden" edit="Y" required="Y" format="" width="1" height="1" 
+					target="editMode=='Add'?session.userInfo.empId:nil" column="1" />
+				<control name="ctlCreateTime" title="创建时间" property="createTime"
+					type="Hidden" edit="Y" required="Y" format="" width="1" height="1"
+					target="editMode=='Add'?CurrentTime():nil" column="1" />
+				<control name="ctlUpdateBy" title="更新人" property="updateBy"
+					type="Hidden" edit="Y" required="Y" format="" width="1" height="1"
+					target="session.userInfo.empId" column="1" />
+				<control name="ctlUpdateTime" title="更新时间" property="updateTime"
+					type="Hidden" edit="Y" required="Y" format="" width="1" height="1"
+					target="editMode=='Add'?CurrentTime():nil" column="1" />
+			</panel>
+
+			<panel name="pToolbar" title="pnlDown" object="" type="Toolbar">
+				<control name="ctlSave" title="确认" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+				<control name="ctlCancel" title="取消" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+			</panel>
+
+
+
+			<!-- 加载 -->
+			<flow trigger="" event="OnLoad" filter="">
+			     <procedure name="jClear" server="" logic="Clear" ifyes="getId" ifno="">
+                    <param name="Out" value="pnlAddGroup"></param>
+                </procedure>
+				 <procedure name="getId" server="" logic="DecodeId" ifyes="je" ifno="">
+                    <param name="Out" value="pnlAddGroup.ctlTraineeId"></param>
+                </procedure>
+                
+
+			</flow>
+
+
+
+			<!--panel pnlGroup 课程名称 Find逻辑 -->
+			<flow trigger="pnlAddGroup.ctlCourseName" event="OnClick"
+				filter="">
+				<procedure name="search" logic="Find" ifyes="reloadSprint"
+					ifno="reloadSprint">
+					<param name="Sql" value="CourseName" />
+					<param name="Out" value="pnlAddGroup" />
+					<param name="Title" value="课程名称选择" />
+					<param name="Options" value="$RESET,重置"/>
+					<param name="Columns" value="id,编码,trainFileId|name,课程名称,ctlCourseName" />
+					<param name="Window" value="Medium" />
+				</procedure>
+			</flow>
+
+
+
+
+			<!-- 确认 -->
+			<flow trigger="pToolbar.ctlSave" event="OnClick" filter="">
+			    
+			   <procedure name="jssave" logic="Save" ifyes="jsclose"
+					ifno="">
+					<param name="In" value="pnlAddGroup"></param>
+					 <param name="Plugin" value="insertFilePlugin" />
+					<param name="Msg" value="'已保存'"></param>
+				</procedure>
+				<procedure name="jsclose" server="" logic="Close" ifyes=""
+					ifno="">
+					<param name="Refresh" value="true"></param>
+				</procedure> 
+			</flow>
+
+			<!-- 取消 -->
+			<flow trigger="pToolbar.ctlCancel" event="OnClick" filter="">
+				<procedure name="jsclose" server="" logic="Close" ifyes=""
+					ifno="">
+					<param name="Refresh" value="false"></param>
+				</procedure>
+			</flow>
+
+
+
+
+			<!-- 布局 -->
+			<layout>
+				<region location="Center" scale="">
+					<subregion panel="pnlAddGroup" location="Center" scale="" />
+					<subregion panel="pToolbar" location="South" scale="" />
+				</region>
+
+			</layout>
+		</ui>
+	</ui_layer>
+</tsoftware>

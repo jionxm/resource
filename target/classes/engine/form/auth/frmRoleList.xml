@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmRoleList" title="角色列表"> 
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnQuery" title="查询" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnClear" title="清空条件" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnCreate" title="新增" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pCondition" title="查询条件" object="role" type="Group">
+		<control name="lk_name" title="角色名称" property="name" type="TextBox" edit="Y" required="N" format="" width="1" height="1" column="3"/>
+	</panel>	
+	<panel name="pTable" title="查询结果" object="role" type="Grid">
+		<control name="edit" title="编辑" property="name" type="Link" edit="" required="" format="" width="160" height="" column=""/>
+		<control name="delete" title="删除" property="name" type="Link" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="a0" title="角色ID" property="id" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="view" title="角色名称" property="name" type="DataLink" edit="" required="" format="" width="250" height="" column=""/>
+		<control name="a2" title="角色说明" property="description" type="TextBox" edit="" required="" format="" width="200" height="" column=""/>
+		<control name="a3" title="创建人" property="createByName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="a4" title="创建时间" property="createTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+		<control name="a5" title="最后修改人 " property="updateByName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="a6" title="最后修改时间 " property="updateTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>
+	</panel>
+    <flow trigger="" event="OnLoad" filter="">
+      <procedure name="j1"  logic="Clear" ifyes="j2" ifno="" sync="Y">
+           <param name="Out" value="pCondition"></param>
+      </procedure>  
+      <procedure name="j2"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryRoleList"></param>
+      </procedure>   
+    </flow>	
+    <flow trigger="pTable.edit" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+        <param name="In" value="pTable.id"></param>
+      </procedure>
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmRoleEdit"></param>
+        <param name="Mode" value="Edit"></param>
+         <param name="Window" value="Medium"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryRoleList"></param>
+      </procedure>              
+    </flow>
+    <flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryRoleList"></param>
+      </procedure>              
+    </flow>     
+    <flow trigger="pToolbar.btnClear" event="OnClick" filter="">
+      <procedure name="jsquery"  logic="Clear" ifyes="" ifno="">
+        <param name="Out" value="pCondition"></param>
+      </procedure>              
+    </flow>    
+    <flow trigger="pTable.delete" event="OnClick" filter="row.id!=1">
+      <procedure name="j0" server="" logic="ConfirmMsg" ifyes="j1" ifno="">
+       <param name="Title" value="删除提示" />
+       <param name="Msg" value="确认删除当前角色吗?" />
+      </procedure>
+      <procedure name="j1" server="" logic="EncodeId" ifyes="j2" ifno="">
+        <param name="In" value="pTable.id"></param>
+      </procedure>
+      <procedure name="j2"  logic="Delete" ifyes="j3" ifno="">
+        <param name="In" value="pTable" />
+        <param name="Msg" value="model.name+'已删除'" />
+       <param name="Constraints" 
+       	value="t_user_role.role_id|用户角色表中已有此角色的授权信息" />
+       <param name="Cascade" value="t_role_func.role_id;" />	
+      </procedure>
+      <procedure name="j3"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryRoleList"></param>
+      </procedure>           
+    </flow>      
+    <flow trigger="pTable.view" event="OnClick" filter="">
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jsgoto" ifno="">
+        <param name="In" value="pTable.id"></param>
+      </procedure>
+      <procedure name="jsgoto"  logic="Transition" ifyes="" ifno="">
+        <param name="To" value="frmRoleView"></param>
+        <param name="Mode" value="Readonly"></param>
+      </procedure>
+    </flow>    
+    <flow trigger="pToolbar.btnCreate" event="OnClick" filter="">
+      <procedure name="jspopup" logic="Popup" ifyes="jsquery" ifno="">
+        <param name="To" value="frmRoleEdit"></param>
+        <param name="Mode" value="Add"></param>
+         <param name="Window" value="Medium"></param>
+      </procedure>
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"></param>
+        <param name="Out" value="pTable"></param>
+        <param name="Sql" value="QryRoleList"></param>
+      </procedure>              
+    </flow>      
+    <layout>
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+		<subregion panel="pCondition" location="North" scale=""/>
+		<subregion panel="pTable" location="Center" scale=""/>
+      </region>
+    </layout>
+  </ui>    
+</ui_layer>
+</tsoftware>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+    <model_layer>
+        <object name="flow" table="t_project" primary="id" unique="id" order="">
+            <property name="id" type="Long" length="20" initial="" field="id"/>
+            <property name="uiName" type="String" length="50" initial=""  field=""/>
+
+            <property name="controlName" type="String" length="50" initial=""  field=""/>
+            <property name="eventName" type="String" length="50" initial=""  field=""/>
+            <property name="resourceName" type="String" length="50" initial=""  field=""/>
+            <property name="transition" type="String" length="50" initial=""  field=""/>
+            
+
+        </object>
+    </model_layer>
+    <ui_layer>
+        <ui name="frmFlowList" title="FlowList">
+            <panel name="pnlToolbar" title="工具条" object="" type="Group">
+                <control name="ctlExport" title="导出清单" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+
+            </panel>
+            <panel name="pnlCondition" title="查询条件" object="flow" type="Group">
+                <control name="uiName" title="uiName" property="uiName" type="Hidden" edit="Y" required="N" format=""
+                         width="2" height="1" column="1"/>
+
+            </panel>
+            <panel name="pnlList" title="查询结果" object="flow" type="Grid">
+                <control name="ctlId" title="主键Id" property="id" type="Hidden" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="uiName" title="ui名称" property="uiName" type="Hidden" edit="" required="" format=""
+                         width="200" height="" column=""/>
+                <control name="controlName" title="控件名称" property="controlName" type="TextBox" edit="" required="" format=""
+                         width="200" height="" column=""/>
+                <control name="eventName" title="事件名称" property="eventName" type="TextBox" edit="" required=""
+                         format=""
+                         width="80" height="" column=""/>
+                <control name="resourceName" title="资源名称" property="resourceName" type="TextBox" edit="" required=""
+                         format=""
+                         width="300" height="" column=""/>
+                <control name="transition" title="跳转页面" property="transition" type="TextBox" edit="" required=""
+                         format=""
+                         width="300" height="" column=""/>
+                         
+            </panel>
+            <flow trigger="" event="OnLoad" filter="">
+                <procedure name="jDecodeId1" server="" logic="DecodeId" ifyes="procTransform" ifno="">
+                    <param name="Out" value="pnlCondition.uiName"/>
+                </procedure>
+                <procedure name="procTransform"  logic="Transform" ifyes="" ifno="">
+                    <param name="In" value="pnlCondition" />
+                    <param name="Out" value="pnlList" />
+                    <param name="Plugin" value=" com.tedu.plugin.flowResource.FlowList" />
+                </procedure>
+            </flow>
+            <flow trigger="pnlToolbar.ctlExport" event="OnClick" filter="">
+
+                <procedure name="procExport"  logic="Export" ifyes="" ifno="">
+                    <param name="Format" value="pnlList"></param>
+                    <param name="In" value="pnlCondition"></param>
+                    <param name="Sql" value=""></param>
+                </procedure>
+            </flow>
+            <layout>
+                <region location="North" scale="">
+                    <subregion panel="pnlToolbar" location="North" scale=""/>
+                    <subregion panel="pnlCondition" location="Center" scale=""/>
+
+                </region>
+                <region location="Center" scale="">
+                    <subregion panel="pnlList" location="Center" scale=""/>
+                </region>
+            </layout>
+        </ui>
+    </ui_layer>
+</tsoftware>

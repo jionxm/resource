@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmAnnounceDetail" title="公告列表详情">
+  	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnBack" title="返回" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pForm" title="公告详情" object="announcement"  type="Group" multiple="">
+		<control name="eq_id" title="公告编号" property="id" type="TextBox" edit="" required="" format="" width="1" height="" column=""/>
+  		<control name="typeName" title="类型" property="typeName" type="TextBox" edit="" required="" format="" width="1" height="1" column="3"/>
+  		<control name="title" title="公告标题" property="title" type="TextBox" edit="" required="" format="" width="2" height="1" column="3"/>
+  		<control name="context" title="公告内容" property="context" type="TextBox" edit="" required="" format="" width="2" height="5" column="3"/>
+    	<control name="orgName" title="发布部门 " property="orgName" type="TextBox" edit="" required="" format="" width="1" height="" column="3"/>
+  		<control name="createName" title="发布人" property="createName" type="TextBox" edit="" required="" format="" width="1" height="" column=""/>
+  		<control name="createTime" title="发布时间" property="createTime" type="TextBox" edit="" required="N"  format="" width="1" height="" column="3"  /> 
+  		<control name="updateName" title="修改人" property="updateName" type="TextBox" edit="" required="" format="" width="1" height="" column=""/>
+  		<control name="updateTime" title="修改时间" property="updateTime" type="TextBox" edit="" required="N"  format="" width="1" height="" column="3"  />
+  </panel>
+	<panel name="pTable" title="查询结果" object="announcement" type="Grid">
+		<control name="title" title="公告标题" property="title" type="TextBox" edit="" required="" format="" width="350" height="" column=""/>
+  		<control name="typeName" title="类型" property="typeName" type="TextBox" edit="" required="" format="" width="350" height="" column=""/>
+  		<control name="orgName" title="发布部门 " property="orgName" type="TextBox" edit="" required="" format="" width="350" height="" column=""/>
+  		<control name="createBy" title="发布人" property="createBy" type="TextBox" edit="" required="" format="" width="350" height="" column=""/>
+  		<control name="createTime" title="发布时间" property="createTime" type="TextBox" edit="" required="N"  format="" width="350" height="1" column=""  />
+	</panel>
+    <flow trigger="" event="OnLoad" filter="" >
+      <procedure name="j1" server="" logic="DecodeId" ifyes="je" ifno="">
+        <param name="Out" value="pForm.eq_id"></param>
+      </procedure> 
+      <procedure name="je"  logic="QueryById" ifyes="j3" ifno="">
+        <param name="In" value="pForm"></param>
+        <param name="Out" value="pForm"></param>
+        <param name="Sql" value="announcement/QryAnnouncementList"></param>
+      </procedure> 
+      <procedure name="j3"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition" />
+        <param name="Out" value="pTable" />
+        <param name="Sql" value="announcement/QryAnnouncementList" />
+      </procedure> 
+      
+    </flow>
+    <flow trigger="pCondition.orgName" event="OnClick" filter="">
+      <procedure name="joSearch" logic="Find" ifyes="" ifno="">
+       <param name="In" value="pCondition"/>
+        <param name="Sql" value="announcementOrg" />
+        <param name="Out" value="pCondition" />
+        <param name="Title" value="发布部门选择" />
+        <param name="Options" value="$RESET,重置"/>
+        <param name="Columns" value="orgId,编码,eq_orgId|orgName,部门名称,orgName" />
+         <param name="Window" value="Medium" />
+      </procedure>
+    </flow> 
+    <!-- 返回 -->
+    <flow trigger="pToolbar.btnBack" event="OnClick" filter="">
+       <procedure name="proTransition" server="/frmAnnouncementList" logic="Back" ifyes="" ifno="">
+         <param name="To" value="frmAnnouncementList"></param>
+       </procedure>
+      </flow>
+    <layout>
+       <region location ="North" scale="">
+       <subregion panel="pToolbar" location="North" scale=""/>
+		<subregion panel="pForm" location="Center" scale=""/>
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pTable" location="Center" scale="" />
+      </region>  
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

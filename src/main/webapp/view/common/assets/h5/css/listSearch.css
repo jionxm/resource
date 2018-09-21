@@ -1,0 +1,83 @@
+body {
+  background: #ebebeb;
+}
+.list-item-title .lf{
+	float: left;
+    width: 85%;
+    height: 100%;
+    overflow: hidden;
+}
+#app #title {
+  box-sizing: border-box;
+  height: 90px;
+  line-height: 90px;
+  text-align: center;
+  background: white;
+  font-size: 38px;
+  font-weight: normal;
+}
+#app #inputsearch {
+  position: relative;
+  height: 90px;
+  padding: 15px 30px;
+  background: #ebebeb;
+}
+#app #inputsearch input {
+  height: 60px;
+  width: 690px;
+  outline: none;
+  border: none;
+  font-size: 30px;
+  border-radius: 10px;
+  padding: 10px;
+  padding-left: 50px;
+}
+#app #inputsearch div {
+  background: url(../img/search.png) no-repeat center center;
+  position: absolute;
+  left: 260px;
+  width: 27px;
+  height: 27px;
+  top: 30px;
+}
+#app #inputsearch .div-active {
+  left: 40px;
+}
+#app #inputsearch input::-ms-input-placeholder {
+  text-align: center;
+}
+#app #inputsearch input::-webkit-input-placeholder {
+  text-align: center;
+}
+#app .list-item {
+  padding: 5px 20px;
+  margin-bottom: 104px;
+  background: white;
+}
+#app .list-item .list-item-title {
+  font-size: 30px;
+  height: 66px;
+  line-height: 66px;
+}
+#app .list-item .list-item-title .rt {
+  color: #898989;
+}
+#app .list-item .list-item-content {
+  font-size: 28px;
+  padding: 12px 0px;
+  color: gray;
+}
+#app .list-item .list-item-foot {
+  font-size: 24px;
+  height: 60px;
+  line-height: 60px;
+}
+#app .list-item .list-item-foot span.lf {
+  margin-right: 30px;
+}
+#app .list-item .list-item-foot span.lf img {
+  vertical-align: middle;
+}
+#app .list-item .list-item-foot span.lf span {
+  vertical-align: middle;
+}

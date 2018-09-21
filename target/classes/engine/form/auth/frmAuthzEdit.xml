@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+  <ui name="frmAuthzEdit" title="授权管理"> 
+	<panel name="pToolbar" title="工具条" object="" type="Toolbar">
+		<control name="btnResource" title="资源授权" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnRole" title="角色授权" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="btnClose" title="返回" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pCondition" title="查询条件" object="resource" type="Hidden" >
+		<control name="eq_funcId" title="eq_funcId" property="funcId" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+	</panel>		
+	<panel name="pRole" title="角色权限" object="roleFunc" type="Group" >
+		<control name="id" title="角色权限ID" property="id" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="funcId" title="pRolefuncId" property="funcId" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="roleId" title="roleId(暂时可见)" property="roleId" type="Hidden" edit="Y" required="N" format="" width="3" height="1" column="2"/>
+		<control name="dataAuth" title="数据授权" property="dataAuth" type="Hidden" edit="Y" required="N" format="" width="1" height="1" column=""/>
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />
+		<!-- savecustome用 -->
+		<control name="resId" title="创建人" property="" type="Hidden" edit="Y" required="N" target="" format="" width="1" height="1" column="1"  />
+	</panel>		
+	<panel name="pTable1" title="已授权" object="resfunc" type="Grid">
+		<control name="cancel" title="取消资源授权" property="" type="Link" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="a1" title="权限 资源ID" property="rfId" type="Hidden" edit="" required="" format="" width="180" height="" column=""/>
+		<control name="a2" title="资源名称" property="name" type="TextBox" edit="" required="" format="" width="200" height="" column=""/>
+		<control name="a21" title="上级资源名称" property="parentName" type="TextBox" edit="" required="" format="" width="200" height="" column=""/>		
+		<control name="a4" title="资源URL" property="url" type="TextBox" edit="" required="" format="" width="300" height="" column=""/>
+		<control name="a5" title="授权人" property="createByName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="a6" title="授权时间" property="createTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>		
+	</panel>	
+	<panel name="pTable2" title="未授权" object="roleFunc" type="Grid">
+		<control name="cancel" title="取消角色授权" property="" type="Link" edit="" required="" format="" width="" height="" column=""/>
+		<control name="assign" title="数据授权" property="" type="Link" edit="" required="" format="" width="" height="" column=""/>
+		<control name="id" title="id" property="id" type="Hidden" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="a1" title="角色名称" property="roleName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="a2" title="用户数量" property="userCount" type="TextBox" edit="" required="" format="" width="80" height="" column=""/>
+		<control name="a21" title="数据访问权限" property="dataAuthName" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>		
+		<control name="a3" title="授权人" property="createByName" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="a5" title="授权时间" property="createTime" type="TextBox" edit="" required="" format="" width="150" height="" column=""/>		
+	</panel>
+	<panel name="pTable3" title="批量录入resFunc记录" object="modResFunc" type="HiddenTable">
+		<control name="id" title="id" property="id" type="Hidden" edit="" required="" format="" width="120" height="" column=""/>
+		<control name="resId" title="权限ID" property="resId" type="TextBox" edit="" required="" format="" width="180" height="" column=""/>		
+		<control name="funcId" title="权限ID" property="funcId" type="TextBox" edit="" required="" format="" width="100" height="" column=""/>
+		<control name="updateTime" title="更新日期" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />		
+		<control name="createTime" title="创建日期" property="createTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="1" height="1" column="1"  />
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column="1"  />
+	</panel>		
+    <flow trigger="" event="OnLoad" filter="">
+      <procedure name="j0" server="" logic="DecodeId" ifyes="j1" ifno="">
+        <param name="Out" value="pCondition.eq_funcId"/>
+      </procedure>        
+      <procedure name="j1" server="" logic="EncodeId" ifyes="j2" ifno="">
+        <param name="In" value="pCondition.eq_funcId"/>
+      </procedure>
+       <procedure name="j2" server="" logic="DecodeId" ifyes="q1" ifno="">
+        <param name="Out" value="pRole.funcId"/>
+      </procedure>  
+      <procedure name="q1"  logic="Query" ifyes="q2" ifno="">
+        <param name="In" value="pCondition"/>
+        <param name="Out" value="pTable1"/>
+        <param name="Sql" value="selectFuncResource"/>
+      </procedure>  
+      <procedure name="q2"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"/>
+        <param name="Out" value="pTable2"/>
+        <param name="Sql" value="QryRoleFuncList"/>
+      </procedure>                 
+    </flow>	    
+    <flow trigger="pTable1.cancel" event="OnClick" filter="">
+      <procedure name="j0" server="" logic="ConfirmMsg" ifyes="d1" ifno="">
+       <param name="Title" value="提示信息"/>
+       <param name="Msg" value="确认删除当前记录吗?"/>
+      </procedure>
+      <procedure name="d1"  logic="Delete" ifyes="j3" ifno="">
+        <param name="In" value="pTable1" />
+        <param name="Msg" value="'已删除'" />
+      </procedure>
+      <procedure name="j3"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"/>
+        <param name="Out" value="pTable1"/>
+        <param name="Sql" value="selectFuncResource"/>
+      </procedure>              
+    </flow>     
+    <flow trigger="pTable2.cancel" event="OnClick" filter="row.id!=1">
+      <procedure name="j0" server="" logic="ConfirmMsg" ifyes="d1" ifno="">
+       <param name="Title" value="提示信息"/>
+       <param name="Msg" value="确认删除当前角色授权吗?"/>
+      </procedure>
+      <procedure name="d1"  logic="Delete" ifyes="j3" ifno="">
+        <param name="In" value="pTable2" />
+        <param name="Msg" value="'删除完毕'" />
+      </procedure>
+      <procedure name="j3"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"/>
+        <param name="Out" value="pTable2"/>
+        <param name="Sql" value="QryRoleFuncList"/>
+      </procedure>              
+    </flow>
+    <flow trigger="pTable2.assign" event="OnClick" filter="" >
+      <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jd" ifno="">
+        <param name="In" value="pTable2.id"/>
+      </procedure>
+       <procedure name="jd" server="" logic="DecodeId" ifyes="search" ifno="">
+        <param name="Out" value="pRole.id"/>
+      </procedure>  
+      <procedure name="search"  logic="Find" ifyes="jssave" ifno="">
+      	<param name="In" value="pTable2.id"/>
+        <param name="Out" value="pRole"/>
+        <param name="Sql" value="AuthForResFunc"/>
+        <param name="Title" value="数据权限分配"/>
+        <param name="Columns" value="id,编码,dataAuth|name,名称"/>
+      </procedure>      
+      <procedure name="jssave" logic="SaveCustom" ifyes="jsquery" ifno="">
+        <param name="Sql" value="updateDataAuth"/>
+        <param name="In" value="pRole"/>
+        <param name="Msg" value="'角色数据授权成功'"/>
+      </procedure>        
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"/>
+        <param name="Out" value="pTable2"/>
+        <param name="Sql" value="QryRoleFuncList"/>
+      </procedure>       
+    </flow>	    
+    <flow trigger="pToolbar.btnClose" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Back" ifyes="" ifno="">
+      </procedure>
+    </flow>	     
+    <!-- find->savecustom -->
+    <flow trigger="pToolbar.btnRole" event="OnClick" filter="" >
+      <procedure name="search"  logic="Find" ifyes="jssave" ifno=""><!-- jssave -->
+      	<param name="In" value="pRole.funcId"/>
+        <param name="Out" value="pRole"/>
+        <param name="Sql" value="RoleForFunc"/>
+        <param name="Title" value="角色分配"/>
+        <param name="Columns" value="id,编码,roleId|name,角色"/>
+      </procedure>      
+      <!-- 
+      <procedure name="jsDetail"  logic="Master2Detail" ifyes="jssave" ifno=""> 
+      	<param name="In" value="pRole.roleId"/>
+        <param name="Out" value="pTable3"/>
+      </procedure>   
+       <procedure name="jssave" logic="Save" ifyes="jsquery" ifno="">
+        <param name="In" value=",pTable3"/>
+        <param name="Mode" value="Add"/>
+        <param name="Msg" value="'角色授权成功'"/>
+      </procedure>  -->                
+      <procedure name="jssave" logic="SaveCustom" ifyes="jsquery" ifno="">
+        <param name="Sql" value="insertRoleFunc"/>
+        <param name="In" value="pRole"/>
+        <param name="Msg" value="'角色授权成功'"/>
+      </procedure>        
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"/>
+        <param name="Out" value="pTable2"/>
+        <param name="Sql" value="QryRoleFuncList"/>
+      </procedure>       
+    </flow>	    
+    <flow trigger="pToolbar.btnResource" event="OnClick" filter="" >
+      <procedure name="search"  logic="Find" ifyes="jsDetail" ifno="">
+      	<param name="In" value="pRole.funcId"/>
+        <param name="Out" value="pRole"/>
+        <param name="Sql" value="ResourceForFunc"/>
+        <param name="Multi" value="Y"/>
+        <param name="Title" value="资源分配"/>
+        <param name="Columns" value="id,编码,resId|name,功能|url,url"/>
+      </procedure>      
+ 	  <procedure name="jsDetail"  logic="Master2Detail" ifyes="jssave" ifno=""><!-- jssave -->
+      	<param name="In" value="pRole.resId"/>
+        <param name="Out" value="pTable3"/>
+      </procedure>      
+       <procedure name="jssave" logic="Save" ifyes="jsquery" ifno="">
+        <param name="In" value=",pTable3"/>
+        <param name="Mode" value="Add"/>
+        <param name="Msg" value="'资源授权成功'"/>
+      </procedure>                 
+<!--       <procedure name="jssave" logic="SaveCustom" ifyes="jsquery" ifno=""> -->
+<!--         <param name="Sql" value="insertResFunc"/> -->
+<!--         <param name="In" value="pRole"/> -->
+<!--         <param name="Msg" value="'资源授权成功'"/> -->
+<!--       </procedure>         -->
+      <procedure name="jsquery"  logic="Query" ifyes="" ifno="">
+        <param name="In" value="pCondition"/>
+        <param name="Out" value="pTable1"/>
+        <param name="Sql" value="selectFuncResource"/>
+      </procedure>       
+    </flow>
+    <layout>
+  	<region location ="North" scale="">
+        <subregion panel="pToolbar" location ="North" scale=""/>
+		<subregion panel="pRole" location="Center" scale=""/>
+      </region>
+	  <region location ="Center" scale="">
+		<subregion panel="pTable1" location="Center" scale="300px"/>
+		<subregion panel="pTable3" location="Center" scale="300px"/>
+		
+		<subregion panel="pCondition" location="South" scale=""/>
+      </region>
+  	  <region location ="South">
+		<subregion panel="pTable2" location="South"  scale="300px"/>
+      </region>      
+    </layout>
+  </ui>    
+</ui_layer>
+</tsoftware>

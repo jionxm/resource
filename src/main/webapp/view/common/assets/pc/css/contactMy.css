@@ -1,0 +1,246 @@
+.none{
+    display: none;
+}
+
+.contact-my{
+    height: 154px;
+    background: url(../img/contact.png) 0 0 no-repeat;
+    opacity: 0.7;
+    padding-top: 46px;   
+}
+.contact-my>div{
+    text-align: center;
+    color: white;
+    font-size: 24px;
+}
+.contact-my>div:first-child{
+    font-size: 48px;
+}
+.detail-contact-my{
+    padding:  66px 0 0 20% ;
+    font-size: 24px;
+}
+.detail-contact-my>div{
+    margin-bottom: 43px;
+}
+.detail-contact-my>div>a{
+    font-size:18px;
+    margin-left: 10px;
+    color: red;
+}
+.detail-contact-my>div>span{
+    display: inline-block;
+    margin-right: 26px;
+    width: 130px;
+}
+.detail-contact-my>div>input{
+    border: 1px solid #b7b7b7;
+    font-size: 24px;
+}
+.detail-ipnut1{
+    height: 68px;
+    width: 43%;
+}
+
+.detail-contact-my>.detail-bottom{
+    border-bottom: 1px solid #b7b7b7;
+    padding-bottom: 66px;
+    margin:0;
+}
+.detail-contact-mysubmit{
+    margin-bottom: 50px;
+}
+
+.detail-contact-mysubmit>button{
+    width: 176px;
+    height: 58px;
+    border-radius: 10px;
+    border: 0;
+    font-size: 24px;
+    color: white;
+}
+.submit-ok{
+    background: #0276e1;
+    margin-right: 50px;
+    margin-left: 50%;
+}
+.cehck-return{
+    background: #999;
+}
+.submit-psd{
+    width: 100%;
+    height: 1586px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background: #00000045;
+}
+.submit-freek{
+    width: 400px;
+    height: 160px;
+    margin: 20% auto;
+    background: #fff;
+    border-radius: 10px;
+    padding-top: 40px;
+    font-size: 24px;
+}
+.submit-img{
+    margin: 0 0 0 150px;
+    padding-top: 68px;
+    padding-left: 0px;
+    width: 200px;
+    height: 60px;
+    background: url(../img/errorPrompt.png) no-repeat 15px 0;
+
+}
+.submit-img1{
+    margin: 0 0 0 150px;
+    padding-top: 68px;
+    padding-left: 0px;
+    width: 200px;
+    height: 60px;
+    background: url(../img/rightPrompt1.png) no-repeat 15px 0;
+}
+.position{
+    vertical-align: top;
+}
+.feed{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background: #00000045;
+}
+.feedback{
+    width: 73%;
+    position: relative;
+    top: 10%;
+    left: 10%;
+    background: white;
+    border-radius: 10px;
+}
+.feedback-close{
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    color: red;
+    top: -5%;
+    left: 97.5%;
+    font-size: 50px;
+    background: url(../img/feedclose.png) -24px -9px no-repeat;
+}
+.feedback-picture{
+    font-size: 40px;
+    vertical-align: middle;
+}
+.feedback-picture>img{
+    margin-left: 43%;
+    padding-top: 3%;
+}
+.feedback-picture>div{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 25px;
+    margin-top: -100px;
+}
+.feed-picture{
+    padding-bottom: 100px;
+}
+.feedback-table{
+    max-height:350px;
+    height: 350px;
+    overflow-y:auto;
+}
+table{
+    margin-left: 10%;
+    font-size: 24px;
+    width: 80%;
+    border-collapse: collapse;
+}
+td{
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #b7b7b7;
+}
+tr{
+    border:"1px solid #b7b7b7";
+}
+
+.feedback-project-name{
+    width: 26%;
+
+}
+.feedback-project-state{
+    width: 26%;
+    
+}
+.feedback-project-schedule{
+    width: 47%;
+    text-align: left;
+    word-break:break-all;
+    word-wrap : break-word;
+}
+.feedback>div>span{
+    font-size: 24px;
+}
+.feedback-flip>a>span{
+    font-size: 24px;
+}
+
+.feedback-flip>b{
+    font-size: 24px;
+    margin:0 10px;
+    color:#666;
+}
+.feedback-flip{
+    margin: 50px auto 0;
+}
+textarea{
+    width:64%;
+    resize: none;
+    /* overflow-y:visible; */
+    word-break:break-all;
+    word-wrap : break-word;
+    font-size: 24px;
+}
+.in-short{
+    height: 300px;
+}
+.in-short>span{
+    display: inline-block;
+    margin-left: 20%;
+    margin-top:9%;
+}
+.in-short>input{
+    margin-left: 35%;
+    border-bottom: 1px solid #999;
+    width: 30%;
+    height: 38px;
+    font-size: 24px;
+}
+.short-ok{
+    width: 100px;
+    height: 38px;
+    border: 0px;
+    background: #eaeaea;
+    font-size: 24px;
+    border-radius: 5px;
+    color: blue;
+    margin-left: 70%;
+    margin-top: 10px;
+}
+.nav{
+    z-index: 2;
+}
+.height{
+    min-height: 500px;
+}
+.check-phone{
+	color:red;
+	 margin-left: 35%;
+	 font-size:18px;
+}

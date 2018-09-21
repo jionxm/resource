@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+			xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<ui_layer>
+<!-- 新建组织 -->
+  <ui name="frmMenuEdit" title="组织弹出">
+  	<panel name="pnlHidden" title="pnlHidden" object="menu" type="Hidden">
+		<control name="code" title="code" property="code" type="Hidden" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pnlDown" title="pnlDown" object="" type="Toolbar">
+		<control name="ctlSave" title="确认" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+		<control name="ctlCancel" title="取消" property="" type="Button" edit="" required="" format="" width="" height="" column=""/>
+	</panel>
+	<panel name="pnlGroup" title="pnlGroup" object="menu" type="Group">
+		<control name="name" title="菜单名称" property="name" type="TextBox" edit="Y" required="Y" format="" width="1" height="1" column="1"/>
+        <control name="type" title="菜单类型" property="type" type="Hidden" edit="N" required="Y" format="" width="1" height="1" column="1"/>
+        <control name="typeName" title="菜单类型" property="typeName" type="TextBox" edit="N" required="Y" format="" width="1" height="1" column="1"/>
+        <control name="seq" title="菜单排序" property="seq" type="TextBox" edit="Y" required="" format="" width="1" height="1" column="1"/>
+
+
+        <control name="parent" title="code" property="parent" type="Hidden" edit="" required="" format="" width="1" height="1" column="1"/>
+		<control name="parentName" title="上级菜单" property="parentName" type="TextBox" edit="N" required="Y" format="" width="1" height="1" column="1"/>
+		<control name="resName" title="访问资源" property="resName" type="PopupBox" edit="Y" required="N" format="" width="1" height="1" column="1"/>
+		<control name="res" title="访问资源id" property="resId" type="Hidden" edit="Y" required="" format="" width="1" height="1" column="" />
+		<control name="target" title="打开方式" property="target" type="ComboBox" edit="Y" required="N" format="" width="1" height="1" column="1"/>
+		<control name="createBy" title="创建人" property="createBy" type="Hidden" edit="Y" required="N" target="Mode=='Add'?session.userInfo.empId:nil" format="" width="1" height="1" column=""  />
+		<control name="updateBy" title="更新人" property="updateBy" type="Hidden" edit="Y" required="N" target="session.userInfo.empId" format="" width="1" height="1" column=""  />
+		<control name="updateTime" title="更新时间" property="updateTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="200" height="1" column=""  />
+		<control name="createTime" title="创建时间" property="createTime" type="Hidden" edit="Y" required="N" target="CurrentTime()" format="" width="200" height="1" column=""  />
+	</panel>
+	 <flow trigger="" event="OnLoad" filter="">
+      <procedure name="j1" server="" logic="DecodeId" ifyes="qid" ifno="">
+        <param name="Out" value="pnlHidden.code"></param>
+      </procedure>
+      <procedure name="qid"  logic="QueryById" ifyes="jsdict1" ifno="">
+      <param name="In" value="pnlHidden"></param>
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="QryMenuParentName"></param>
+      </procedure>
+            <procedure name="jsdict1"  logic="List" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup.target"></param>
+        <param name="Sql" value="target"></param>
+      </procedure>
+	 </flow>
+	<!-- 保存 -->
+    <flow trigger="pnlDown.ctlSave" event="OnClick" filter="" >
+      <procedure name="jssave"  logic="Save" ifyes="jsclose" ifno="">
+        <param name="In" value="pnlGroup"></param>
+        <param name="Msg" value="'资源'+model.name+'的信息已被保存,详情请查看操作日志'"></param>
+      </procedure>
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="true"></param>
+      </procedure>
+    </flow>
+        <flow trigger="pnlDown.ctlCancel" event="OnClick" filter="" >
+      <procedure name="jsclose" server="" logic="Close" ifyes="" ifno="">
+        <param name="Refresh" value="false"></param>
+      </procedure>
+    </flow>
+    <flow trigger="pnlGroup.resName" event="OnClick" filter="">
+      <procedure name="searchRes"  logic="Find" ifyes="" ifno="">
+        <param name="Out" value="pnlGroup"></param>
+        <param name="Sql" value="res2"></param>
+        <param name="Options" value="$RESET,重置"/>
+        <param name="Title" value="访问资源"></param>
+        <param name="Window" value="Medium"></param>
+        <param name="Columns" value="id,资源编码,res|name,资源名字,resName"></param> 
+      </procedure>
+    </flow>
+    <layout>
+      <region location ="South" scale="">
+        <subregion panel="pnlDown" location="South" scale="" />
+      </region>
+      <region location ="Center" scale="">
+        <subregion panel="pnlGroup" location="Center" scale="" />
+        <subregion panel="pnlHidden" location="Center" scale="" />
+      </region>
+    </layout>
+  </ui>
+</ui_layer>
+</tsoftware>

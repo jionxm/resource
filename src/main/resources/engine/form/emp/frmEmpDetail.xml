@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+    <ui_layer>
+        <ui name="frmEmpDetail" title="人员详情">
+            <panel name="pnlDetailTool" title="工具条" object="" type="Toolbar">
+                <control name="ctlEducation" title="新增教育经历" property="" type="Button" edit="" required="" format=""
+                         width="" height="" column=""/>
+                <control name="ctlExperience" title="新增工作经历" property="" type="Button" edit="" required="" format=""
+                         width="" height="" column=""/>
+                <control name="ctlTraining" title="新增培训记录" property="" type="Button" edit="" required="" format=""
+                         width="" height="" column=""/>
+                <control name="ctlWorkflow" title="启动工作流" property="" type="Button" edit="" required="" format=""
+                         width="" height="" column=""/>
+                <control name="ctlConfirm" title="审核" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlList" title="查看流程进度" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+
+                <control name="ctlAssessment" title="新增考核记录" property="" type="Button" edit="" required="" format=""
+                         width="" height="" column=""/>
+                <control name="ctlExportFormat" title="导出简历" property="" type="Button" edit="" required="" format=""
+                         width="" height="" column=""/>
+                <control name="ctlPrintPdf" title="打印简历" property="" type="Button" edit="" required="" format=""
+                         width="" height="" column=""/>
+                <control name="ctlBack" title="返回" property="" type="Button" edit="" required="" format="" width=""
+                         height="" column=""/>
+            </panel>
+            <panel name="pnlDetailGroup" title="详细信息" object="employee1" type="Group">
+                <control name="eq_empId" title="empId" property="empId" type="Hidden" edit="N" required="N" format=""
+                         width="1" height="1" column=""/>
+                <control name="ctlId" title="id" property="empId" type="Hidden" edit="Y" required="" format="" width="3"
+                         height="" column=""/>
+                <control name="ctlName" title="人员姓名" property="name" type="TextBox" edit="Y" required="Y" format=""
+                         width="1" height="1" column=""/>
+                <control name="ctlCode" title="人员编码" property="code" type="TextBox" edit="Y" required="Y" format=""
+                         width="1" height="1" column=""/>
+                <control name="ctlExtCode" title="外部编码" property="extCode" type="TextBox" edit="Y" required="N"
+                         format="" width="1" height="1" column="3"/>
+                <control name="ctlOrgId" title="部门" property="orgId" type="Hidden" edit="Y" required="N" format=""
+                         width="1" height="1" column=""/>
+                <control name="ctlOrgName" title="所属部门" property="orgName" type="PopupBox" edit="" required="N"
+                         format="" width="1" height="1" column=""/>
+                <control name="ctlIdCode" title="身份证号" property="idCard" type="TextBox" edit="Y" required="Y" format=""
+                         width="1" height="1" column=""/>
+                <control name="ctlStatus" title="状态" property="statusName" type="ComboBox" edit="Y" required="Y"
+                         format="" width="1" height="1" column="3" initial="" source=""/>
+                <control name="ctlType" title="人员类型" property="typeName" type="ComboBox" edit="Y" required="Y" format=""
+                         width="1" height="1" column=""/>
+                <control name="ctlGender" title="性别" property="genderName" type="ComboBox" edit="Y" required="Y"
+                         format="" width="1" height="1" column="" initial=""/>
+                <control name="ctlNationality" title="民族" property="nationality" type="Hidden" edit="Y" required="N"
+                         format="" width="1" height="1" column=""/>
+                <control name="ctlNationalityName" title="民族" property="nationalityName" type="PopupBox" edit=""
+                         required="N" format="" width="1" height="1" column="3"/>
+                <control name="ctlBirthPlaceName" title="出生地" property="birthPlaceName" type="PopupBox" edit=""
+                         required="N" format="" width="1" height="1" column=""/>
+                <control name="ctlBirthPlace" title="出生地" property="birthPlace" type="Hidden" edit="Y" required="N"
+                         format="" width="1" height="1" column=""/>
+                <control name="ctlBirthDate" title="出生日期" property="birthDate" type="DateBox" edit="Y" required="N"
+                         format="" width="1" height="1" column="" initial=""/>
+                <control name="ctlMarital" title="婚姻状况" property="maritalName" type="ComboBox" edit="Y" required="N"
+                         format="" width="1" height="1" column="3"/>
+                <control name="ctlMobile" title="移动电话" property="mobile" type="TextBox" edit="Y" required="N" format=""
+                         width="1" height="1" column=""/>
+                <control name="ctlOfficePhone" title="办公电话" property="officePhone" type="TextBox" edit="Y" required="N"
+                         format="" width="1" height="1" column=""/>
+                <control name="ctlHomePhone" title="家庭电话" property="homePhone" type="TextBox" edit="Y" required="N"
+                         format="" width="1" height="1" column="3"/>
+                <control name="ctlEmail" title="电子邮箱" property="email" type="TextBox" edit="Y" required="N" format=""
+                         width="1" height="1" column=""/>
+                <control name="ctlWechat" title="岗位" property="positionName" type="TextBox" edit="Y" required="N"
+                         format="" width="1" height="1" column=""/>
+                <control name="ctlEntryDate" title="入职日期" property="entryDate" type="DateBox" edit="Y" required="N"
+                         format="" width="1" height="1" column="3"/>
+                <control name="ctlHomeAddress" title="家庭住址" property="homeAddress" type="TextBox" edit="Y" required="N"
+                         format="" width="2" height="1" column=""/>
+                <control name="ctlHomePostcode" title="邮政编码" property="homePostcode" type="TextBox" edit="Y"
+                         required="N" format="" width="1" height="1" column="3"/>
+                <control name="ctlPhotoId" title="上传照片" property="photoId" type="Hidden" edit="Y" required="N" format=""
+                         width="3" height="1" column="3"/>
+                <control name="ctlRemark" title="备注" property="remark" type="TextBox" edit="Y" required="N" format=""
+                         width="3" height="2" column="3"/>
+            </panel>
+            <panel name="pnlDetailImage" title="头像显示" object="employee1" type="Image">
+                <control name="ctlEdit" title="图片显示" property="" type="ImageView" edit="" required="" format="" width="1" height="1" column=""/>
+            </panel>
+            <panel name="pnlEducation" title="教育经历" object="education" type="Grid"><!-- userrole -->
+                <control name="id" title="ID" property="id" type="Hidden" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlEdit" title="编辑" property="" type="Link" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlDel" title="删除" property="" type="Link" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlStartDate" title="开始日期" property="startDate" type="TextBox" edit="" required=""
+                         format="Common.DateFormatter" width="140" height="" column=""/>
+                <control name="ctlEndDate" title="结束日期" property="endDate" type="TextBox" edit="" required=""
+                         format="Common.DateFormatter" width="140" height="" column=""/>
+                <control name="ctlSchool" title="学校名称" property="school" type="TextBox" edit="" required="" format=""
+                         width="140" height="" column=""/>
+                <control name="ctlSpeciality" title="专业" property="speciality" type="TextBox" edit="" required=""
+                         format="" width="140" height="" column=""/>
+                <control name="ctlDegreeName" title="学历" property="degreeName" type="TextBox" edit="" required=""
+                         format="" width="140" height="" column=""/>
+                <control name="ctlLearningStyleName" title="学习方式" property="learningStyleName" type="TextBox" edit=""
+                         required="" format="" width="140" height="" column=""/>
+            </panel>
+            <panel name="pnlExperience" title="工作经历" object="experience" type="Grid">
+                <control name="id" title="ID" property="id" type="Hidden" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlEdit" title="编辑" property="" type="Link" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlDel" title="删除" property="" type="Link" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlStartDate" title="开始日期" property="startDate" type="TextBox" edit="" required=""
+                         format="Common.DateFormatter" width="140" height="" column=""/>
+                <control name="ctlEndDate" title="结束日期" property="endDate" type="TextBox" edit="" required=""
+                         format="Common.DateFormatter" width="140" height="" column=""/>
+                <control name="ctlCompany" title="单位名称" property="company" type="TextBox" edit="" required="" format=""
+                         width="140" height="" column=""/>
+                <control name="ctlDepartment" title="部门" property="department" type="TextBox" edit="" required=""
+                         format="" width="140" height="" column=""/>
+                <control name="ctlPosition" title="职位" property="position" type="TextBox" edit="" required="" format=""
+                         width="140" height="" column=""/>
+            </panel>
+            <panel name="pnlTraining" title="培训记录" object="training" type="Grid">
+                <control name="id" title="ID" property="id" type="Hidden" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlEdit" title="编辑" property="" type="Link" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlDel" title="删除" property="" type="Link" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlStartDate" title="开始日期" property="startDate" type="TextBox" edit="" required=""
+                         format="Common.DateFormatter" width="140" height="" column=""/>
+                <control name="ctlEndDate" title="结束日期" property="endDate" type="TextBox" edit="" required=""
+                         format="Common.DateFormatter" width="140" height="" column=""/>
+                <control name="ctlAgency" title="培训机构名称" property="agency" type="TextBox" edit="" required="" format=""
+                         width="140" height="" column=""/>
+                <control name="ctlContent" title="培训内容" property="content" type="TextBox" edit="" required="" format=""
+                         width="140" height="" column=""/>
+                <control name="ctlCertificate" title="资格证书" property="certificate" type="TextBox" edit="" required=""
+                         format="" width="140" height="" column=""/>
+            </panel>
+            <panel name="pnlAssessment" title="考核记录" object="assessment" type="Grid">
+                <control name="id" title="ID" property="id" type="Hidden" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlEdit" title="编辑" property="" type="Link" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlDel" title="删除" property="" type="Link" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="ctlStartDate" title="日期" property="startDate" type="TextBox" edit="" required=""
+                         format="Common.DateFormatter" width="140" height="" column=""/>
+                <control name="ctlName" title="考核名称" property="name" type="TextBox" edit="" required="" format=""
+                         width="140" height="" column=""/>
+                <control name="ctlResult" title="考核结果" property="result" type="TextBox" edit="" required="" format=""
+                         width="140" height="" column=""/>
+                <control name="ctlScore" title="考核成绩" property="score" type="TextBox" edit="" required="" format=""
+                         width="140" height="" column=""/>
+            </panel>
+            <panel name="pnlEmpLog" title="变更记录" object="empLog" type="Grid">
+                <control name="id" title="ID" property="id" type="Hidden" edit="" required="" format="" width=""
+                         height="" column=""/>
+                <control name="createByName" title="创建人" property="createByName" type="TextBox" edit="" required=""
+                         format="" width="150" height="" column=""/>
+                <control name="createTime" title="创建时间" property="createTime" type="TextBox" edit="" required=""
+                         format="" width="200" height="" column=""/>
+                <control name="ctlLogContent" title="变更内容" property="logContent" type="TextBox" edit="" required=""
+                         format="" width="500" height="" column=""/>
+            </panel>
+
+            <!-- 加载 -->
+            <flow trigger="" event="OnLoad" filter="">
+                <procedure name="getId" server="" logic="DecodeId" ifyes="je" ifno="">
+                    <param name="Out" value="pnlDetailGroup.ctlId"></param>
+                </procedure>
+                <procedure name="je" logic="EncodeId" ifyes="jd" ifno="">
+                    <param name="In" value="pnlDetailGroup.ctlId"></param>
+                </procedure>
+                <procedure name="jd" server="" logic="DecodeId" ifyes="queryInfo" ifno="">
+                    <param name="Out" value="pnlDetailGroup.eq_empId"></param>
+                </procedure>
+                <procedure name="queryInfo" logic="QueryById" ifyes="queryEducation" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlDetailGroup"></param>
+                    <param name="Sql" value="QryEmployeeList"></param>
+                </procedure>
+                <procedure name="queryEducation" logic="Query" ifyes="queryExperience" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlEducation"></param>
+                    <param name="Sql" value="QryEducationList"></param>
+                </procedure>
+                <procedure name="queryExperience" logic="Query" ifyes="queryTraining" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlExperience"></param>
+                    <param name="Sql" value="QryExperienceList"></param>
+                </procedure>
+                <procedure name="queryTraining" logic="Query" ifyes="queryAssessment" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlTraining"></param>
+                    <param name="Sql" value="QryTrainingList"></param>
+                </procedure>
+                <procedure name="queryAssessment" logic="Query" ifyes="queryEmpLog" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlAssessment"></param>
+                    <param name="Sql" value="QryAssessmentList"></param>
+                </procedure>
+                <procedure name="queryEmpLog" logic="Query" ifyes="queryPhoto" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlEmpLog"></param>
+                    <param name="Sql" value="emp/QryEmpLog"></param>
+                </procedure>
+                <procedure name="queryPhoto" logic="Image" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup.ctlPhotoId"></param>
+                    <param name="Out" value="pnlDetailImage.ctlEdit"></param>
+                </procedure>
+            </flow>
+            <!--启动工作流-->
+            <flow trigger="pnlDetailTool.ctlWorkflow" event="OnClick"
+                  filter="WorkflowState('frmEmpDetail_'+model.pnlDetailGroup.eq_empId,'NotStart')">
+
+                <procedure name="procConfirm" server="" logic="ConfirmMsg" ifyes="procStartWorkflow" ifno="">
+                    <param name="Title" value="启动审批流程"></param>
+                    <param name="Msg" value="确认启动审批流程吗?"></param>
+                </procedure>
+                <procedure name="procStartWorkflow" logic="StartWorkflow" ifyes="proTransition" ifno="">
+                    <param name="Workflow" value="empEntryProcess"></param>
+                    <param name="ViewUrl" value="frmEmpDetail"></param>
+                    <param name="In" value="pnlDetailGroup.eq_empId"></param>
+                </procedure>
+                <procedure name="proTransition" server="/frmEmpList" logic="Back" ifyes="" ifno="">
+                </procedure>
+
+            </flow>
+            <!--确认-->
+            <flow trigger="pnlDetailTool.ctlConfirm" event="OnClick"
+                  filter="HasTask('frmEmpDetail_'+model.pnlDetailGroup.ctlId,session.userInfo.userId)">
+                <procedure name="procExecActivity" logic="ExecActivity" ifyes="procTransition" ifno="">
+                    <param name="WorkFlow" value="empEntryProcess"></param>
+                    <param name="UiName" value="frmEmpDetail"></param>
+                    <param name="In" value="pnlDetailGroup.ctlId"></param>
+                    <param name="Desc" value="新员工入职流程审核"></param>
+                </procedure>
+                <procedure name="procTransition" server="/frmEmpList" logic="Back" ifyes="" ifno="">
+                </procedure>
+            </flow>
+            <flow trigger="pnlDetailTool.ctlList" event="OnClick" filter="">
+                <procedure name="procListActivity" logic="ListActivity" ifyes="" ifno="">
+                    <param name="WorkFlow" value="empEntryProcess"></param>
+                    <param name="UiName" value="frmEmpDetail"></param>
+                    <param name="In" value="pnlDetailGroup.ctlId"></param>
+                </procedure>
+            </flow>
+
+            <!-- 新增教育 -->
+            <flow trigger="pnlDetailTool.ctlEducation" event="OnClick" filter="">
+                <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+                    <param name="In" value="pnlDetailGroup.ctlId"></param>
+                </procedure>
+                <procedure name="jspopup" logic="Popup" ifyes="queryEducation" ifno="">
+                    <param name="To" value="frmEducation"></param>
+                    <param name="Mode" value="Add"></param>
+                    <param name="Window" value="Medium"></param>
+                </procedure>
+                <procedure name="queryEducation" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlEducation"></param>
+                    <param name="Sql" value="QryEducationList"></param>
+                </procedure>
+            </flow>
+            <!-- 编辑教育 -->
+            <flow trigger="pnlEducation.ctlEdit" event="OnClick" filter="">
+                <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+                    <param name="In" value="pnlEducation.id"></param>
+                </procedure>
+                <procedure name="jspopup" logic="Popup" ifyes="queryEducation" ifno="">
+                    <param name="To" value="frmEducation"></param>
+                    <param name="Mode" value="Edit"></param>
+                    <param name="Window" value="Medium"></param>
+                </procedure>
+                <procedure name="queryEducation" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlEducation"></param>
+                    <param name="Sql" value="QryEducationList"></param>
+                </procedure>
+            </flow>
+            <!-- 删除教育 -->
+            <flow trigger="pnlEducation.ctlDel" event="OnClick" filter="">
+                <procedure name="msg" server="" logic="ConfirmMsg" ifyes="deleteData" ifno="">
+                    <param name="Title" value="删除"></param>
+                    <param name="Msg" value="确认删除当前记录吗?"></param>
+                </procedure>
+                <procedure name="deleteData" logic="Delete" ifyes="queryTable" ifno="">
+                    <param name="In" value="pnlEducation"/>
+                    <param name="Msg" value="教育经历已删除"/>
+                </procedure>
+                <procedure name="queryTable" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlEducation"></param>
+                    <param name="Sql" value="QryEducationList"></param>
+                </procedure>
+            </flow>
+            <!-- 新增工作 -->
+            <flow trigger="pnlDetailTool.ctlExperience" event="OnClick" filter="">
+                <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+                    <param name="In" value="pnlDetailGroup.ctlId"></param>
+                </procedure>
+                <procedure name="jspopup" server="/frmEmpDetailEdite" logic="Popup" ifyes="queryExperience" ifno="">
+                    <param name="To" value="frmExperience"></param>
+                    <param name="Mode" value="Add"></param>
+                    <param name="Window" value="Medium"></param>
+                </procedure>
+                <procedure name="queryExperience" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlExperience"></param>
+                    <param name="Sql" value="QryExperienceList"></param>
+                </procedure>
+            </flow>
+            <!-- 编辑工作 -->
+            <flow trigger="pnlExperience.ctlEdit" event="OnClick" filter="">
+                <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+                    <param name="In" value="pnlExperience.id"></param>
+                </procedure>
+                <procedure name="jspopup" logic="Popup" ifyes="queryExperience" ifno="">
+                    <param name="To" value="frmExperience"></param>
+                    <param name="Mode" value="Edit"></param>
+                    <param name="Window" value="Medium"></param>
+                </procedure>
+                <procedure name="queryExperience" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlExperience"></param>
+                    <param name="Sql" value="QryExperienceList"></param>
+                </procedure>
+            </flow>
+            <!-- 删除工作 -->
+            <flow trigger="pnlExperience.ctlDel" event="OnClick" filter="">
+                <procedure name="msg" server="" logic="ConfirmMsg" ifyes="deleteData" ifno="">
+                    <param name="Title" value="删除"></param>
+                    <param name="Msg" value="确认删除当前记录吗?"></param>
+                </procedure>
+                <procedure name="deleteData" logic="Delete" ifyes="queryTable" ifno="">
+                    <param name="In" value="pnlExperience"/>
+                    <param name="Msg" value="工作经历已删除"/>
+                </procedure>
+                <procedure name="queryTable" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlExperience"></param>
+                    <param name="Sql" value="QryExperienceList"></param>
+                </procedure>
+            </flow>
+            <!-- 新增培训 -->
+            <flow trigger="pnlDetailTool.ctlTraining" event="OnClick" filter="">
+                <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+                    <param name="In" value="pnlDetailGroup.ctlId"></param>
+                </procedure>
+                <procedure name="jspopup" server="/frmEmpDetailEdite" logic="Popup" ifyes="queryTraining" ifno="">
+                    <param name="To" value="frmTraining"></param>
+                    <param name="Mode" value="Add"></param>
+                    <param name="Window" value="Medium"></param>
+                </procedure>
+                <procedure name="queryTraining" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlTraining"></param>
+                    <param name="Sql" value="QryTrainingList"></param>
+                </procedure>
+            </flow>
+            <!-- 编辑培训 -->
+            <flow trigger="pnlTraining.ctlEdit" event="OnClick" filter="">
+                <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+                    <param name="In" value="pnlTraining.id"></param>
+                </procedure>
+                <procedure name="jspopup" logic="Popup" ifyes="queryTraining" ifno="">
+                    <param name="To" value="frmTraining"></param>
+                    <param name="Mode" value="Edit"></param>
+                    <param name="Window" value="Medium"></param>
+                </procedure>
+                <procedure name="queryTraining" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlTraining"></param>
+                    <param name="Sql" value="QryTrainingList"></param>
+                </procedure>
+            </flow>
+            <!-- 删除培训 -->
+            <flow trigger="pnlTraining.ctlDel" event="OnClick" filter="">
+                <procedure name="msg" server="" logic="ConfirmMsg" ifyes="deleteData" ifno="">
+                    <param name="Title" value="删除"></param>
+                    <param name="Msg" value="确认删除当前记录吗?"></param>
+                </procedure>
+                <procedure name="deleteData" logic="Delete" ifyes="queryTable" ifno="">
+                    <param name="In" value="pnlTraining"/>
+                    <param name="Msg" value="培训记录已删除"/>
+                </procedure>
+                <procedure name="queryTable" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlTraining"></param>
+                    <param name="Sql" value="QryTrainingList"></param>
+                </procedure>
+            </flow>
+            <!-- 新增考核 -->
+            <flow trigger="pnlDetailTool.ctlAssessment" event="OnClick" filter="">
+                <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+                    <param name="In" value="pnlDetailGroup.ctlId"></param>
+                </procedure>
+                <procedure name="jspopup" server="/frmEmpDetailEdite" logic="Popup" ifyes="queryAssessment" ifno="">
+                    <param name="To" value="frmAssessment"></param>
+                    <param name="Mode" value="Add"></param>
+                    <param name="Window" value="Medium"></param>
+                </procedure>
+                <procedure name="queryAssessment" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlAssessment"></param>
+                    <param name="Sql" value="QryAssessmentList"></param>
+                </procedure>
+            </flow>
+            <!-- 编辑培训 -->
+            <flow trigger="pnlAssessment.ctlEdit" event="OnClick" filter="">
+                <procedure name="jsencodeid" server="" logic="EncodeId" ifyes="jspopup" ifno="">
+                    <param name="In" value="pnlAssessment.id"></param>
+                </procedure>
+                <procedure name="jspopup" logic="Popup" ifyes="queryAssessment" ifno="">
+                    <param name="To" value="frmAssessment"></param>
+                    <param name="Mode" value="Edit"></param>
+                    <param name="Window" value="Medium"></param>
+                </procedure>
+                <procedure name="queryAssessment" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlAssessment"></param>
+                    <param name="Sql" value="QryAssessmentList"></param>
+                </procedure>
+            </flow>
+            <!-- 删除考核 -->
+            <flow trigger="pnlAssessment.ctlDel" event="OnClick" filter="">
+                <procedure name="msg" server="" logic="ConfirmMsg" ifyes="deleteData" ifno="">
+                    <param name="Title" value="删除"></param>
+                    <param name="Msg" value="确认删除当前记录吗?"></param>
+                </procedure>
+                <procedure name="deleteData" logic="Delete" ifyes="queryTable" ifno="">
+                    <param name="In" value="pnlAssessment"/>
+                    <param name="Msg" value="考核记录已删除"/>
+                </procedure>
+                <procedure name="queryTable" logic="Query" ifyes="" ifno="">
+                    <param name="In" value="pnlDetailGroup"></param>
+                    <param name="Out" value="pnlAssessment"></param>
+                    <param name="Sql" value="QryAssessmentList"></param>
+                </procedure>
+            </flow>
+            <!-- 返回 -->
+            <flow trigger="pnlDetailTool.ctlBack" event="OnClick" filter="">
+                <procedure name="jsback" logic="Back" ifyes="" ifno="">
+
+                </procedure>
+            </flow>
+
+            <!-- 导出简历 -->
+            <flow trigger="pnlDetailTool.ctlExportFormat" event="OnClick" filter="">
+                <procedure name="jsExFormat" logic="ExportFormat" ifyes="" ifno="">
+                    <param name="In"
+                           value="pnlDetailGroup,pnlEducation,pnlTraining,pnlExperience,pnlAssessment"></param>
+                    <param name="Template" value="introduce.xls"></param>
+                </procedure>
+            </flow>
+            <!-- 打印简历 -->
+            <flow trigger="pnlDetailTool.ctlPrintPdf" event="OnClick" filter="">
+                <procedure name="jsPrintPdf" logic="PrintPdf" ifyes="" ifno="">
+                    <param name="In"
+                           value="pnlDetailGroup,pnlEducation,pnlTraining,pnlExperience,pnlAssessment"></param>
+                    <param name="Template" value="introduce.xls"></param>
+                </procedure>
+            </flow>
+            <!-- 布局 -->
+            <layout>
+                <region location="North" scale="">
+                    <subregion panel="pnlDetailTool" location="North" scale=""/>
+                    <subregion panel="pnlDetailImage" location="East" scale="200px"/>
+                    <subregion panel="pnlDetailGroup" location="Center" scale=""/>
+                </region>
+
+                <region location="Center" scale="">
+                    <subregion panel="pnlEducation" location="Center" scale=""/>
+                    <subregion panel="pnlExperience" location="Center" scale=""/>
+                    <subregion panel="pnlTraining" location="Center" scale=""/>
+                    <subregion panel="pnlAssessment" location="Center" scale=""/>
+                    <subregion panel="pnlEmpLog" location="Center" scale=""/>
+                </region>
+            </layout>
+        </ui>
+    </ui_layer>
+</tsoftware>
