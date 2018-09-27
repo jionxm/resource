@@ -152,7 +152,7 @@
       <procedure name="js2" logic="SaveCustom" ifyes="queryTable" ifno="">
         <param name="Sql" value="updateJobStatus2"></param>
         <param name="In" value="pnlDg"></param>
-        <param name="Msg" value="model.name+'启动'"></param>
+        <param name="Msg" value="model.name+'禁用'"></param>
       </procedure>      
       <procedure name="queryTable"  logic="Query" ifyes="" ifno="">
         <param name="In" value="pnlGroup"></param>
