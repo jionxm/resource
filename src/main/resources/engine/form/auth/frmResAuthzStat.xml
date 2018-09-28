@@ -32,7 +32,7 @@
       <procedure name="jsLstType"  logic="List" ifyes="jsQuery" ifno="">
         <param name="Out" value="pCondition.eq_resType"></param>
         <param name="Sql" value="" />
-		<param name="Options" value="$NULL,未指派|AbsoluteURL,外部页面|RelativeURL,内部页面|Component,组件"></param>
+		<param name="Options" value="$NULL,未指派|AbsoluteURL,外部页面|RelativeURL,内部页面|Component,组件|Module,模块|SubSystem,子系统|System,系统|"></param>
       </procedure>   
       <procedure name="jsQuery" logic="Query" ifyes="" ifno="">
         <param name="In" value="pCondition"></param>
