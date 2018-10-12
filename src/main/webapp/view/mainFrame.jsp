@@ -260,7 +260,14 @@
     }
 
     function logout() {
-        window.location.href = "${ctx}/logOut";
+    	layer.open({
+    	    content: '您确定要退出系统吗？'
+    	    ,btn: ['确定', '取消']
+    	    ,yes: function(index){
+    	      window.location.href = "${ctx}/logOut";
+    	      layer.close(index);
+    	    }
+    	  });
     }
 
 

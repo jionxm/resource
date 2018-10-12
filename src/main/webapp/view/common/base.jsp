@@ -14,12 +14,14 @@
  <link rel="stylesheet" href="${ctx}/view/common/css/plugins/easyui-1.5.2/themes/default/easyui.css">
  <link rel="stylesheet" href="${ctx}/view/common/css/plugins/easyui-1.5.2/themes/icon.css">
 <link rel="stylesheet" href="${ctx}/view/common/css/style.css">
+<link rel="stylesheet" href="${ctx}/view/common/css/layer.css">
 
 <script src="${ctx}/view/common/js/store/myStorage.js" charset="utf-8"></script>
 <script src="${ctx}/view/common/js/store/json2.js" charset="utf-8"></script>
 <script src="${ctx}/view/common/js/store/localDB.js" charset="utf-8"></script>
 <!-- ajaxUtil-->
 <script src="${ctx}/view/common/js/ajaxUtil.js" charset="utf-8"></script>
+<script src="${ctx}/view/common/js/layer.js" charset="utf-8"></script>
 <script type="text/javascript">  
 function isIE() { //ie?
     if (!!window.ActiveXObject || "ActiveXObject" in window)
