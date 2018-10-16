@@ -70,21 +70,27 @@ public class BackupResourcePlugins implements ILogicPlugin {
 		String id = formModel.getPrimaryFieldValue();
 		String fileId = formModel.getData().get("resourceFileId").toString();
 		log.info(fileId);
-		if (fileId.contains(",")) {
+		if (fileId.contains(",")) {//备份多个文件
 			String[] files = fileId.split(",");
 			for (String file : files) {
 				saveRecord(id, file);
+				List<Map<String, Object>> list = getParams("resource/QryCopyFile","eq_fileId",file);				
+				String url=list.get(0).get("url").toString();
+				String fileName=url.substring(url.lastIndexOf("/")+1);		
+				String srcPathStr=list.get(0).get("path").toString()+fileName;
+				copyFile(srcPathStr);
 			}
-		} else {
+			log.info("选中文件备份成功");
+		} else {//单个文件备份
 			saveRecord(id, fileId);
+			List<Map<String, Object>> list = getParams("resource/QryCopyFile","eq_fileId",fileId);				
+			String url=list.get(0).get("url").toString();
+			String fileName=url.substring(url.lastIndexOf("/")+1);//取到原文件的名字
+			/*url=url.replaceAll("/", "\\\\");//将url的/转换为\*/		
+			String srcPathStr=list.get(0).get("path").toString()+fileName;
+			copyFile(srcPathStr);
+			log.info("单个文件备份成功");
 		}
-		List<Map<String, Object>> list = getParams("resource/QryCopyFile","eq_fileId",fileId);				
-		String url=list.get(0).get("url").toString();
-		String fileName=url.substring(url.lastIndexOf("/")+1);//取到原文件的名字
-		/*url=url.replaceAll("/", "\\\\");//将url的/转换为\*/		
-		String srcPathStr=list.get(0).get("path").toString()+fileName;
-		copyFile(srcPathStr);
-		log.info("文件备份成功");
 	}
 
 	public void saveRecord(String id, String fileId) {
