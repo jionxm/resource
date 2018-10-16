@@ -486,7 +486,7 @@
     <build>
         <finalName>tpms_test</finalName>
         <filters>
-            <filter>src/main/resources/test/system.properties</filter>
+            <filter>src/main/resources/${profiles.active}/system.properties</filter>
         </filters>
         <resources>
             <resource>
