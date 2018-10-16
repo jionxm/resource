@@ -1,5 +1,33 @@
 
 jQuery.extend({
+	
+	handleError : function(s, xhr, status, e) {   
+		debugger           
+		          if (s.error) {                    
+						s.error.call(s.context || s, xhr, status, e);                
+					}
+		          if (s.global) {                    
+			(s.context ? jQuery(s.context) : jQuery.event).trigger("ajaxError", [ xhr, s, e ]);                
+			}            
+		},
+		httpData: function (xhr, type, s) {                    
+			var ct = xhr.getResponseHeader("content-type"),            
+			xml = type == "xml" || !type && ct && ct.indexOf("xml") >= 0,            
+			data = xml ? xhr.responseXML : xhr.responseText;                    
+			if (xml && data.documentElement.tagName == "parsererror")                        
+				throw "parsererror";                    
+			if (s && s.dataFilter)                        
+				data = s.dataFilter(data, type);                    
+			if (typeof data === "string") {                        
+				if (type == "script")                            
+					jQuery.globalEval(data);                        
+				if (type == "json")                           
+					data = window["eval"]("(" + data + ")");                   
+				}                    
+			return data;                
+			},
+
+
 
 
     createUploadIframe: function(id, uri)
@@ -209,10 +237,12 @@ jQuery.extend({
             // you have to delete the '<pre></pre>' tag.
             // The pre tag in Chrome has attribute, so have to use regex to remove
             var data = r.responseText;
-            var rx = new RegExp("<pre.*?>(.*?)</pre>","i");
-            var am = rx.exec(data);
+            console.log("data:::"+data);
+//            var rx = new RegExp("<pre.*?>(.*?)</pre>","i");
+//            var am = rx.exec(data);
+//            console.log("am"+am);
             //this is the desired data extracted
-            var data = (am) ? am[1] : "";    //the only submatch or empty
+//            var data = (am) ? am[1] : "";    //the only submatch or empty
             eval( "data = " + data );
         }
         // evaluate scripts within html
