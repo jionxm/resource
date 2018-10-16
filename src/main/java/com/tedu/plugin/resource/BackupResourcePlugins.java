@@ -1,5 +1,9 @@
 package com.tedu.plugin.resource;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +78,13 @@ public class BackupResourcePlugins implements ILogicPlugin {
 		} else {
 			saveRecord(id, fileId);
 		}
+		List<Map<String, Object>> list = getParams("resource/QryCopyFile","eq_fileId",fileId);				
+		String url=list.get(0).get("url").toString();
+		String fileName=url.substring(url.lastIndexOf("/")+1);//取到原文件的名字
+		/*url=url.replaceAll("/", "\\\\");//将url的/转换为\*/		
+		String srcPathStr=list.get(0).get("path").toString()+fileName;
+		copyFile(srcPathStr);
+		log.info("文件备份成功");
 	}
 
 	public void saveRecord(String id, String fileId) {
@@ -92,5 +103,44 @@ public class BackupResourcePlugins implements ILogicPlugin {
 		queryPage.setQueryParam(url);
 		List<Map<String, Object>> list = formService.queryBySqlId(queryPage);
 		return list;
+	}
+	public List<Map<String, Object>> getParams(String url, String eq, String param) {
+		QueryPage queryPage = new QueryPage();
+		Map<String, Object> mapParam = new HashMap<>();
+		mapParam.put(eq, param);
+		queryPage.setParamsByMap(mapParam);
+		queryPage.setQueryParam(url);
+		// 查询人员并替换新旧表单相关人员信息(姓名)
+		List<Map<String, Object>> list = formService.queryBySqlId(queryPage);
+		return list;
+	}
+	/*
+	 * 实现文件的拷贝
+	 * 
+	 * @param srcPathStr 源文件的地址信息
+	 * 
+	 * @param desPathStr 目标文件的地址信息
+	 */
+	public static void copyFile(String srcPathStr) {
+		// 1.获取源文件的名称
+		String desPathStr =srcPathStr.substring(0,srcPathStr.lastIndexOf("\\") + 1) +"copy"
+								+srcPathStr.substring(srcPathStr.lastIndexOf("\\") + 1);
+		File srcFile = new File(srcPathStr);
+		File desFile = new File(desPathStr);
+		try {
+			if (!desFile.exists()) {
+				if (!srcFile.exists()) {
+					throw new FileNotFoundException("原文件必须存在");
+				} else {
+					Files.copy(srcFile.toPath(), desFile.toPath());
+				}
+			} else {
+				System.out.println("已存在同名文件");
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
