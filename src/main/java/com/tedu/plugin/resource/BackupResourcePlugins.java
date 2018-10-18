@@ -72,34 +72,36 @@ public class BackupResourcePlugins implements ILogicPlugin {
 		log.info(fileId);
 		if (fileId.contains(",")) {//备份多个文件
 			String[] files = fileId.split(",");
-			for (String file : files) {
-				saveRecord(id, file);
+			for (String file : files) {				
 				List<Map<String, Object>> list = getParams("resource/QryCopyFile","eq_fileId",file);				
 				String url=list.get(0).get("url").toString();
 				String fileName=url.substring(url.lastIndexOf("/")+1);		
 				String srcPathStr=list.get(0).get("path").toString()+fileName;
-				copyFile(srcPathStr);
+				String desPathStr ="E:\\copyfiles"+srcPathStr.substring(srcPathStr.indexOf("\\",3));
+				saveRecord(id,file,desPathStr);
+				copyFile(srcPathStr,desPathStr);
 			}
 			log.info("选中文件备份成功");
 		} else {//单个文件备份
-			saveRecord(id, fileId);
 			List<Map<String, Object>> list = getParams("resource/QryCopyFile","eq_fileId",fileId);				
 			String url=list.get(0).get("url").toString();
 			String fileName=url.substring(url.lastIndexOf("/")+1);//取到原文件的名字
 			/*url=url.replaceAll("/", "\\\\");//将url的/转换为\*/		
 			String srcPathStr=list.get(0).get("path").toString()+fileName;
-			copyFile(srcPathStr);
+			String desPathStr ="E:\\copyfiles"+srcPathStr.substring(srcPathStr.indexOf("\\",3));
+			saveRecord(id, fileId,desPathStr);
+			copyFile(srcPathStr,desPathStr);
 			log.info("单个文件备份成功");
 		}
 	}
 
-	public void saveRecord(String id, String fileId) {
+	public void saveRecord(String id, String fileId,String desPathStr) {
 		Map<String, Object> data = new HashMap<>();
 		CustomFormModel cModel = new CustomFormModel();
 		data.put("recordId", id);
 		data.put("fileId", fileId);
+		data.put("backupsPath",desPathStr);
 		cModel.setData(data);
-		log.info("insert:" + data);
 		cModel.setSqlId("resource/insertRestore");
 		formMapper.saveCustom(cModel);
 	}
@@ -127,23 +129,30 @@ public class BackupResourcePlugins implements ILogicPlugin {
 	 * 
 	 * @param desPathStr 目标文件的地址信息
 	 */
-	public static void copyFile(String srcPathStr) {
-		// 1.获取源文件的名称
-		String desPathStr =srcPathStr.substring(0,srcPathStr.lastIndexOf("\\") + 1) +"copy"
-								+srcPathStr.substring(srcPathStr.lastIndexOf("\\") + 1);
+	public static void copyFile(String srcPathStr,String desPathStr) {
+		// 1.获取源文件的名称		
 		File srcFile = new File(srcPathStr);
 		File desFile = new File(desPathStr);
+		String path=desFile.toPath().toString().substring(0, desFile.toPath().toString().lastIndexOf("\\"));
+		File paperFile=new File(path);
 		try {
-			if (!desFile.exists()) {
 				if (!srcFile.exists()) {
 					throw new FileNotFoundException("原文件必须存在");
 				} else {
-					Files.copy(srcFile.toPath(), desFile.toPath());
+					if(!paperFile.isDirectory()) {
+						System.out.println("创建一个存放备份文件的文件夹");
+						paperFile.mkdirs();
+						Files.copy(srcFile.toPath(), desFile.toPath());
+					}else {
+						if(!desFile.exists()){
+							Files.copy(srcFile.toPath(), desFile.toPath());
+						}else {
+							System.out.println("已存在同名文件");
+						}						
+					}
 				}
-			} else {
-				System.out.println("已存在同名文件");
-			}
-		} catch (FileNotFoundException e) {
+		}
+		 catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
