@@ -37,13 +37,14 @@ public class BackupResourcePlugins implements ILogicPlugin {
 		Object object = formModel.getData().get("resourceFileId");
 		log.info(object.toString());
 		if (object == null || object.equals("")) {
+			log.info("未获取到备份文件id");
 			List<Map<String, Object>> list = getParams("resource/QryResFile");
 			log.info(list);
 			String fileIds = "";
 			if (list == null || list.size() == 0) {
 				throw new ValidException(ErrorCode.INVALIDATE_FORM_DATA, "备份失败", "没有可备份文件！");
 			}
-			if (list.size() == 1) {
+			/*if (list.size() == 1) {
 				fileIds = list.get(0).get("fileId").toString();
 			} else {
 				for (Map<String, Object> map : list) {
@@ -59,7 +60,7 @@ public class BackupResourcePlugins implements ILogicPlugin {
 			}
 			data.put("resourceFileId", fileIds);
 			formModel.setData(data);
-			log.info(formModel.getData());
+			log.info(formModel.getData());*/
 		}
 		return null;
 	}
