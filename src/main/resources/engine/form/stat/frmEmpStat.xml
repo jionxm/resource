@@ -94,18 +94,6 @@
                     <subregion panel="pnlProjEmpBarChart" location="Center" scale="50%"/><!-- 按项目 -->
                 </region>
             </layout>
-            <!-- <layout>
-                <region location="North" scale="180px">
-                    <subregion panel="pnlCondition" location="West"/>
-                    <subregion panel="pnlCondition1" location="West"/>
-                    <subregion panel="pnlEmpStatusBarChart" location="West" scale="50%"/>
-                    <subregion panel="pnlOrgEmpPieChart" location="East" scale="50%"/>
-                </region>
-                <region location="Center" scale="300px">
-                    <subregion panel="pnlPostEmpPieChart" location="East" scale="50%"/>
-                    <subregion panel="pnlProjEmpBarChart" location="West" scale="50%"/>
-                </region>
-            </layout> -->
         </ui>
     </ui_layer>
 </tsoftware>

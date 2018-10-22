@@ -88,10 +88,13 @@ function exportData(){
 	
 	//获取所选导出列
 	var checkedDataArray = $('#dataList').datalist("getChecked");
+	console.log("checkedDataArray-->"+checkedDataArray);
 	var dataValue = new Array();
 	var dataTitle = new Array();
+	var status;
 	$.each(checkedDataArray, function (i, checkedData) {
 		debugger
+		status =true;
 		if(checkedDataArray[0].value==""){
 			dataValue[i-1] = checkedData.value;
 			if(checkedData.title==''||checkedData.title == undefined){
@@ -117,6 +120,7 @@ function exportData(){
 	param['exportType'] = exportType;
 	param['title'] = title;
  	var url = exportUrl;
+ 	if(status){
 	$.ajax({	
 		type: 'GET',
 		url: url,
@@ -142,7 +146,12 @@ function exportData(){
 				$.messager.alert("数据导出","生成文件失败，请重试");
 			}
 		},
-	}); 
+	}); }else{
+			layer.open({
+			    content: '导出列不能为空！'
+			    ,btn: '确定'
+			  });
+	}
 }
 
 //下载导出的数据文件
