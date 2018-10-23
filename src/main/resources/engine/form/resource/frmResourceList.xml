@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsoftware xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../componentConfig.xsd">
+<!-- 资源扫描 -->
+<model_layer>
+  <object name="fileData" table="t_file_data" primary="id" unique="" order="id desc">
+	<property name="id" type="Long" length="20" validate=""  field="id"/>
+	<property name="name" type="String" length="500" validate=""  field="name"/>
+	<property name="path" type="String" length="500" validate=""  field="path"/>
+  </object>
+</model_layer>
+	<ui_layer>
+		<ui name="frmResourceList" title="资源扫描列表">
+			<panel name="pToolbar" title="按钮栏" object="" type="Toolbar">
+				<control name="btnQuery" title="查询" property="" type="Button"
+					edit="" required="" format="" width="" height="" column="" />
+			</panel>
+			<panel name="pTable" title="查询结果" object="fileData" type="Grid">
+				<control name="id" title="文件扫描id" property="id" type="Hidden"
+					edit="" required="" format="" width="80" height="" column="" />
+				<control name="fileName" title="扫描文件名称" property="name"
+					type="TextBox" edit="" required="" format="" width="300" height=""
+					column="" />
+				<control name="filePath" title="扫描文件路径" property="path"
+					type="TextBox" edit="" required="" format="" width="600" height=""
+					column="" />
+			</panel>
+			<!-- 逻辑加载 -->
+			<flow trigger="" event="OnLoad" filter="">
+			<!-- 	<procedure name="jClear" logic="Clear" ifyes="" ifno=""
+					sync="Y">
+					<param name="Out" value="pForm"></param>
+				</procedure> -->
+				<procedure name="Query" logic="Query" ifyes="" ifno=""
+					sync="Y">
+					<param name="Out" value="pTable"></param>
+					<param name="Sql" value="resource/QryFilesData2"></param>
+				</procedure>
+			</flow>
+			<!-- 查询点击事件 -->
+			<flow trigger="pToolbar.btnQuery" event="OnClick" filter="">
+				<procedure name="Query" logic="Query" ifyes="" ifno=""
+					sync="Y">
+					<param name="Out" value="pTable"></param>
+					<param name="Sql" value="resource/QryFilesData2"></param>
+				</procedure>
+			</flow>
+			<layout>
+				<region location="North" scale="">
+					<subregion panel="pToolbar" location="North" scale="" />
+				</region>
+				<region location="Center" scale="">
+					<subregion panel="pTable" location="Center" scale="" />
+				</region>
+			</layout>
+		</ui>
+	</ui_layer>
+</tsoftware>

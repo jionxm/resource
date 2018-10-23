@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import com.tedu.base.engine.dao.FormMapper;
 import com.tedu.base.engine.model.CustomFormModel;
 import com.tedu.base.engine.service.FormLogService;
 import com.tedu.base.engine.service.FormService;
+import com.tedu.base.engine.util.FormUtil;
 import com.tedu.base.scanFileFirectory.service.ScanFileFirectoryService;
 import com.tedu.base.task.SpringUtils;
 
@@ -35,12 +37,43 @@ public class ScanFileFirectoryServiceImpl implements ScanFileFirectoryService {
 	@Override
 	public void gainScanFileFirectory() {
 		String path = "E:\\copyfiles";
+		List<Map<String,Object>> mapNewData =new ArrayList<Map<String, Object>>();
 		for (Object filePath : scanFilesWithRecursion(path)) {
+			Map<String, Object> map = new HashMap<>();
 			String srcPath = filePath.toString();
 			String srcName=srcPath.substring(srcPath.lastIndexOf("\\")+1);
-			saveRecord(srcPath, srcName);
+			map.put("name",srcName);
+			map.put("path",srcPath);
+			mapNewData.add(map);
 		}
-		log.info("一共插入"+filesSum+"个文件");
+		List<Map<String,Object>> mapOldData = qryRecord("resource/QryFilesData");
+		log.info("查询出"+mapOldData.size()+"个原文件");
+		for(Map<String,Object> newmap:mapNewData){
+			boolean flag = false;
+			if(null == mapOldData || mapOldData.size() ==0 ) {
+				flag =true;
+			}else {
+			for(Map<String,Object> oldmap:mapOldData){
+				FormUtil.shrink(oldmap, newmap);
+				if(newmap.size()==0) {
+					log.info("数据重复不插入");
+					flag=false;
+					break;
+				}else {
+					flag=true;
+				}
+					}
+						}
+			if(flag==true) {
+				String srcPath = newmap.get("path").toString();				
+				String srcName=srcPath.substring(srcPath.lastIndexOf("\\")+1);
+				saveRecord(srcPath, srcName);
+				filesSum++;
+			}
+		
+		}
+		scanFiles.clear();//清理存扫描目录的集合
+		log.info("一共新插入"+filesSum+"个文件");
 	}
 	private static ArrayList<Object> scanFiles = new ArrayList<Object>();
 	private static int filesSum=0;
@@ -65,7 +98,6 @@ public class ScanFileFirectoryServiceImpl implements ScanFileFirectoryService {
 							/** 非文件夹 **/
 							else {
 								scanFiles.add(filelist[i].getAbsolutePath());
-								filesSum++;
 							}
 						}
 					}
@@ -94,6 +126,12 @@ public class ScanFileFirectoryServiceImpl implements ScanFileFirectoryService {
 		cModel.setData(data);
 		cModel.setSqlId("resource/InsertResource");
 		formMapper.saveCustom(cModel);
+	}
+	public List<Map<String, Object>> qryRecord(String path) {
+		QueryPage queryPage = new QueryPage();
+		queryPage.setQueryParam(path);
+		List<Map<String,Object>> mapData = formMapper.query(queryPage);
+		return mapData;
 	}
 }
 //定义一个文件夹或者文件找不到的异常类
