@@ -141,6 +141,7 @@
         <param name="Type" value="jpg,txt,pdf,md,mp4"></param>
         <param name="Bucket" value="public"></param>
         <param name="Out" value="empGroup.ctlPhotoId"></param>
+        <param name="Module" value="resource"></param>
         <!-- <param name="UploadUrl" value="qiniu"></param> -->
       </procedure>
     </flow>
