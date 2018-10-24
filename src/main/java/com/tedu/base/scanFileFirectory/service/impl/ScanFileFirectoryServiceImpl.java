@@ -34,14 +34,15 @@ public class ScanFileFirectoryServiceImpl implements ScanFileFirectoryService {
 	@Autowired
 	FormService formService;
 	public final Logger log = Logger.getLogger(this.getClass());
+	public static final String separator=File.separator; 
 	@Override
 	public void gainScanFileFirectory() {
-		String path = "E:\\copyfiles";
+		String path = separator+"opt"+separator+"file"+separator+"AI"+separator+"data";		
 		List<Map<String,Object>> mapNewData =new ArrayList<Map<String, Object>>();
 		for (Object filePath : scanFilesWithRecursion(path)) {
 			Map<String, Object> map = new HashMap<>();
 			String srcPath = filePath.toString();
-			String srcName=srcPath.substring(srcPath.lastIndexOf("\\")+1);
+			String srcName=srcPath.substring(srcPath.lastIndexOf(separator)+1);
 			map.put("name",srcName);
 			map.put("path",srcPath);
 			mapNewData.add(map);
@@ -66,7 +67,7 @@ public class ScanFileFirectoryServiceImpl implements ScanFileFirectoryService {
 						}
 			if(flag==true) {
 				String srcPath = newmap.get("path").toString();				
-				String srcName=srcPath.substring(srcPath.lastIndexOf("\\")+1);
+				String srcName=srcPath.substring(srcPath.lastIndexOf(separator)+1);
 				saveRecord(srcPath, srcName);
 				filesSum++;
 			}

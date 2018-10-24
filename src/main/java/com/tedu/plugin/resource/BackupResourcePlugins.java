@@ -30,6 +30,7 @@ public class BackupResourcePlugins implements ILogicPlugin {
 	@Autowired
 	FormService formService;
 	public final Logger log = Logger.getLogger(this.getClass());
+	public static final String separator=File.separator; 
 
 	@Override
 	public Object doBefore(FormEngineRequest requestObj, FormModel formModel) {
@@ -76,9 +77,9 @@ public class BackupResourcePlugins implements ILogicPlugin {
 			for (String file : files) {				
 				List<Map<String, Object>> list = getParams("resource/QryCopyFile","eq_fileId",file);				
 				String url=list.get(0).get("url").toString();
-				String fileName=url.substring(url.lastIndexOf("/")+1);		
+				String fileName=url.substring(url.lastIndexOf("/")+1);
 				String srcPathStr=list.get(0).get("path").toString()+fileName;
-				String desPathStr ="E:\\copyfiles"+srcPathStr.substring(srcPathStr.indexOf("\\",3));
+				String desPathStr=separator+"opt"+separator+"file"+separator+"resource"+separator+"copy"+separator+srcPathStr.substring(srcPathStr.indexOf(separator,6)+1);
 				saveRecord(id,file,desPathStr);
 				copyFile(srcPathStr,desPathStr);
 			}
@@ -89,7 +90,8 @@ public class BackupResourcePlugins implements ILogicPlugin {
 			String fileName=url.substring(url.lastIndexOf("/")+1);//取到原文件的名字
 			/*url=url.replaceAll("/", "\\\\");//将url的/转换为\*/		
 			String srcPathStr=list.get(0).get("path").toString()+fileName;
-			String desPathStr ="E:\\copyfiles"+srcPathStr.substring(srcPathStr.indexOf("\\",3));
+			//String desPathStr ="E:"+separator+"copyfiles"+srcPathStr.substring(srcPathStr.indexOf(separator,3));
+			String desPathStr=separator+"opt"+separator+"file"+separator+"resource"+separator+"copy"+separator+srcPathStr.substring(srcPathStr.indexOf(separator,6)+1);
 			saveRecord(id, fileId,desPathStr);
 			copyFile(srcPathStr,desPathStr);
 			log.info("单个文件备份成功");
@@ -134,7 +136,7 @@ public class BackupResourcePlugins implements ILogicPlugin {
 		// 1.获取源文件的名称		
 		File srcFile = new File(srcPathStr);
 		File desFile = new File(desPathStr);
-		String path=desFile.toPath().toString().substring(0, desFile.toPath().toString().lastIndexOf("\\"));
+		String path=desFile.toPath().toString().substring(0, desFile.toPath().toString().lastIndexOf(separator));
 		File paperFile=new File(path);
 		try {
 				if (!srcFile.exists()) {
