@@ -123,6 +123,7 @@
         <param name="Type" value="jpg"></param>
         <param name="Bucket" value="public"></param>
         <param name="Out" value="pnlDetailGroup.ctlPhotoId"></param>
+        <param name="Module" value="resource"></param>
       </procedure>
     </flow>  
     <layout>
